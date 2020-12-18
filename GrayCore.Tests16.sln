@@ -1,0 +1,101 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GrayCore.Tests", "GrayCore.Tests16.vcxproj", "{7F4E6E2C-271C-4198-B834-3006495FB81B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GrayCore", "..\GrayCore\GrayCore16.vcxproj", "{792DB699-0265-43B2-9438-4D0B202272E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		DebugDLL|x64 = DebugDLL|x64
+		DebugDLL|x86 = DebugDLL|x86
+		DebugMFC|x64 = DebugMFC|x64
+		DebugMFC|x86 = DebugMFC|x86
+		DebugStat|x64 = DebugStat|x64
+		DebugStat|x86 = DebugStat|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+		ReleaseDLL|x64 = ReleaseDLL|x64
+		ReleaseDLL|x86 = ReleaseDLL|x86
+		ReleaseMFC|x64 = ReleaseMFC|x64
+		ReleaseMFC|x86 = ReleaseMFC|x86
+		ReleaseStat|x64 = ReleaseStat|x64
+		ReleaseStat|x86 = ReleaseStat|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.Debug|x64.ActiveCfg = DebugDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.Debug|x64.Build.0 = DebugDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.Debug|x86.ActiveCfg = DebugDLL|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.Debug|x86.Build.0 = DebugDLL|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugDLL|x64.ActiveCfg = DebugDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugDLL|x64.Build.0 = DebugDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugDLL|x86.ActiveCfg = Debug|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugDLL|x86.Build.0 = Debug|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugMFC|x64.ActiveCfg = DebugDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugMFC|x64.Build.0 = DebugDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugMFC|x86.ActiveCfg = Debug|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugMFC|x86.Build.0 = Debug|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugStat|x64.ActiveCfg = DebugDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugStat|x64.Build.0 = DebugDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugStat|x86.ActiveCfg = Debug|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.DebugStat|x86.Build.0 = Debug|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.Release|x64.ActiveCfg = ReleaseDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.Release|x64.Build.0 = ReleaseDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.Release|x86.ActiveCfg = Release|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.Release|x86.Build.0 = Release|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseDLL|x64.ActiveCfg = ReleaseDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseDLL|x64.Build.0 = ReleaseDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseDLL|x86.ActiveCfg = Release|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseDLL|x86.Build.0 = Release|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseMFC|x64.ActiveCfg = ReleaseDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseMFC|x64.Build.0 = ReleaseDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseMFC|x86.ActiveCfg = Release|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseMFC|x86.Build.0 = Release|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseStat|x64.ActiveCfg = ReleaseDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseStat|x64.Build.0 = ReleaseDLL|x64
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseStat|x86.ActiveCfg = Release|Win32
+		{7F4E6E2C-271C-4198-B834-3006495FB81B}.ReleaseStat|x86.Build.0 = Release|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.Debug|x64.ActiveCfg = DebugDLL|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.Debug|x64.Build.0 = DebugDLL|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.Debug|x86.ActiveCfg = DebugDLL|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.Debug|x86.Build.0 = DebugDLL|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugDLL|x64.ActiveCfg = DebugDLL|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugDLL|x64.Build.0 = DebugDLL|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugDLL|x86.ActiveCfg = DebugDLL|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugDLL|x86.Build.0 = DebugDLL|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugMFC|x64.ActiveCfg = DebugMFC|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugMFC|x64.Build.0 = DebugMFC|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugMFC|x86.ActiveCfg = DebugMFC|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugMFC|x86.Build.0 = DebugMFC|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugStat|x64.ActiveCfg = DebugStat|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugStat|x64.Build.0 = DebugStat|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugStat|x86.ActiveCfg = DebugStat|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.DebugStat|x86.Build.0 = DebugStat|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.Release|x64.ActiveCfg = ReleaseStat|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.Release|x64.Build.0 = ReleaseStat|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.Release|x86.ActiveCfg = ReleaseStat|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.Release|x86.Build.0 = ReleaseStat|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseDLL|x64.ActiveCfg = ReleaseDLL|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseDLL|x64.Build.0 = ReleaseDLL|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseDLL|x86.ActiveCfg = ReleaseDLL|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseDLL|x86.Build.0 = ReleaseDLL|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseMFC|x64.ActiveCfg = ReleaseMFC|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseMFC|x64.Build.0 = ReleaseMFC|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseMFC|x86.ActiveCfg = ReleaseMFC|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseMFC|x86.Build.0 = ReleaseMFC|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseStat|x64.ActiveCfg = ReleaseStat|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseStat|x64.Build.0 = ReleaseStat|x64
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseStat|x86.ActiveCfg = ReleaseStat|Win32
+		{792DB699-0265-43B2-9438-4D0B202272E3}.ReleaseStat|x86.Build.0 = ReleaseStat|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3814684D-038F-4D49-9ED3-5060788A2E30}
+	EndGlobalSection
+EndGlobal
