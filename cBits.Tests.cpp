@@ -11,11 +11,11 @@ namespace Gray
 	{
 		UNITTEST2_METHOD(cBits)
 		{
-			int i1 = -123;		// test shifting signed numbers.
-			int i2 = i1 >> 2;
-			UNITTEST2_TRUE(i2 != 0);
-			int i3 = i1 << 2;
-			UNITTEST2_TRUE(i3 != 0);
+			const int i1 = -123;		// test shifting signed numbers.
+			const int i2 = i1 >> 2;
+			STATIC_ASSERT(i2 == -31, i2);
+			const int i3 = i1 << 2;
+			STATIC_ASSERT(i3 == -492, i3);
 
 			//! bit reversal.
 			BYTE u8 = cBits::Reverse<BYTE>(0x18);

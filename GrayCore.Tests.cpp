@@ -3,7 +3,7 @@
 //! Support M$ testing framework.
 
 #include "pch.h"
- 
+
 namespace Gray
 {
 
@@ -12,7 +12,7 @@ namespace Gray
 	// $(DevEnvDir)\CommonExtensions\Microsoft\TestWindow\Extensions\CppUnitFramework = D:\Programs\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions\CppUnitFramework
 #pragma comment(lib,"Microsoft.VisualStudio.TestTools.CppUnitTestFramework.lib")
 
-	class cUnitTestsMsLogger :  public cLogAppender, public cRefBase
+	class cUnitTestsMsLogger : public cLogAppender, public cRefBase
 	{
 		IUNKNOWN_DISAMBIG(cRefBase);
 		virtual HRESULT WriteString(const LOGCHAR_t* pszMsg) override
@@ -31,7 +31,7 @@ namespace Gray
 		__LineInfo lineInfo(cStringW(src.m_pszFile), src.m_pszFunction, src.m_uLine);	// StrArg
 		Assert::IsTrue(false, cStringW(pszExp), &lineInfo);
 		return false;
-	}	 
+	}
 
 	TEST_MODULE_INITIALIZE(Initialize)
 	{
@@ -41,7 +41,7 @@ namespace Gray
 		uts.m_pAssertOrig = cDebugAssert::sm_pAssertCallback;
 		cDebugAssert::sm_pAssertCallback = UnitTestsMs_AssertCallback;		// special version of assert
 
-	    // add special log appender. Logger. cUnitTestLogger
+		// add special log appender. Logger. cUnitTestLogger
 		cLogMgr& log = cLogMgr::I();
 		if (log.FindAppenderType(typeid(cUnitTestsMsLogger), true) == nullptr)
 		{
@@ -64,7 +64,7 @@ namespace Gray
 		// https://docs.microsoft.com/en-us/visualstudio/test/writing-unit-tests-for-c-cpp?view=vs-2019
 
 	public:
-		
+
 		UNITTEST2_METHOD(GrayCore)
 		{
 			static_assert(!USE_UNICODE_FN, "USE_UNICODE_FN");

@@ -22,10 +22,10 @@ namespace Gray
 		}
 	};
 
-	class cUnitTestHashSmart : public cRefBase, public cUnitTestHashStruct
+	class cUnitTestHashRef : public cRefBase, public cUnitTestHashStruct
 	{
 	public:
-		cUnitTestHashSmart(HASHCODE_t nHashCode = 0)
+		cUnitTestHashRef(HASHCODE_t nHashCode = 0)
 			: cUnitTestHashStruct(nHashCode)
 		{
 		}
@@ -39,16 +39,16 @@ namespace Gray
 	{
 		UNITTEST2_METHOD(cHashTable)
 		{
-			//! @todo add and remove stuff. cUnitTestHashSmart
+			//! @todo add and remove stuff. cUnitTestHashRef
 
 			cHashTableStruct<cUnitTestHashStruct, HASHCODE_t, 5> hashtable1;
 			UNITTEST2_TRUE(hashtable1.get_HashArrayQty() == 32);
 			hashtable1.Add(cUnitTestHashStruct(123));
 			// UNITTEST2_TRUE(hashtable1.FindArgForKey(123) == t1.get_Ptr());
 
-			cHashTableSmart<cUnitTestHashSmart, HASHCODE_t, 5> hashtable2;
+			cHashTableRef<cUnitTestHashRef, HASHCODE_t, 5> hashtable2;
 			UNITTEST2_TRUE(hashtable1.get_HashArrayQty() == 32);
-			cRefPtr<cUnitTestHashSmart> t2(new cUnitTestHashSmart(123));
+			cRefPtr<cUnitTestHashRef> t2(new cUnitTestHashRef(123));
 			hashtable2.Add(t2);
 			UNITTEST2_TRUE(hashtable2.FindArgForKey(123) == t2);
 

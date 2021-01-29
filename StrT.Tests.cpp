@@ -249,17 +249,20 @@ namespace Gray
 			const StrLen_t iLenStr = StrT::Len<TYPE>(k_tEsc);
 			UNITTEST_TRUE(iLenStr == 11);
 
-			// @todo > 127
+			// @todo > 127?
 			TYPE szTmpEsc[127];
+			UNITTEST_TRUE(STRMAX(szTmpEsc) == 126);
 			for (int i = 0; i < (int)STRMAX(szTmpEsc); i++)
 				szTmpEsc[i] = (TYPE)(i + 1);
 			szTmpEsc[STRMAX(szTmpEsc)] = '\0';
+			const StrLen_t iLenEsc = StrT::Len<TYPE>(szTmpEsc);
+			UNITTEST_TRUE(iLenEsc == 126);
 
 			TYPE szTmpE1[128];
 			StrLen_t iLenE = StrT::EscSeqAdd<TYPE>(szTmpE1, k_tEsc, STRMAX(szTmpE1));
 			UNITTEST_TRUE(iLenE == 15);
 
-			TYPE szTmpE2[4 * 1024];
+			TYPE szTmpE2[1024];
 			iLenE = StrT::EscSeqAdd<TYPE>(szTmpE2, szTmpEsc, STRMAX(szTmpE2));
 			UNITTEST_TRUE(iLenE == 225); // 225 for 127, 725 for ?
 

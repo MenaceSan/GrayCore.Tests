@@ -11,7 +11,7 @@ namespace Gray
 		UNITTEST2_METHOD(cRandom)
 		{
 			// Test general randomness.
-			cRandomNoise& rSys = cRandomNoise::I();
+			cRandomOS& rSys = cRandomOS::I();
 
 			BYTE s1[16];
 			rSys.GetNoise(s1, sizeof(s1));
