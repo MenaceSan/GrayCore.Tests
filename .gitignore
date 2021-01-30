@@ -1,4 +1,4 @@
 .svn
 .vs
 x64v142
-GrayCore.Tests16.vcxproj.user
+*.user
