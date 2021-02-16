@@ -35,19 +35,19 @@ namespace Gray
 		{
 			// IsValid
 			static const int k_Val = 123;	// i should not be able to write to this !?
-			UNITTEST2_TRUE(cMem::IsValid(&k_Val, 1, false));	// read static/const memory is valid.
+			UNITTEST2_TRUE(!cMem::IsCorrupt(&k_Val, 1, false));	// read static/const memory is valid.
 
 			// Write to nullptr and low memory?
-			UNITTEST2_TRUE(!cMem::IsValid(nullptr, 1));
-			UNITTEST2_TRUE(!cMem::IsValid((void*)12, 1, true));
+			UNITTEST2_TRUE(cMem::IsCorrupt(nullptr, 1));
+			UNITTEST2_TRUE(cMem::IsCorrupt((void*)12, 1, true));
 
 #if 0 // This doesn't work well in VS2015 in x64 for some reason. Does not continue from exception.
 			// Write to const/ROM space?
-			bool bCanWriteToROM = cMem::IsValid(&k_Val, 1, true);
+			bool bCanWriteToROM = !cMem::IsCorrupt(&k_Val, 1, true);
 			UNITTEST2_TRUE(!bCanWriteToROM);	// writing to const should NOT be valid !?
 
 			// Write to Code?
-			bool bCanWriteToCode = cMem::IsValid((void*)&cMem::CompareIndex, 1, true);
+			bool bCanWriteToCode = !cMem::IsCorrupt((void*)&cMem::CompareIndex, 1, true);
 			UNITTEST2_TRUE(!bCanWriteToCode);
 #endif
 
@@ -84,8 +84,8 @@ namespace Gray
 			size_t nSizeRet = cMem::ReadFromString(bTmp, STRMAX(bTmp), szTmp);
 			UNITTEST2_TRUE(nSizeRet == (size_t)k_TEXTBLOB_LEN);
 			UNITTEST2_TRUE(!cMem::Compare(bTmp, (const char*)k_sTextBlob.m_A, nSizeRet));
-			UNITTEST2_TRUE(cMem::IsValid(szTmp));
-			UNITTEST2_TRUE(cMem::IsValid(bTmp));
+			UNITTEST2_TRUE(!cMem::IsCorrupt(szTmp, sizeof(szTmp)));
+			UNITTEST2_TRUE(!cMem::IsCorrupt(bTmp, sizeof(bTmp)));
 		}
 	};
 	UNITTEST2_REGISTER(cMem, UNITTEST_LEVEL_Core);

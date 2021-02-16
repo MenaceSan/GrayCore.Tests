@@ -28,7 +28,7 @@ namespace Gray
 			static const char* k_pszMsg = "Test Exception";
 			GRAY_TRY
 			{
-				GRAY_THROW cUnitTestException(k_pszMsg, LOGLEV_TRACE);
+				GRAY_THROW cUnitTestException(k_pszMsg, LOGLEV_TRACE);	// ignore this throw.
 			}
 				GRAY_TRY_CATCH(cExceptionBase, ex)
 			{

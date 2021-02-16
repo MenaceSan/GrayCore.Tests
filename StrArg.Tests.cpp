@@ -10,27 +10,27 @@ namespace Gray
 	bool GRAYCALL StrArg_UnitTestT()
 	{
 		const TYPE* pszStr1 = StrArg<TYPE>('a', (StrLen_t)10);
-		UNITTEST_TRUE(StrT::Cmp<TYPE>(pszStr1, CSTRCONST("aaaaaaaaaa")) == 0);
+		UNITTEST2_TRUE(StrT::Cmp<TYPE>(pszStr1, CSTRCONST("aaaaaaaaaa")) == 0);
 
 		const INT32 iVal32 = 0x12;
 		const TYPE* pszStr2 = StrArg<TYPE>(iVal32);
-		UNITTEST_TRUE(StrT::Cmp<TYPE>(pszStr2, CSTRCONST("18")) == 0);
+		UNITTEST2_TRUE(StrT::Cmp<TYPE>(pszStr2, CSTRCONST("18")) == 0);
 
 		const UINT32 uVal32 = 0x12;
 		const TYPE* pszStr3 = StrArg<TYPE>(uVal32, (RADIX_t)0x10);
-		UNITTEST_TRUE(StrT::Cmp<TYPE>(pszStr3, CSTRCONST("012")) == 0);
+		UNITTEST2_TRUE(StrT::Cmp<TYPE>(pszStr3, CSTRCONST("012")) == 0);
 
 		const INT64 iVal64 = 0x12;
 		const TYPE* pszStr4 = StrArg<TYPE>(iVal64);
-		UNITTEST_TRUE(StrT::Cmp<TYPE>(pszStr4, CSTRCONST("18")) == 0);
+		UNITTEST2_TRUE(StrT::Cmp<TYPE>(pszStr4, CSTRCONST("18")) == 0);
 
 		const UINT64 uVal64 = 0x12;
 		const TYPE* pszStr5 = StrArg<TYPE>(uVal64, (RADIX_t)0x10);
-		UNITTEST_TRUE(StrT::Cmp<TYPE>(pszStr5, CSTRCONST("012")) == 0);
+		UNITTEST2_TRUE(StrT::Cmp<TYPE>(pszStr5, CSTRCONST("012")) == 0);
 
 		const double dVal = 123.123;
 		const TYPE* pszStr6 = StrArg<TYPE>(dVal);
-		UNITTEST_TRUE(StrT::Cmp<TYPE>(pszStr6, CSTRCONST("123.123")) == 0);
+		UNITTEST2_TRUE(StrT::Cmp<TYPE>(pszStr6, CSTRCONST("123.123")) == 0);
 
 		BYTE szTmpB[16];
 		szTmpB[0] = 'a';
@@ -38,7 +38,7 @@ namespace Gray
 		szTmpB[2] = 'c';
 		szTmpB[3] = '\0';
 		const TYPE* pszStrB = StrArg<TYPE>(szTmpB);
-		UNITTEST_TRUE(StrT::Cmp<TYPE>(pszStrB, CSTRCONST("abc")) == 0);
+		UNITTEST2_TRUE(StrT::Cmp<TYPE>(pszStrB, CSTRCONST("abc")) == 0);
 
 		WORD szTmpW[16];
 		szTmpW[0] = 'a';
@@ -46,7 +46,7 @@ namespace Gray
 		szTmpW[2] = 'c';
 		szTmpW[3] = '\0';
 		const TYPE* pszStrW = StrArg<TYPE>(szTmpW);
-		UNITTEST_TRUE(StrT::Cmp<TYPE>(pszStrW, CSTRCONST("abc")) == 0);
+		UNITTEST2_TRUE(StrT::Cmp<TYPE>(pszStrW, CSTRCONST("abc")) == 0);
 
 		return true;
 	}

@@ -73,16 +73,18 @@ namespace Gray
 			TIMEPERF_t tDiff2 = tStart2.get_AgePerf();
 			UNITTEST2_TRUE(tDiff2 > 1);
 
-			const TIMESYSD_t k_nLen = 200;
-			const TIMESYSD_t k_nLenVar = 20;	// Allow variation up to 10%
-
+			const TIMESYSD_t k_nLen = 200; // sleep units.
+ 
 			for (int tocks = 1; tocks <= 3; tocks++)
 			{
-				cTimeSys hires = cTimeSys::GetTimeNow();
-				cThreadId::SleepCurrent((int)(k_nLen * tocks));
-				TIMESYSD_t nAge = hires.get_AgeSys();
-				UNITTEST2_TRUE(nAge >= (k_nLen - k_nLenVar) * tocks);
-				UNITTEST2_TRUE(nAge <= (k_nLen + k_nLenVar) * tocks);
+				const TIMESYSD_t nTimeToSleep = k_nLen * tocks;
+
+				cTimeSys timeStart = cTimeSys::GetTimeNow();
+				cThreadId::SleepCurrent(nTimeToSleep);
+				TIMESYSD_t nTimeSlept = timeStart.get_AgeSys();
+
+				UNITTEST2_TRUE(nTimeSlept >= nTimeToSleep); // never sleep less ! 
+				UNITTEST2_TRUE(nTimeSlept <= k_nLen * (tocks + 1));  //  we can sleep longer ? system lag.
 			}
 		}
 	};
