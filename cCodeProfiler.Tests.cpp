@@ -13,9 +13,9 @@ namespace Gray
 		cThreadId::SleepCurrent(2);		// Waste some time.
 	}
 
-	UNITTEST2_CLASS(cCodeProfiler)
+	UNITTEST_CLASS(cCodeProfiler)
 	{
-		UNITTEST2_METHOD(cCodeProfiler)
+		UNITTEST_METHOD(cCodeProfiler)
 		{
 			TestFunction();
 			// Now look to see if the function recorded something.

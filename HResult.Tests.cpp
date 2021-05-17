@@ -6,12 +6,12 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(HResult)
+	UNITTEST_CLASS(HResult)
 	{
-		UNITTEST2_METHOD(HResult)
+		UNITTEST_METHOD(HResult)
 		{
 			HRESULT hRes = HResult::Make(8, (FACILITY_TYPE)FACILITY_NULL, 3000);	// test special reserved codes.
-			UNITTEST2_TRUE(hRes == ((HRESULT)0xc0000bb8));
+			UNITTEST_TRUE(hRes == ((HRESULT)0xc0000bb8));
 
 			HResult::AddCodesDefault();
 
@@ -31,10 +31,10 @@ namespace Gray
 				// HResult::GetTextV
 				HRESULT hResTest = k_HResCodes[i];
 				cString sError = cString::GetErrorString(hResTest);
-				UNITTEST2_TRUE(sError.GetLength() > 0);
+				UNITTEST_TRUE(sError.GetLength() > 0);
 				// Reversible?
 				HRESULT hResRet = HResult::GetHResFromStr(sError, sError.GetLength());
-				UNITTEST2_TRUE(hResRet == hResTest);
+				UNITTEST_TRUE(hResRet == hResTest);
 			}
 		}
 	};

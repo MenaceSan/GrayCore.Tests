@@ -7,18 +7,18 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cTimeDouble)
+	UNITTEST_CLASS(cTimeDouble)
 	{
 		bool UnitTest_1(const cTimeUnits & rTu) // static
 		{
 			cTimeUnits Tu2;
 			cTimeInt timeTest(rTu);
 			timeTest.GetTimeUnits(Tu2, TZ_UTC);
-			UNITTEST2_TRUE(rTu == Tu2);
+			UNITTEST_TRUE(rTu == Tu2);
 
 			cTimeDouble datetimeTest(rTu);
 			datetimeTest.GetTimeUnits(Tu2, TZ_UTC);
-			UNITTEST2_TRUE(rTu == Tu2);
+			UNITTEST_TRUE(rTu == Tu2);
 
 #if 0
 			int iTimeDays = timeTest.GetTime();
@@ -29,13 +29,13 @@ namespace Gray
 
 			// InitTimeDouble()
 			cTimeInt timeTest2(datetimeTest);
-			UNITTEST2_TRUE(timeTest2 == timeTest);
+			UNITTEST_TRUE(timeTest2 == timeTest);
 
 			// GetTimeFromSec()
 			cTimeDouble datetimeTest2 = cTimeDouble::GetTimeFromSec(timeTest.GetTime());
 			double dSecsDiff = datetimeTest2.get_Days() - datetimeTest.get_Days();
 			dSecsDiff = ABS(dSecsDiff) / cTimeUnits::k_nSecondsPerDay;
-			UNITTEST2_TRUE(dSecsDiff <= 0.0001); // close?
+			UNITTEST_TRUE(dSecsDiff <= 0.0001); // close?
 
 #ifdef _WIN32
 		// VariantTime is the same as COleDateTime compare
@@ -43,41 +43,41 @@ namespace Gray
 			rTu.GetSys(sysTime);
 			double dTest;
 			::SystemTimeToVariantTime(&sysTime, &dTest);
-			UNITTEST2_TRUE(dTest == datetimeTest.get_Double());
+			UNITTEST_TRUE(dTest == datetimeTest.get_Double());
 
 			::VariantTimeToSystemTime(dTest, &sysTime);
-			UNITTEST2_TRUE(rTu == cTimeUnits(sysTime));
+			UNITTEST_TRUE(rTu == cTimeUnits(sysTime));
 #endif
 			return true;
 		}
 
-		UNITTEST2_METHOD(cTimeDouble)
+		UNITTEST_METHOD(cTimeDouble)
 		{
 			cUnitTests& uts = cUnitTests::I();
 
 			cTimeDouble tnow1;
 			tnow1.InitTimeNow();
-			UNITTEST2_TRUE(tnow1.isTimeValid());
+			UNITTEST_TRUE(tnow1.isTimeValid());
 			cTimeUnits tn;
-			UNITTEST2_TRUE(tnow1.GetTimeUnits(tn, TZ_LOCAL));
-			UNITTEST2_TRUE(tn.isReasonableTimeUnits());
+			UNITTEST_TRUE(tnow1.GetTimeUnits(tn, TZ_LOCAL));
+			UNITTEST_TRUE(tn.isReasonableTimeUnits());
 
 			uts.m_pLog->addDebugInfoF("Current local time is '%s'", LOGSTR(tnow1.GetTimeFormStr(TIME_FORMAT_TZ, TZ_LOCAL)));
 
 			cTimeUnits tu0(1900, 1, 1, 0);	// 0
 			// cTimeUnits tu0( 1899,  12, 31, 24 );	// midnight
 			cTimeDouble t0(tu0);
-			UNITTEST2_TRUE(t0.get_Days() == 2);
+			UNITTEST_TRUE(t0.get_Days() == 2);
 
 			cTimeDouble y2k;
 			HRESULT hRes = y2k.SetTimeStr(_GT("2000/1/1 00:00:00"), TZ_UTC);
-			UNITTEST2_TRUE(hRes > 0);
+			UNITTEST_TRUE(hRes > 0);
 			double dd = y2k.get_Days();
-			UNITTEST2_TRUE(dd == cTimeDouble::k_nY2K);
+			UNITTEST_TRUE(dd == cTimeDouble::k_nY2K);
 			hRes = y2k.SetTimeStr(_GT("2000/1/1 01:00:00"), TZ_UTC);
-			UNITTEST2_TRUE(hRes > 0);
+			UNITTEST_TRUE(hRes > 0);
 			dd = y2k.get_Days() - (cTimeDouble::k_nY2K + 1.0 / 24.0);
-			UNITTEST2_TRUE(ABS(dd) <= 0.0001);
+			UNITTEST_TRUE(ABS(dd) <= 0.0001);
 
 			// Try a bunch of samples dates to convert back and forth.
 			// Valid from 1970 to 2038
@@ -104,8 +104,8 @@ namespace Gray
 			cThreadId::SleepCurrent(1);	// may not be accurate enough to advance without sleep?
 			cTimeDouble tnow2;
 			tnow2.InitTimeNow();
-			UNITTEST2_TRUE(tnow2.isTimeValid());
-			UNITTEST2_TRUE(tnow2 > tnow1);
+			UNITTEST_TRUE(tnow2.isTimeValid());
+			UNITTEST_TRUE(tnow2 > tnow1);
 
 			double dDays = 1 * cTimeUnits::k_Units[TIMEUNIT_Day].m_dUnitDays
 				+ 2 * cTimeUnits::k_Units[TIMEUNIT_Hour].m_dUnitDays
@@ -116,7 +116,7 @@ namespace Gray
 				;
 
 			cString s1 = cTimeDouble::GetTimeSpanStr(dDays, TIMEUNIT_Day, 6);
-			UNITTEST2_TRUE(!s1.Compare(_GT("1 day 2 hours 3 minutes 4.00501 seconds")));
+			UNITTEST_TRUE(!s1.Compare(_GT("1 day 2 hours 3 minutes 4.00501 seconds")));
 		}
 	};
 

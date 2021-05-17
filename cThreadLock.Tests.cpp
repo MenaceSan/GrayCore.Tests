@@ -6,15 +6,15 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cThreadLock)
+	UNITTEST_CLASS(cThreadLock)
 	{
-		UNITTEST2_METHOD(cThreadLock)
+		UNITTEST_METHOD(cThreadLock)
 		{
 			cUnitTests& uts = cUnitTests::I();
 
 			// NOTE: See cThread UnitTest for better testing of locks.
 			THREADID_t idCurrent = cThreadId::GetCurrentId();
-			UNITTEST2_TRUE(cThreadId::IsValidId(idCurrent));
+			UNITTEST_TRUE(cThreadId::IsValidId(idCurrent));
 
 			cThreadLockFast lockFast;
 			lockFast.Lock();

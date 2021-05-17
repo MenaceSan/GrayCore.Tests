@@ -125,6 +125,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>CppUnitTestFramework.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">
@@ -140,6 +141,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>Microsoft.VisualStudio.TestTools.CppUnitTestFramework.x64.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
@@ -161,6 +163,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>CppUnitTestFramework.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">
@@ -180,10 +183,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>Microsoft.VisualStudio.TestTools.CppUnitTestFramework.x64.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cAppConsole.Tests.cpp" />
+    <ClCompile Include="cAppImpl.Tests.cpp" />
     <ClCompile Include="cAppState.Tests.cpp" />
     <ClCompile Include="cArchive.Tests.cpp" />
     <ClCompile Include="cArraySort.Tests.cpp" />
@@ -197,7 +202,6 @@
     <ClCompile Include="cFileDir.Tests.cpp" />
     <ClCompile Include="cFilePath.Tests.cpp" />
     <ClCompile Include="cFileText.Tests.cpp" />
-    <ClCompile Include="cFileTextReader.Tests.cpp" />
     <ClCompile Include="cFloat.Tests.cpp" />
     <ClCompile Include="cFloatDeco.Tests.cpp" />
     <ClCompile Include="cHashTable.Tests.cpp" />
@@ -219,6 +223,7 @@
     <ClCompile Include="cSecurityAttributes.Tests.cpp" />
     <ClCompile Include="cSingleton.Tests.cpp" />
     <ClCompile Include="cStream.Tests.cpp" />
+    <ClCompile Include="cStreamTextReader.Tests.cpp" />
     <ClCompile Include="cString.Tests.cpp" />
     <ClCompile Include="cSystemInfo.Tests.cpp" />
     <ClCompile Include="cThreadLock.Tests.cpp" />

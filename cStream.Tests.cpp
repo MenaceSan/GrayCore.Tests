@@ -7,6 +7,7 @@
 #include "cStreamQueue.h"
 #include "cRandom.h"
 #include "cTypes.h"
+#include "cFile.h"
 
 namespace Gray
 {
@@ -19,7 +20,7 @@ namespace Gray
 		size_t iSizeBlock = g_Rand.GetRandUX(1024) + 100;	// TODO Make random range bigger !! 2k ?
 		cHeapBlock blockwrite(iSizeBlock * 2);
 		g_Rand.GetNoise(blockwrite, iSizeBlock);
-		::memcpy(blockwrite.get_DataBytes() + iSizeBlock, blockwrite.get_DataBytes(), iSizeBlock);	// double it.
+		cMem::Copy(blockwrite.get_DataBytes() + iSizeBlock, blockwrite.get_DataBytes(), iSizeBlock);	// double it.
 
 		size_t iSizeWriteTotal = 0;
 		size_t iSizeReadTotal = 0;
@@ -32,94 +33,121 @@ namespace Gray
 		int i = 0;
 		for (;; i++)
 		{
-			UNITTEST2_TRUE(iSizeReadTotal <= iSizeWriteTotal);
+			UNITTEST_TRUE(iSizeReadTotal <= iSizeWriteTotal);
 
 			if (iSizeWriteTotal < nSizeTotal)	// write more?
 			{
 				size_t iSizeWriteBlock = g_Rand.GetRandUX((UINT)(iSizeBlock - 1)) + 1;
 				if (iSizeWriteTotal + iSizeWriteBlock > nSizeTotal)
 					iSizeWriteBlock = nSizeTotal - iSizeWriteTotal;
-				UNITTEST2_TRUE(iSizeWriteBlock <= iSizeBlock);
+				UNITTEST_TRUE(iSizeWriteBlock <= iSizeBlock);
 				hRes = stmOut.WriteX(blockwrite.get_DataBytes() + (iSizeWriteTotal % iSizeBlock), iSizeWriteBlock);
-				UNITTEST2_TRUE(SUCCEEDED(hRes));
+				UNITTEST_TRUE(SUCCEEDED(hRes));
 				nSizeReal = (size_t)hRes;
-				UNITTEST2_TRUE(nSizeReal <= iSizeWriteBlock);
+				UNITTEST_TRUE(nSizeReal <= iSizeWriteBlock);
 				iSizeWriteTotal += nSizeReal;
-				UNITTEST2_TRUE(iSizeWriteTotal <= nSizeTotal);
+				UNITTEST_TRUE(iSizeWriteTotal <= nSizeTotal);
 			}
 
-			UNITTEST2_TRUE(iSizeReadTotal <= iSizeWriteTotal);
+			UNITTEST_TRUE(iSizeReadTotal <= iSizeWriteTotal);
 
 			size_t iSizeReadBlock = g_Rand.GetRandUX((UINT)(iSizeBlock - 1)) + 1;
-			UNITTEST2_TRUE(iSizeReadBlock <= iSizeBlock);
+			UNITTEST_TRUE(iSizeReadBlock <= iSizeBlock);
 			BYTE* pRead = blockread.get_DataBytes();
 			hRes = stmIn.ReadX(pRead, iSizeReadBlock);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
 			nSizeReal = (size_t)hRes;
-			UNITTEST2_TRUE(nSizeReal <= iSizeReadBlock);
+			UNITTEST_TRUE(nSizeReal <= iSizeReadBlock);
 
 			// Make sure i read correctly.
 			const BYTE* pWrite = blockwrite.get_DataBytes() + (iSizeReadTotal % iSizeBlock);
-			COMPARE_t iRet = cMem::Compare(pWrite, pRead, nSizeReal);
-			UNITTEST2_TRUE(iRet == 0);
+			bool isEqual = cMem::IsEqual(pWrite, pRead, nSizeReal);
+			UNITTEST_TRUE(isEqual);
 			iSizeReadTotal += nSizeReal;
-			UNITTEST2_TRUE(iSizeReadTotal <= iSizeWriteTotal);
+			UNITTEST_TRUE(iSizeReadTotal <= iSizeWriteTotal);
 
 			if (iSizeReadTotal >= nSizeTotal)	// done?
 				break;
 			if (!uts.IsTestInteractive() && tStart.get_AgeSec() > 100)
 			{
-				UNITTEST2_TRUE(false);
+				UNITTEST_TRUE(false);
 				return;
 			}
 		}
 	}
 
-	UNITTEST2_CLASS(cStream)
+	UNITTEST_CLASS(cStream)
 	{
 	public:
-		void UnitTest_StreamSize(cStream & q)
+		void Test_StreamSize(cStream & q, bool isQ)
 		{
-			//! Write size to a stream and read back.
+			//! Write stuff to a stream and read back. WriteSize()
+
+			UNITTEST_TRUE(q.GetLength() == 0);
+			STREAM_POS_t nRetSeek = q.GetPosition();
+			UNITTEST_TRUE(nRetSeek == 0);
+
+			const ITERATE_t k_Iterations = 64;	// fill 64 bits by doubling.
+			const size_t k_SizeWrite = 86;
 
 			ITERATE_t iIterations = 0;
 			size_t iInc = 1;
-			for (size_t i = 0; i < cTypeLimit<DWORD>::k_Max && iIterations <= 64; i += iInc, iInc *= 2, iIterations++)
+			for (size_t i = 0; i < cTypeLimit<DWORD>::k_Max && iIterations <= k_Iterations; i += iInc, iInc *= 2, iIterations++)
 			{
 				HRESULT hRes = q.WriteSize(i);
-				UNITTEST2_TRUE(SUCCEEDED(hRes));
+				UNITTEST_TRUE(SUCCEEDED(hRes) && hRes >= 1);
 			}
 
-			STREAM_SEEKRET_t nRetSeek = q.GetPosition();
-			UNITTEST2_TRUE(nRetSeek == 0);
-			UNITTEST2_TRUE(q.GetLength() == 86);
+			UNITTEST_TRUE(q.GetLength() == k_SizeWrite);
+
+			nRetSeek = q.GetPosition();
+
+			if (isQ)
+			{
+				UNITTEST_TRUE(nRetSeek == 0);
+			}
+			else
+			{
+				UNITTEST_TRUE(nRetSeek == k_SizeWrite);
+				q.SeekX(0, SEEK_Set);
+			}
 
 			ITERATE_t iIterations2 = 0;
 			iInc = 1;
-			for (size_t i = 0; i < cTypeLimit<DWORD>::k_Max && iIterations2 <= 64; i += iInc, iInc *= 2, iIterations2++)
+			for (size_t i = 0; i < cTypeLimit<DWORD>::k_Max && iIterations2 <= k_Iterations; i += iInc, iInc *= 2, iIterations2++)
 			{
-				size_t nSizeRead;
-				HRESULT hRes = q.ReadSize(nSizeRead);
-				UNITTEST2_TRUE(SUCCEEDED(hRes));
-				UNITTEST2_TRUE(i == nSizeRead);
+				size_t nSizeRead = 0;
+				HRESULT hRes = q.ReadSize(OUT nSizeRead);
+				UNITTEST_TRUE(SUCCEEDED(hRes));
+				UNITTEST_TRUE(i == nSizeRead);
 			}
 
 			nRetSeek = q.GetPosition();
-			UNITTEST2_TRUE(nRetSeek == 86);
-			UNITTEST2_TRUE(iIterations == iIterations2);
+			UNITTEST_TRUE(nRetSeek == k_SizeWrite);
+			UNITTEST_TRUE(iIterations == iIterations2);
+
+			UNITTEST_TRUE(q.GetLength() == k_SizeWrite);
 		}
 
-		UNITTEST2_METHOD(cStream)
+		UNITTEST_METHOD(cStream)
 		{
 			//! ReadSize, WriteSize()
+ 
+			g_Rand.InitSeedOS();
+
 			cStreamQueue q;
-			UnitTest_StreamSize(q);
-			UNITTEST2_TRUE(q.isEmptyQ());	// all read back.
-			UNITTEST2_TRUE(q.get_ReadQty() == 0);
+			Test_StreamSize(q, true);
+			UNITTEST_TRUE(q.isEmptyQ());	// all read back.
+			UNITTEST_TRUE(q.get_ReadQty() == 0);
 
 			UnitTest_StreamIntegrity(q, q, 10000 + g_Rand.GetRandUX(500000));
-			UNITTEST2_TRUE(q.isEmptyQ());	// all read back.
-			UNITTEST2_TRUE(q.get_ReadQty() == 0);
+			UNITTEST_TRUE(q.isEmptyQ());	// all read back.
+			UNITTEST_TRUE(q.get_ReadQty() == 0);
+
+			cFile fileTmp;
+			HRESULT hRes = fileTmp.OpenCreate(cAppState::I().GetTempFile(), OF_CREATE | OF_READWRITE | OF_BINARY);
+			UNITTEST_TRUE(SUCCEEDED(hRes));
+			Test_StreamSize(fileTmp, false);
 		}
 	};
 

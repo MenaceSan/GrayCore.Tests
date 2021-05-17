@@ -7,9 +7,9 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cThreadLockRW)
+	UNITTEST_CLASS(cThreadLockRW)
 	{
-		UNITTEST2_METHOD(cThreadLockRW)
+		UNITTEST_METHOD(cThreadLockRW)
 		{
 			//! TODO cThreadLockRW
 				//! Test reentrant and upgrade features.

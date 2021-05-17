@@ -6,20 +6,20 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cHeap)
+	UNITTEST_CLASS(cHeap)
 	{
-		UNITTEST2_METHOD(cHeap)
+		UNITTEST_METHOD(cHeap)
 		{
 			// test physical memory and the heap.
 			cUnitTests& uts = cUnitTests::I();
 
-			UNITTEST2_TRUE(uts.m_pLog != nullptr);
-			UNITTEST2_TRUE(cHeap::Check());
+			UNITTEST_TRUE(uts.m_pLog != nullptr);
+			UNITTEST_TRUE(cHeap::Check());
 
 			UINT64 uPhysTotal = cHeap::get_PhysTotal();
-			UNITTEST2_TRUE(uPhysTotal);
+			UNITTEST_TRUE(uPhysTotal);
 			UINT64 uPhysAvail = cHeap::get_PhysAvail();
-			UNITTEST2_TRUE(uPhysAvail);
+			UNITTEST_TRUE(uPhysAvail);
 			uts.m_pLog->addInfoF("Heap %s free of %s total", LOGSTR(cString::GetSizeK(uPhysAvail)), LOGSTR(cString::GetSizeK(uPhysTotal)));
 
 			// Allocate a bunch of blocks and make sure they stay put til freed
@@ -29,18 +29,18 @@ namespace Gray
 				const GChar_t* pszLine = k_asTextLines[i];
 				StrLen_t iLen = StrT::Len(pszLine);
 				test[i].Alloc(pszLine, iLen);
-				UNITTEST2_TRUE(test[i].isValidRead());
+				UNITTEST_TRUE(test[i].isValidRead());
 			}
 			for (ITERATE_t j = 0; j < (ITERATE_t)_countof(test) && !k_asTextLines[j].isNull(); j++)
 			{
-				UNITTEST2_TRUE(test[j].isValidRead());
+				UNITTEST_TRUE(test[j].isValidRead());
 				const GChar_t* pszLine = k_asTextLines[j];
 				StrLen_t iLen = StrT::Len(pszLine);
-				UNITTEST2_TRUE(!cMem::Compare(pszLine, test[j].get_DataBytes(), iLen));
+				UNITTEST_TRUE(cMem::IsEqual(pszLine, test[j].get_DataBytes(), iLen));
 				test[j].Free();
 			}
 
-			UNITTEST2_TRUE(cHeap::Check());
+			UNITTEST_TRUE(cHeap::Check());
 
 			// Test GetSize. NOTE: _MSC_VER always returns the exact size of alloc requested.
 			for (size_t nSizeAlloc = 0; nSizeAlloc < 1024; nSizeAlloc++)
@@ -52,24 +52,24 @@ namespace Gray
 					// Alloc 0 ? may return nullptr or not.
 					uts.m_pLog->addInfoF("Heap alloc(%d) = ptr 0%x, size=%d", (int)nSizeAlloc, (int)(INT_PTR)heapblock.get_DataBytes(), (int)nSizeTest);
 				}
-				UNITTEST2_TRUE(nSizeTest >= nSizeAlloc);
+				UNITTEST_TRUE(nSizeTest >= nSizeAlloc);
 			}
 
 			// NOT Aligned allocate.
 			void* pData1N = cHeap::AllocPtr(100);
 			cValArray::FillSize<BYTE>(pData1N, 100, 0x11);
-			UNITTEST2_TRUE(!cHeapAlign::IsAlignedAlloc(pData1N, 16)); // Should NOT report it is aligned.
+			UNITTEST_TRUE(!cHeapAlign::IsAlignedAlloc(pData1N, 16)); // Should NOT report it is aligned.
 			cHeap::FreePtr(pData1N);
 
 			// Aligned allocate.
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 			void* pData1A = cHeapAlign::AllocPtr(100, 16);
 			cValArray::FillSize<BYTE>(pData1A, 100, 0x22);
-			UNITTEST2_TRUE(cHeapAlign::IsAlignedAlloc(pData1A, 16)); // Should report it is aligned.
+			UNITTEST_TRUE(cHeapAlign::IsAlignedAlloc(pData1A, 16)); // Should report it is aligned.
 			cHeapAlign::FreePtr(pData1A);
 #endif
 
-			UNITTEST2_TRUE(cHeap::Check());
+			UNITTEST_TRUE(cHeap::Check());
 		}
 	};
 	UNITTEST2_REGISTER(cHeap, UNITTEST_LEVEL_Core);

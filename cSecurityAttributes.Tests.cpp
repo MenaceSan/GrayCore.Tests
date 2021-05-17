@@ -10,9 +10,9 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cSecurityAttributes)
+	UNITTEST_CLASS(cSecurityAttributes)
 	{
-		UNITTEST2_METHOD(cSecurityAttributes)
+		UNITTEST_METHOD(cSecurityAttributes)
 		{
 			// cSecurityId sidUsers(DOMAIN_ALIAS_RID_USERS);
 			// cSecurityId sidAdmins(DOMAIN_ALIAS_RID_ADMINS);
@@ -21,7 +21,7 @@ namespace Gray
 			cSecurityId sidUser;
 			cOSUserToken token;
 			HRESULT hRes = token.GetSID(sidUser);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
 			uts.m_pLog->addInfoF("sidUser='%s'", LOGSTR(sidUser.GetStringSID()));
 
 			cSecurityId sidEveryone(WinLocalSid);
@@ -39,9 +39,9 @@ namespace Gray
 
 			cFile fileTest;
 			hRes = fileTest.OpenCreate(sPathOut, OF_WRITE | OF_CREATE, sa1);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
 			hRes = fileTest.WriteX("WinLocalSid\n", 5);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
 
 			cSecurityAttributes sa3;
 

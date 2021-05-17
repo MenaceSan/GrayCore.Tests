@@ -10,6 +10,7 @@ namespace Gray
 #ifdef USE_UNITTESTS_MS
 	// NOTE: This requires runtime path set to find CppUnitTestFramework.dll or CppUnitTestFramework.x64.dll as well. 
 	// $(DevEnvDir)\CommonExtensions\Microsoft\TestWindow\Extensions\CppUnitFramework = D:\Programs\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions\CppUnitFramework
+	// C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\TestPlatform\Extensions\Cpp\Microsoft.VisualStudio.TestTools.CppUnitTestFramework.x64.dll
 #pragma comment(lib,"Microsoft.VisualStudio.TestTools.CppUnitTestFramework.lib")
 
 	class cUnitTestsMsLogger : public cLogAppender, public cRefBase
@@ -17,7 +18,7 @@ namespace Gray
 		IUNKNOWN_DISAMBIG(cRefBase);
 		virtual HRESULT WriteString(const LOGCHAR_t* pszMsg) override
 		{
-			//! Pass messages to M$
+			//! Pass messages to M$ unit test output
 			::Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(pszMsg);
 			return 1;
 		}
@@ -59,16 +60,16 @@ namespace Gray
 
 #endif
 
-	UNITTEST2_CLASS(GrayCore)
+	UNITTEST_CLASS(GrayCore)
 	{
 		// https://docs.microsoft.com/en-us/visualstudio/test/writing-unit-tests-for-c-cpp?view=vs-2019
 
 	public:
 
-		UNITTEST2_METHOD(GrayCore)
+		UNITTEST_METHOD(GrayCore)
 		{
 			static_assert(!USE_UNICODE_FN, "USE_UNICODE_FN");
-			UNITTEST2_TRUE(true);
+			UNITTEST_TRUE(true);
 
 			cUnitTests& uts = cUnitTests::I();
 			// cUnitTests::AssertValid

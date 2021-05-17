@@ -8,16 +8,16 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cWinHeap)
+	UNITTEST_CLASS(cWinHeap)
 	{
-		UNITTEST2_METHOD(cWinHeap)
+		UNITTEST_METHOD(cWinHeap)
 		{
 			// Enum all the private heaps for this process.
 			cUnitTests& uts = cUnitTests::I();
 
 			HANDLE aProcessHeaps[256];
 			DWORD dwRet = ::GetProcessHeaps(_countof(aProcessHeaps), aProcessHeaps);
-			UNITTEST2_TRUE(dwRet > 0);
+			UNITTEST_TRUE(dwRet > 0);
 
 			for (DWORD i = 0; i < dwRet; i++)
 			{

@@ -6,7 +6,7 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(StrU)
+	UNITTEST_CLASS(StrU)
 	{
 		static bool GRAYCALL UnitTestU(const wchar_t* pwText, StrLen_t nLen)
 		{
@@ -53,17 +53,17 @@ namespace Gray
 			return true;
 		}
 
-		UNITTEST2_METHOD(StrU)
+		UNITTEST_METHOD(StrU)
 		{
 			// https://www.cl.cam.ac.uk/~mgk25/ucs/examples/quickbrown.txt
 
 			static const wchar_t* kGreekU = L"Σὲ γνωρίζω ἀπὸ τὴν κόψη";
 			static const char* kGreek8 = "Î£á½² Î³Î½Ï‰Ïá½·Î¶Ï‰ á¼€Ï€á½¸ Ï„á½´Î½ Îºá½¹ÏˆÎ·";	// in UTF8
 
-			UNITTEST2_TRUE(UnitTestU(kGreekU, k_StrLen_UNK));
+			UNITTEST_TRUE(UnitTestU(kGreekU, k_StrLen_UNK));
 
-			UNITTEST2_TRUE(UnitTest8(k_sTextBlob, k_TEXTBLOB_LEN));
-			UNITTEST2_TRUE(UnitTest8(kGreek8, k_StrLen_UNK));
+			UNITTEST_TRUE(UnitTest8(k_sTextBlob, k_TEXTBLOB_LEN));
+			UNITTEST_TRUE(UnitTest8(kGreek8, k_StrLen_UNK));
 		}
 	};
 

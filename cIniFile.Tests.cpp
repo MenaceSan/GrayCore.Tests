@@ -8,7 +8,7 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cIniFile)
+	UNITTEST_CLASS(cIniFile)
 	{
 	public:
 		const FILECHAR_t* k_TestFileIni = _FN("cIniFileUnitTest") _FN(MIME_EXT_ini); // static
@@ -22,13 +22,13 @@ namespace Gray
 			for (iLines = 0; iLines < pSection->get_LineQty(); iLines++)
 			{
 				IniChar_t* pszLine = pSection->GetLineEnum(iLines);
-				UNITTEST2_TRUE(pszLine != nullptr);
+				UNITTEST_TRUE(pszLine != nullptr);
 				// DEBUG_MSG(( "%s", LOGSTR(pszLine) ));
 			}
 			return (HRESULT)iLines;
 		}
 
-		UNITTEST2_METHOD(cIniFile)
+		UNITTEST_METHOD(cIniFile)
 		{
 			//! read and write tests.
 			//! open some INI file.
@@ -38,7 +38,7 @@ namespace Gray
 
 			cIniFile file;
 			HRESULT hRes = file.ReadIniFile(sTestInpFile);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
 
 			// read headless section first. has no [SECTION] header.
 			cIniSectionEntryPtr pSection = file.FindSection(nullptr);
@@ -47,10 +47,13 @@ namespace Gray
 				UnitTest_Section(pSection);
 			}
 
-			for (ITERATE_t i = 0; i < file.m_aSections.GetSize(); i++)
+			for (ITERATE_t i = 0; ; i++)
 			{
-				pSection = file.FindSection(file.m_aSections.GetAt(i)->get_SectionTitle(), false);
-				UNITTEST2_TRUE(pSection != nullptr);
+				auto pSection2 = file.EnumSection(i);
+				if (pSection2 == nullptr)
+					break;
+				pSection = file.FindSection(pSection2->get_SectionTitle(), false);
+				UNITTEST_TRUE(pSection != nullptr);
 				UnitTest_Section(pSection);
 			}
 
@@ -66,16 +69,16 @@ namespace Gray
 			// now write it back out.
 			cStringF sIniWriteFile = cFilePath::CombineFilePathX(uts.get_TestOutDir(), _FN(GRAY_NAMES) _FN("IniFileUnitTest") _FN(MIME_EXT_ini));
 			hRes = file.WriteIniFile(sIniWriteFile);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
 
 			// read it back again to make sure its correct ?
 			cIniFile file2;
 			hRes = file2.ReadIniFile(sIniWriteFile);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
 
 			pszLine = file2.FindKeyLinePtr(pszTestSection, pszTestKey);
-			UNITTEST2_TRUE(pszLine != nullptr);
-			UNITTEST2_TRUE(!StrT::Cmp(pszLine, pszTestLine));
+			UNITTEST_TRUE(pszLine != nullptr);
+			UNITTEST_TRUE(!StrT::Cmp(pszLine, pszTestLine));
 
 #if 0
 			filewrite.WriteString(

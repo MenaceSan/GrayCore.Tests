@@ -1,6 +1,6 @@
 //
 // cUnitTestMs.h
-//
+// ONLY included from a test DLL.
 
 #pragma once
 #include "../GrayCore/include/cUnitTest.h"
@@ -12,7 +12,7 @@
 #if defined(_MFC_VER) || defined(GRAY_STATICLIB)	// GRAY_STATICLIB or _MFC_VER can be defined to make Gray* all static lib
 #define GRAYCORE_TEST_LINK
 #else
-#define GRAYCORE_TEST_LINK __DECL_IMPORT	// default is to include from a DLL/SO (GRAY_DLL)
+#define GRAYCORE_TEST_LINK __DECL_IMPORT	// default is to include from a DLL/SO  
 #endif
 #endif
 
@@ -24,21 +24,17 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace Gray
 {
 
-#define UNITTEST2_CLASS(n)		class UNITTEST_N(n) : public cUnitTest //!< define and implement class.
-#define UNITTEST2_METHOD(x)		public: void RunUnitTest() override				// call the public virtual as a test. 
-
 #ifdef USE_UNITTESTS_MS		// _WIN32 should register with M$ unit test framework as well. define in global namespace.
 
-// #define UNITTEST2_TRUE 			::Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsTrue 
-// #define UNITTEST2_TRUE2(x, d)	::Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsTrue(x)
-#define UNITTEST2_REGISTER(n,l)	UNITTEST_REGISTER(n,l); TEST_CLASS(n##TestsMS) { public: cNewPtr<cUnitTest> m_pTest; n##TestsMS() : m_pTest(new UNITTEST_N(n)) {} TEST_METHOD(RunTest) { m_pTest->RunUnitTest(); } }
+// #define UNITTEST_TRUE(x) 		::Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsTrue(x) 
+// #define UNITTEST_TRUE2(x, d)	::Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsTrue(x)
+
+#define UNITTEST_MSN(n)	n##TestsMS // UNITTEST_N(n) ## MS
+#define UNITTEST2_REGISTER(n,lvl)	UNITTEST_REGISTER(n,lvl); UNITTEST_EXT_EXP(n); TEST_CLASS(UNITTEST_MSN(n)) { public: cNewPtr<UNITTEST_N(n)> m_pTest; UNITTEST_MSN(n)() : m_pTest(new UNITTEST_N(n)) {} TEST_METHOD(RunTest) { m_pTest->RunUnitTest(); } }
 
 #else
 
-#define UNITTEST2_REGISTER 		UNITTEST_REGISTER  
+#define UNITTEST2_REGISTER(n,lvl) 		UNITTEST_REGISTER(n,lvl); UNITTEST_EXT_EXP(n);
 #endif
-
-#define UNITTEST2_TRUE 			UNITTEST_TRUE 
-#define UNITTEST2_TRUE2(x, d)	UNITTEST_TRUE2
 
 }

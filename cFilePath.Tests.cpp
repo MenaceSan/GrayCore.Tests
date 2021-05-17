@@ -6,9 +6,9 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cFilePath)
+	UNITTEST_CLASS(cFilePath)
 	{
-		UNITTEST2_METHOD(cFilePath)
+		UNITTEST_METHOD(cFilePath)
 		{
 			static const FILECHAR_t* k_UnitTest_FilePaths[] =
 			{
@@ -49,7 +49,7 @@ namespace Gray
 				uts.m_pLog->addDebugInfoF("File='%s', Symbol='%s'", LOGSTR(pszTest), LOGSTR(sSymbolicName));
 
 				sSymbolicName = cFilePath::GetFileSymbolicName(pszTest, "PREFIX");
-				UNITTEST2_TRUE(sSymbolicName.GetLength());
+				UNITTEST_TRUE(sSymbolicName.GetLength());
 
 				// MakeProperPath
 				FILECHAR_t szOut[_MAX_PATH];
@@ -57,21 +57,21 @@ namespace Gray
 				StrLen_t nLen1 = StrT::CopyLen(szOut, pszTest, STRMAX(szOut));
 				StrLen_t nLen3 = cFilePath::MakeProperPath(szOut);
 
-				UNITTEST2_TRUE(nLen1 >= nLen2);
-				UNITTEST2_TRUE(nLen2 == nLen3);
+				UNITTEST_TRUE(nLen1 >= nLen2);
+				UNITTEST_TRUE(nLen2 == nLen3);
 			}
 
 			FILECHAR_t* pszUpDir2 = cFilePath::GetFilePathUpDir2(_FN("/a/b/c/d/ef.ext"), k_StrLen_UNK, 2);
-			UNITTEST2_TRUE(!StrT::CmpI(pszUpDir2, _FN("d/ef.ext")));
+			UNITTEST_TRUE(!StrT::CmpI(pszUpDir2, _FN("d/ef.ext")));
 			pszUpDir2 = cFilePath::GetFilePathUpDir2(_FN("/a/b/c/d/ef.ext"), k_StrLen_UNK, -2);
-			UNITTEST2_TRUE(!StrT::CmpI(pszUpDir2, _FN("b/c/d/ef.ext")));
+			UNITTEST_TRUE(!StrT::CmpI(pszUpDir2, _FN("b/c/d/ef.ext")));
 
 			cStringF sUpDir1 = cFilePath::GetFilePathUpDir1(_FN("sdf:/dir1/dir2/dir3/dir4"), k_StrLen_UNK, 1);
-			UNITTEST2_TRUE(!sUpDir1.Compare(_FN("sdf:/dir1/dir2/dir3")));
+			UNITTEST_TRUE(!sUpDir1.Compare(_FN("sdf:/dir1/dir2/dir3")));
 
 			// combine and make proper.
 			cStringF strFilePath = cFilePath::CombineFilePathF('/', _FN("a"), _FN("b\\c"), _FN("d/ef.ext"), nullptr);
-			UNITTEST2_TRUE(!strFilePath.Compare(_FN("a/b/c/d/ef.ext")));
+			UNITTEST_TRUE(!strFilePath.Compare(_FN("a/b/c/d/ef.ext")));
 		}
 	};
 	UNITTEST2_REGISTER(cFilePath, UNITTEST_LEVEL_Core);

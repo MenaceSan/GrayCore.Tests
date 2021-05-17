@@ -15,17 +15,17 @@ namespace Gray
 		CHEAPOBJECT_IMPL;
 	};
 
-	UNITTEST2_CLASS(cSingleton)
+	UNITTEST_CLASS(cSingleton)
 	{
-		UNITTEST2_METHOD(cSingleton)
+		UNITTEST_METHOD(cSingleton)
 		{
-			UNITTEST2_TRUE(!cUnitTestSing::isSingleCreated());
+			UNITTEST_TRUE(!cUnitTestSing::isSingleCreated());
 			{
 				cUnitTestSing inst;
-				UNITTEST2_TRUE(cUnitTestSing::isSingleCreated());
+				UNITTEST_TRUE(cUnitTestSing::isSingleCreated());
 				// Will be destructed at app close.
 			}
-			UNITTEST2_TRUE(!cUnitTestSing::isSingleCreated());
+			UNITTEST_TRUE(!cUnitTestSing::isSingleCreated());
 		}
 	};
 	UNITTEST2_REGISTER(cSingleton, UNITTEST_LEVEL_Core);

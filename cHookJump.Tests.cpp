@@ -8,7 +8,7 @@ namespace Gray
 {
 	static cHookJump sm_cHookJump_HookAPI;
 
-	UNITTEST2_CLASS(cHookJump)
+	UNITTEST_CLASS(cHookJump)
 	{
 		// Make sure this code is not optimized out !
 #ifdef _MSC_VER
@@ -44,45 +44,45 @@ namespace Gray
 		{
 			// Test replacing a internal call.
 			INT_PTR iRet = HookJump1();	// test with no hooks.
-			UNITTEST2_TRUE(iRet == 1);
+			UNITTEST_TRUE(iRet == 1);
 
 			cHookJump tester;
 			HRESULT hRes = tester.InstallHook((FARPROC)HookJump1, (FARPROC)HookJump2);
-			UNITTEST2_TRUE(tester.isHookInstalled());
+			UNITTEST_TRUE(tester.isHookInstalled());
 
 			iRet = HookJump1();	// really calls cUnitTest_HookJump2
-			UNITTEST2_TRUE(iRet == 2);
+			UNITTEST_TRUE(iRet == 2);
 
 			iRet = HookJump2();
-			UNITTEST2_TRUE(iRet == 2);
+			UNITTEST_TRUE(iRet == 2);
 
 			{
 				cHookSwapLock lock(tester);
 				iRet = HookJump1();	// cUnitTest_HookJump1 was restored globally.
-				UNITTEST2_TRUE(iRet == 1);
+				UNITTEST_TRUE(iRet == 1);
 			}
 
 			iRet = HookJump1();
-			UNITTEST2_TRUE(iRet == 2);
+			UNITTEST_TRUE(iRet == 2);
 
 			{
 				cHookSwapChain<> lock(tester);
 				iRet = HookJump1();	// cUnitTest_HookJump1 still as cUnitTest_HookJump2.
-				UNITTEST2_TRUE(iRet == 2);
+				UNITTEST_TRUE(iRet == 2);
 				iRet = lock.m_pFuncChain();	// cUnitTest_HookJump1 was restored just for Chain.
-				UNITTEST2_TRUE(iRet == 1);
+				UNITTEST_TRUE(iRet == 1);
 			}
 
 			iRet = HookJump1();	// cUnitTest_HookJump1 as cUnitTest_HookJump2.
-			UNITTEST2_TRUE(iRet == 2);
+			UNITTEST_TRUE(iRet == 2);
 
 			tester.RemoveHook();
-			UNITTEST2_TRUE(!tester.isHookInstalled());
+			UNITTEST_TRUE(!tester.isHookInstalled());
 
 			iRet = HookJump1();
-			UNITTEST2_TRUE(iRet == 1);	// was restored.
+			UNITTEST_TRUE(iRet == 1);	// was restored.
 			iRet = HookJump2();
-			UNITTEST2_TRUE(iRet == 2);		// still works as expected.
+			UNITTEST_TRUE(iRet == 2);		// still works as expected.
 		}
 
 		typedef VOID(FAR WINAPI* OutputDebugStringA_t)(_In_opt_ LPCSTR lpOutputString);
@@ -105,12 +105,12 @@ namespace Gray
 			::OutputDebugStringA("TestAPI() 2 (No prefix)\n");	// raw call.
 		}
 
-		UNITTEST2_METHOD(cHookJump)
+		UNITTEST_METHOD(cHookJump)
 		{
 			//! hook a API function for one call.
 
 			cUnitTests& uts = cUnitTests::I();
-			UNITTEST2_TRUE(uts.m_pLog != nullptr);
+			UNITTEST_TRUE(uts.m_pLog != nullptr);
 
 			TestBasic();
 			TestAPI();

@@ -19,7 +19,7 @@ namespace Gray
 		}
 	};
 
-	UNITTEST2_CLASS(cException)
+	UNITTEST_CLASS(cException)
 	{
 	public:
 
@@ -34,15 +34,15 @@ namespace Gray
 			{
 				// We should get here.
 				cExceptionHolder exh(ex);	// kill it.
-				UNITTEST2_TRUE(exh.get_Severity() == LOGLEV_TRACE);
+				UNITTEST_TRUE(exh.get_Severity() == LOGLEV_TRACE);
 				cStringL sMsg = exh.get_ErrorStr();	// may have prefix.
-				UNITTEST2_TRUE(sMsg.Contains(k_pszMsg));
+				UNITTEST_TRUE(sMsg.Contains(k_pszMsg));
 				return;	// done.
 			}
 #ifndef _MFC_VER
 			GRAY_TRY_CATCHALL
 			{
-				UNITTEST2_TRUE(false);	// should not get here !
+				UNITTEST_TRUE(false);	// should not get here !
 			}
 #endif
 				GRAY_TRY_END
@@ -78,7 +78,7 @@ namespace Gray
 			// cExceptionSystem::InitForCurrentThread()
 		}
 
-		UNITTEST2_METHOD(cException)
+		UNITTEST_METHOD(cException)
 		{
 			TestThrow1();
 			TestSystem();

@@ -7,9 +7,9 @@
 
 namespace Gray 
 {
-	UNITTEST2_CLASS(cAppConsole)
+	UNITTEST_CLASS(cAppConsole)
 	{
- 		UNITTEST2_METHOD(cAppConsole)
+ 		UNITTEST_METHOD(cAppConsole)
 		{
 			cUnitTests& uts = cUnitTests::I();
 			cAppConsole& console = cAppConsole::I();

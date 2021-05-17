@@ -3,10 +3,11 @@
 //
 #include "pch.h"
 #include "cQueue.h"
+#include "cQueueChunked.h"
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cQueue)
+	UNITTEST_CLASS(cQueue)
 	{
 		const GChar_t* UnitTest_GetSrc(ITERATE_t i, ITERATE_t & riSrcLenMax)
 		{
@@ -16,7 +17,7 @@ namespace Gray
 			return static_cast<const GChar_t*>(cUnitTests::k_sTextBlob) + i;
 		}
 
-		UNITTEST2_METHOD(cQueue)
+		UNITTEST_METHOD(cQueue)
 		{
 			// Read test cQueueRead
 			cQueueRead<GChar_t> qr(k_sTextBlob, 0, cUnitTests::k_TEXTBLOB_LEN);
@@ -48,20 +49,20 @@ namespace Gray
 					break;
 				k += iPut;
 			}
-			UNITTEST2_TRUE(qs.isFullQ());
+			UNITTEST_TRUE(qs.isFullQ());
 			ITERATE_t j = 0;
 			for (;;)
 			{
 				const GChar_t* pSrc = UnitTest_GetSrc(j, iSrcLenMax);
 				GChar_t junk[UNITTEST_CHUNK];
-				ITERATE_t iGot = qs.ReadQty(junk, MIN(iSrcLenMax, (int)_countof(junk)));
-				if (iGot <= 0)
+				ITERATE_t nReadQty = qs.ReadQty(junk, MIN(iSrcLenMax, (int)_countof(junk)));
+				if (nReadQty <= 0)
 					break;
-				UNITTEST2_TRUE(!memcmp(pSrc, junk, iGot));
-				j += iGot;
+				UNITTEST_TRUE(cMem::IsEqual(pSrc, junk, nReadQty));
+				j += nReadQty;
 			}
-			UNITTEST2_TRUE(k == j);
-			UNITTEST2_TRUE(qs.isEmptyQ());
+			UNITTEST_TRUE(k == j);
+			UNITTEST_TRUE(qs.isEmptyQ());
 
 			// Read/Write a bunch of stuff to cQueueChunked
 			cQueueChunked<GChar_t> qc(512);
@@ -75,15 +76,15 @@ namespace Gray
 			{
 				const GChar_t* pSrc = UnitTest_GetSrc(j, iSrcLenMax);
 				GChar_t junk[UNITTEST_CHUNK];
-				ITERATE_t iGot = qc.ReadQty(junk, MIN(iSrcLenMax, (int)_countof(junk)));
-				if (iGot <= 0)
+				ITERATE_t nReadQty = qc.ReadQty(junk, MIN(iSrcLenMax, (int)_countof(junk)));
+				if (nReadQty <= 0)
 					break;
-				UNITTEST2_TRUE(!memcmp(pSrc, junk, iGot));
-				j += iGot;
+				UNITTEST_TRUE(cMem::IsEqual(pSrc, junk, nReadQty));
+				j += nReadQty;
 			}
 
-			UNITTEST2_TRUE(k == j);
-			UNITTEST2_TRUE(qc.isEmptyQ());
+			UNITTEST_TRUE(k == j);
+			UNITTEST_TRUE(qc.isEmptyQ());
 		}
 	};
 	UNITTEST2_REGISTER(cQueue, UNITTEST_LEVEL_Core);

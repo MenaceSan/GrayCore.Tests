@@ -6,37 +6,34 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cIniObject)
+	UNITTEST_CLASS(cIniObject)
 	{
 		// TODO: UNITTEST cIniObject
 		class cUnitTestIniObject : public cIniObject
 		{
 		public:
-			virtual IPROPIDX_t get_PropQty(void) const
+			IPROPIDX_t get_PropQty(void) const override
 			{
 				// IIniObjectDef
 				return 0;
 			}
-			virtual const IniChar_t* get_PropName(IPROPIDX_t ePropIdx) const
+			const IniChar_t* get_PropName(IPROPIDX_t ePropIdx) const override
 			{
 				// IIniObjectDef
 				UNREFERENCED_PARAMETER(ePropIdx);
 				return nullptr;
 			}
-			virtual IPROPIDX_t FindProp(const IniChar_t* pName) const
+			IPROPIDX_t FindProp(const IniChar_t* pName) const override
 			{
 				// IIniObjectDef
 				UNREFERENCED_PARAMETER(pName);
 				return -1;
 			}
-			HRESULT PropSetN(IPROPIDX_t ePropIdx, const IniChar_t* pszName)
+			HRESULT PropSet(const IniChar_t* pszPropTag, const IniChar_t* pszValue) override
 			{
-				// IIniObjectWriteN
-				UNREFERENCED_PARAMETER(ePropIdx);
-				UNREFERENCED_PARAMETER(pszName);
 				return E_NOTIMPL;
 			}
-			virtual HRESULT PropEnum(IPROPIDX_t ePropIdx, OUT cStringI& rsValue, cStringI* psKey = nullptr) const
+			HRESULT PropGetEnum(IPROPIDX_t ePropIdx, OUT cStringI& rsValue, cStringI* psKey = nullptr) const override
 			{
 				// IIniBaseEnumerator
 				UNREFERENCED_PARAMETER(ePropIdx);
@@ -46,7 +43,7 @@ namespace Gray
 			}
 		};
 
-		UNITTEST2_METHOD(cIniObject)
+		UNITTEST_METHOD(cIniObject)
 		{
 			cUnitTestIniObject obj;
 

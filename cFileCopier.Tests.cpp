@@ -17,9 +17,9 @@ namespace Gray
 		UNREFERENCED_PARAMETER(pSrc);
 	}
 
-	UNITTEST2_CLASS(cFileCopier)
+	UNITTEST_CLASS(cFileCopier)
 	{
-		UNITTEST2_METHOD(cFileCopier)
+		UNITTEST_METHOD(cFileCopier)
 		{
 			// TODO cFileCopier copy files from one dir to another.
 			cUnitTests& uts = cUnitTests::I();

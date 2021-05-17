@@ -18,9 +18,9 @@ namespace Gray
 		}
 	};
 
-	UNITTEST2_CLASS(cList)
+	UNITTEST_CLASS(cList)
 	{
-		UNITTEST2_METHOD(cList)
+		UNITTEST_METHOD(cList)
 		{
 			cListT<cUnitTestListRef> list;
 			// list.InsertHead(new cUnitTestListRef(1));

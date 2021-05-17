@@ -1,19 +1,20 @@
 //
-//! @file cFileTextReader.Tests.cpp
+//! @file cStreamTextReader.Tests.cpp
 //
 #include "pch.h"
-#include "cFileTextReader.h"
+#include "cStreamTextReader.h"
+#include "cFileText.h"
 #include "cMime.h"
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cFileTextReader)
+	UNITTEST_CLASS(cStreamTextReader)
 	{
 		const FILECHAR_t* k_TestFileIni = _FN("cIniFileUnitTest") _FN(MIME_EXT_ini); // static
 
-		UNITTEST2_METHOD(cFileTextReader)
+		UNITTEST_METHOD(cStreamTextReader)
 		{
-			//! test reading cFileTextReader.
+			//! test reading cStreamTextReader.
 			//! @note any text changes to this file can invalidate the test results.
 
 			cStringF sFilePath = cFilePath::CombineFilePathX(get_TestInpDir(), k_TestFileIni);
@@ -22,14 +23,14 @@ namespace Gray
 
 			cFileTextReader tr(k_MaxLineLen);
 			HRESULT hRes = tr.OpenX(sFilePath, OF_READ | OF_TEXT | OF_SHARE_DENY_NONE | OF_CACHE_SEQ);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
 
 			int iLineNumber = 1;	// 1 based.
 			for (;; )
 			{
-				const char* pszLine = nullptr;
-				hRes = tr.ReadStringLine(&pszLine);
-				UNITTEST2_TRUE(SUCCEEDED(hRes));
+				char line[StrT::k_LEN_MAX];
+				hRes = tr.ReadStringLine(line, STRMAX(line));
+				UNITTEST_TRUE(SUCCEEDED(hRes));
 				if (hRes == 0)
 					break;
 
@@ -38,7 +39,7 @@ namespace Gray
 				if (hRes >= k_MaxLineLen)
 				{
 					// Warning  line length was too long !
-					UNITTEST2_TRUE(iLineNumber == 167);	// Fix this if source changes.
+					UNITTEST_TRUE(iLineNumber == 167);	// Fix this if source changes.
 					DEBUG_MSG(("line %d length was > %d", iLineNumber, hRes));
 				}
 				else
@@ -46,12 +47,13 @@ namespace Gray
 					iLineNumber++;	// don't count split lines.
 				}
 
-				UNITTEST2_TRUE(hRes <= k_MaxLineLen);
+				UNITTEST_TRUE(hRes <= k_MaxLineLen);
 			}
 
-			UNITTEST2_TRUE(iLineNumber == 56);	// Fix this if source changes.
+			UNITTEST_TRUE(iLineNumber == 56);	// Fix this if source changes.
+			UNITTEST_TRUE(tr.get_CurrentLineNumber() == iLineNumber);
 		}
 	};
-	UNITTEST2_REGISTER(cFileTextReader, UNITTEST_LEVEL_Core);
+	UNITTEST2_REGISTER(cStreamTextReader, UNITTEST_LEVEL_Core);
 }
 

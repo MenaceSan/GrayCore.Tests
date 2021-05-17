@@ -6,16 +6,16 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cOSProcess)
+	UNITTEST_CLASS(cOSProcess)
 	{
-		UNITTEST2_METHOD(cOSProcess)
+		UNITTEST_METHOD(cOSProcess)
 		{
 			// get my process name.
 			cOSProcess procMe;
 			procMe.AttachCurrentProcess();
 
 			cStringF sMyName = procMe.get_ProcessName();
-			UNITTEST2_TRUE(sMyName.GetLength() > 0);		// testhost.exe for M$ test
+			UNITTEST_TRUE(sMyName.GetLength() > 0);		// testhost.exe for M$ test
 
 			// open a process for URL view ?
 		}

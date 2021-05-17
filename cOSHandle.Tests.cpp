@@ -6,9 +6,9 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cOSHandle)
+	UNITTEST_CLASS(cOSHandle)
 	{
-		UNITTEST2_METHOD(cOSHandle)
+		UNITTEST_METHOD(cOSHandle)
 		{
 			cOSHandle h1;
 			cOSHandle h2;

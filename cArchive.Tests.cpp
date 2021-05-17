@@ -82,19 +82,19 @@ namespace Gray
 		}
 	};
 
-	UNITTEST2_CLASS(cArchive)
+	UNITTEST_CLASS(cArchive)
 	{
 	public:
 
-		UNITTEST2_METHOD(cArchive)
+		UNITTEST_METHOD(cArchive)
 		{
 			cStreamQueue q1;
 			cArchive awrite(q1, true);	// write
 
 			cUnitTestArchive1 t1;
-			UNITTEST2_TRUE(t1.IsEqual(t1));
+			UNITTEST_TRUE(t1.IsEqual(t1));
 			HRESULT hRes = t1.Serialize(awrite);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
 
 			size_t nQSize = q1.get_ReadQty();
 			const void* pQData = q1.get_ReadPtr();
@@ -103,21 +103,21 @@ namespace Gray
 
 			cUnitTestArchive1 t2;
 			t2.SetZero();
-			UNITTEST2_TRUE(!t1.IsEqual(t2));
+			UNITTEST_TRUE(!t1.IsEqual(t2));
 
 			hRes = t2.Serialize(aread);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
-			UNITTEST2_TRUE(t1.IsEqual(t2));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(t1.IsEqual(t2));
 
 			cStreamQueue q2;
 			cArchive awrite2(q2, true);	// write it again
 			hRes = t2.Serialize(awrite2);
-			UNITTEST2_TRUE(SUCCEEDED(hRes));
+			UNITTEST_TRUE(SUCCEEDED(hRes));
 
 			// it is the same?
-			UNITTEST2_TRUE(q2.get_ReadQty() == (int)nQSize);
+			UNITTEST_TRUE(q2.get_ReadQty() == (int)nQSize);
 			const void* pQData2 = q2.get_ReadPtr();
-			UNITTEST2_TRUE(!cMem::Compare(pQData2, pQData, nQSize));
+			UNITTEST_TRUE(cMem::IsEqual(pQData2, pQData, nQSize));
 		}
 	};
 

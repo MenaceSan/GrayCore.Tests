@@ -4,6 +4,7 @@
 #include "pch.h"
 #include "StrFormat.h"
 #include "cTypes.h"
+#include "cIniBase.h"		//  IIniBaseGetter
 
 namespace Gray
 {
@@ -242,7 +243,7 @@ namespace Gray
 			StrLen_t nLenX = sExpected.GetLength();
 			if (nLenX >= nLenOut)
 				nLenX = nLenOut - 1;
-			UNITTEST2_TRUE(nLenX < StrT::k_LEN_MAX - 1);
+			UNITTEST_TRUE(nLenX < StrT::k_LEN_MAX - 1);
 
 			if (pszOut != nullptr)
 			{
@@ -253,21 +254,21 @@ namespace Gray
 			if (nLenRet == -1)
 			{
 				// M$ version will return this if the nLenOut size is too small.
-				UNITTEST2_TRUE(2 == nLenX);
+				UNITTEST_TRUE(2 == nLenX);
 				nLenRet = nLenX;
 			}
 			else
 			{
-				UNITTEST2_TRUE(nLenRet == nLenX);
+				UNITTEST_TRUE(nLenRet == nLenX);
 			}
 
 			if (pszOut != nullptr)
 			{
 				// NOTE: M$ vsnprintf() will fill unused data in _DEBUG mode. with 0xFE
-				UNITTEST2_TRUE(pszOut[nLenX] == '\0');
-				UNITTEST2_TRUE(!StrT::CmpN<TYPE>(pszOut, sExpected, nLenX));
+				UNITTEST_TRUE(pszOut[nLenX] == '\0');
+				UNITTEST_TRUE(!StrT::CmpN<TYPE>(pszOut, sExpected, nLenX));
 				BYTE chEnd2 = (BYTE)pszOut[StrT::k_LEN_MAX - 1];
-				UNITTEST2_TRUE(chEnd2 == cHeap::FILL_UnusedStack);
+				UNITTEST_TRUE(chEnd2 == cHeap::FILL_UnusedStack);
 			}
 		}
 	}
@@ -278,7 +279,7 @@ namespace Gray
 		// http://www.cplusplus.com/reference/cstdio/printf/
 		// pFormat = StrT::sprintfN<TYPE>
 
-		UNITTEST2_TRUE(pFormat != nullptr);
+		UNITTEST_TRUE(pFormat != nullptr);
 
 		TYPE szTmp[StrT::k_LEN_MAX];
 		UnitTestFormatX(pFormat, szTmp, STRMAX(szTmp));
@@ -291,30 +292,93 @@ namespace Gray
 
 		// Support C# style string {0} ?
 		// nLenRet = (*pFormat)(szTmp, STRMAX(szTmp), CSTRCONST("test{0}test"), StrArg<TYPE>("fedcba"));
-		// UNITTEST2_TRUE(nLenRet == 11);	
+		// UNITTEST_TRUE(nLenRet == 11);	
 
 		// bad pointer. (throw exception?)
 		nLenRet = (*pFormat)(szTmp, STRMAX(szTmp), CSTRCONST("test%stest"), 12312323);
-		UNITTEST2_TRUE(nLenRet == 11);
+		UNITTEST_TRUE(nLenRet == 11);
 #endif
 	}
 
-	UNITTEST2_CLASS(StrFormat)
+	UNITTEST_CLASS(StrFormat)
 	{
-		UNITTEST2_METHOD(StrFormat)
+
+		void TestTemplateBlocks()
 		{
-			cTimePerf timeStart1(true);
-			UnitTestFormat<wchar_t>(StrFormat<wchar_t>::FormatF);
-			UnitTestFormat<char>(StrFormat<char>::FormatF);
-			cTimePerf timeStart2(true);
+			// StrA::ReplaceTemplateBlock
+			class cUnitTestBlock : public IIniBaseGetter
+			{
+			public:
+				virtual HRESULT PropGet(const char* pszPropTag, OUT cStringI& rsVal) const
+				{
+					if (!Gray::StrT::CmpI(pszPropTag, "blocks"))
+					{
+						rsVal = "TESTBLOCK";
+						return S_OK;
+					}
+					if (!Gray::StrT::CmpI(pszPropTag, "blo1"))
+					{
+						rsVal = "blo";
+						return S_OK;
+					}
+					if (!Gray::StrT::CmpI(pszPropTag, "cks2"))
+					{
+						rsVal = "cks";
+						return S_OK;
+					}
+					return HRESULT_WIN32_C(ERROR_UNKNOWN_PROPERTY);
+				}
+			} testBlock;
+
+			// recursive test.
+
+			StrBuilderDyn<> s1;
+			StrLen_t iRet1 = StrTemplate::ReplaceTemplateBlock(s1,
+				"Test with recursive <?<?blo1?><?cks2?>?>. and junk <?IntentionalUnknownProperty?>.",
+				&testBlock, false);
+			UNITTEST_TRUE(iRet1 == 82);
+			UNITTEST_TRUE(s1.get_Length() == 71);
+			UNITTEST_TRUE(StrT::Cmp(s1.get_Str(), "Test with recursive TESTBLOCK. and junk <?IntentionalUnknownProperty?>.") == 0);
+
+			StrBuilderDyn<> s2;
+			StrLen_t iRet2 = StrTemplate::ReplaceTemplateBlock(s2,
+				"Test input string with <?blocks?>. And another <?blocks?>.",
+				&testBlock, false);
+			UNITTEST_TRUE(iRet2 == 58);
+			UNITTEST_TRUE(s2.get_Length() == 56);
+			UNITTEST_TRUE(StrT::Cmp(s2.get_Str(), "Test input string with TESTBLOCK. And another TESTBLOCK.") == 0);
+		}
+
+		void TestBuilder()
+		{
+			// test StrBuilder
+
+			StrBuilderDyn<> s1;
+			s1.AddFormat("%s - %d - %s - %s", "sdf", 123, "ABC", "XYZ", "IGNOREDJUNK");
+			UNITTEST_TRUE(s1.get_Length() == 21);
+			UNITTEST_TRUE(StrT::Cmp(s1.get_Str(), "sdf - 123 - ABC - XYZ") == 0);
+
+		}
+
+		UNITTEST_METHOD(StrFormat)
+		{
+			cTimePerf timeMark1(true);
+			UnitTestFormat<wchar_t>(StrFormat<wchar_t>::F);
+			UnitTestFormat<char>(StrFormat<char>::F);
+
+			cTimePerf timeMark2(true);
 			UnitTestFormat<wchar_t>(StrT::sprintfN<wchar_t>);
 			UnitTestFormat<char>(StrT::sprintfN<char>);
-			cTimePerf timeStart3(true);
-			TIMEPERF_t iDff1 = timeStart1.GetAgeDiff(timeStart2);
-			TIMEPERF_t iDff2 = timeStart2.GetAgeDiff(timeStart3);
-			UNITTEST2_TRUE(iDff1 > 0);
-			UNITTEST2_TRUE(iDff2 > 0);
-			// UNITTEST2_TRUE(iDff1 <= iDff2);	// Assume my version is faster.
+
+			cTimePerf timeMark3(true);
+			TIMEPERF_t iDff1 = timeMark1.GetAgeDiff(timeMark2);
+			TIMEPERF_t iDff2 = timeMark2.GetAgeDiff(timeMark3);
+			UNITTEST_TRUE(iDff1 > 0);
+			UNITTEST_TRUE(iDff2 > 0);
+			// UNITTEST_TRUE(iDff1 <= iDff2);	// Assume my version is faster.
+
+			TestTemplateBlocks();
+			TestBuilder();
 		}
 	};
 	UNITTEST2_REGISTER(StrFormat, UNITTEST_LEVEL_Core);

@@ -14,41 +14,41 @@ namespace Gray
 
 		TYPE nValRev2 = nValH;
 		cValArray::ReverseArray<BYTE>((BYTE*)&nValRev2, sizeof(nValRev2));
-		UNITTEST2_TRUE(nValRev2 == nValRev);
+		UNITTEST_TRUE(nValRev2 == nValRev);
 
 		TYPE nValRev3 = cMemT::ReverseType(nValH);
-		UNITTEST2_TRUE(nValRev3 == nValRev);
+		UNITTEST_TRUE(nValRev3 == nValRev);
 
 		TYPE nValN = cMemT::HtoN(nValH);
 #ifdef USE_LITTLE_ENDIAN
 		// Bytes must be reversed.
-		UNITTEST2_TRUE(nValN == nValRev);
+		UNITTEST_TRUE(nValN == nValRev);
 #else
-		UNITTEST2_TRUE(nValN == nValH);	// no change
+		UNITTEST_TRUE(nValN == nValH);	// no change
 #endif
-		UNITTEST2_TRUE(cMemT::NtoH(nValN) == nValH);	// back to original value.
+		UNITTEST_TRUE(cMemT::NtoH(nValN) == nValH);	// back to original value.
 	}
 
-	UNITTEST2_CLASS(cMem)
+	UNITTEST_CLASS(cMem)
 	{
-		UNITTEST2_METHOD(cMem)
+		UNITTEST_METHOD(cMem)
 		{
 			// IsValid
 			static const int k_Val = 123;	// i should not be able to write to this !?
-			UNITTEST2_TRUE(!cMem::IsCorrupt(&k_Val, 1, false));	// read static/const memory is valid.
+			UNITTEST_TRUE(!cMem::IsCorrupt(&k_Val, 1, false));	// read static/const memory is valid.
 
 			// Write to nullptr and low memory?
-			UNITTEST2_TRUE(cMem::IsCorrupt(nullptr, 1));
-			UNITTEST2_TRUE(cMem::IsCorrupt((void*)12, 1, true));
+			UNITTEST_TRUE(cMem::IsCorrupt(nullptr, 1));
+			UNITTEST_TRUE(cMem::IsCorrupt((void*)12, 1, true));
 
 #if 0 // This doesn't work well in VS2015 in x64 for some reason. Does not continue from exception.
 			// Write to const/ROM space?
 			bool bCanWriteToROM = !cMem::IsCorrupt(&k_Val, 1, true);
-			UNITTEST2_TRUE(!bCanWriteToROM);	// writing to const should NOT be valid !?
+			UNITTEST_TRUE(!bCanWriteToROM);	// writing to const should NOT be valid !?
 
 			// Write to Code?
 			bool bCanWriteToCode = !cMem::IsCorrupt((void*)&cMem::CompareIndex, 1, true);
-			UNITTEST2_TRUE(!bCanWriteToCode);
+			UNITTEST_TRUE(!bCanWriteToCode);
 #endif
 
 			// CompareIndex
@@ -57,18 +57,18 @@ namespace Gray
 			cMem::Fill(szTmp1, sizeof(szTmp1), 1);
 			cMem::Fill(szTmp2, sizeof(szTmp2), 2);
 			size_t nRet = cMem::CompareIndex(szTmp1, szTmp2, 4);
-			UNITTEST2_TRUE(nRet == 0);
+			UNITTEST_TRUE(nRet == 0);
 
 			szTmp1[0] = 2;
 			nRet = cMem::CompareIndex(szTmp1, szTmp2, 8);
-			UNITTEST2_TRUE(nRet == 1);
+			UNITTEST_TRUE(nRet == 1);
 
 			nRet = cMem::CompareIndex(szTmp1, szTmp2, 9);
-			UNITTEST2_TRUE(nRet == 1);
+			UNITTEST_TRUE(nRet == 1);
 
 			cMem::Copy(szTmp1, szTmp2, sizeof(szTmp2));
 			nRet = cMem::CompareIndex(szTmp1, szTmp2, 9);
-			UNITTEST2_TRUE(nRet == 9);
+			UNITTEST_TRUE(nRet == 9);
 
 			// Host order test data.
 			UnitTestMem<WORD>(0x1234);
@@ -78,14 +78,14 @@ namespace Gray
 
 			char szTmp[k_TEXTBLOB_LEN * 4 + 10];
 			StrLen_t nLen = cMem::ConvertToString(szTmp, STRMAX(szTmp), (const BYTE*)(const char*)k_sTextBlob.m_A, k_TEXTBLOB_LEN);
-			UNITTEST2_TRUE(nLen >= k_TEXTBLOB_LEN);
+			UNITTEST_TRUE(nLen >= k_TEXTBLOB_LEN);
 
 			BYTE bTmp[k_TEXTBLOB_LEN + 10];
 			size_t nSizeRet = cMem::ReadFromString(bTmp, STRMAX(bTmp), szTmp);
-			UNITTEST2_TRUE(nSizeRet == (size_t)k_TEXTBLOB_LEN);
-			UNITTEST2_TRUE(!cMem::Compare(bTmp, (const char*)k_sTextBlob.m_A, nSizeRet));
-			UNITTEST2_TRUE(!cMem::IsCorrupt(szTmp, sizeof(szTmp)));
-			UNITTEST2_TRUE(!cMem::IsCorrupt(bTmp, sizeof(bTmp)));
+			UNITTEST_TRUE(nSizeRet == (size_t)k_TEXTBLOB_LEN);
+			UNITTEST_TRUE(cMem::IsEqual(bTmp, (const char*)k_sTextBlob.m_A, nSizeRet));
+			UNITTEST_TRUE(!cMem::IsCorrupt(szTmp, sizeof(szTmp)));
+			UNITTEST_TRUE(!cMem::IsCorrupt(bTmp, sizeof(bTmp)));
 		}
 	};
 	UNITTEST2_REGISTER(cMem, UNITTEST_LEVEL_Core);

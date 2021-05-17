@@ -11,7 +11,7 @@ namespace Gray
 	static const cStrConst k_t2 = CSTRCONST("sdfsdF23 5");	// lower case = higher number ASCII.
 	static const cStrConst k_t3 = CSTRCONST("a.b.c");
 
-	UNITTEST2_CLASS(StrT)
+	UNITTEST_CLASS(StrT)
 	{
 		template< typename TYPE>
 		static void UnitTestBasic() // static
@@ -21,40 +21,40 @@ namespace Gray
 			STATIC_ASSERT('\r' == 0x0d, Check_CR);	// StrChar::k_CR  
 
 			bool bPrintable = StrT::IsPrintable<TYPE>(k_t3, 2);
-			UNITTEST2_TRUE(bPrintable);
+			UNITTEST_TRUE(bPrintable);
 			bPrintable = StrT::IsPrintable("a\177", 2);
-			UNITTEST2_TRUE(!bPrintable);
+			UNITTEST_TRUE(!bPrintable);
 
 			bool bIsWhitespace = StrT::IsWhitespace<TYPE>(CSTRCONST("  \f\r\n\t "), k_StrLen_UNK);
-			UNITTEST2_TRUE(bIsWhitespace);
+			UNITTEST_TRUE(bIsWhitespace);
 			bIsWhitespace = StrT::IsWhitespace<TYPE>(nullptr);
-			UNITTEST2_TRUE(bIsWhitespace);
+			UNITTEST_TRUE(bIsWhitespace);
 			bIsWhitespace = StrT::IsWhitespace<TYPE>(cStrConst::k_Empty);
-			UNITTEST2_TRUE(bIsWhitespace);
+			UNITTEST_TRUE(bIsWhitespace);
 
 			StrLen_t nLen = StrT::Len<TYPE>(k_t1);
-			UNITTEST2_TRUE(nLen == 7);
+			UNITTEST_TRUE(nLen == 7);
 
 			COMPARE_t eComp = StrT::Cmp<TYPE>(k_t1, k_t2);
-			UNITTEST2_TRUE(eComp > 0);
+			UNITTEST_TRUE(eComp > 0);
 
 			eComp = StrT::CmpI<TYPE>(k_t1, k_t2);
-			UNITTEST2_TRUE(eComp < 0);
+			UNITTEST_TRUE(eComp < 0);
 
 			eComp = StrT::CmpN<TYPE>(k_t1, k_t2, 16);
-			UNITTEST2_TRUE(eComp > 0);
+			UNITTEST_TRUE(eComp > 0);
 
 			eComp = StrT::CmpIN<TYPE>(k_t1, k_t2, 16);
-			UNITTEST2_TRUE(eComp < 0);
+			UNITTEST_TRUE(eComp < 0);
 
 			bool bCmp = StrT::StartsWithI<TYPE>(k_t2, k_t1);
-			UNITTEST2_TRUE(!bCmp);
+			UNITTEST_TRUE(!bCmp);
 
 			bCmp = StrT::EndsWithI<TYPE>(k_t2, k_t1);
-			UNITTEST2_TRUE(!bCmp);
+			UNITTEST_TRUE(!bCmp);
 
 			HASHCODE32_t nHashCode = StrT::GetHashCode32<TYPE>(k_t1, k_StrLen_UNK, 0);
-			UNITTEST2_TRUE(nHashCode == 0x1488c5b4);
+			UNITTEST_TRUE(nHashCode == 0x1488c5b4);
 		}
 
 		template< typename TYPE>
@@ -63,67 +63,67 @@ namespace Gray
 			static const cStrConst k_tSent = CSTRCONST("This is a sentence. And another. // comment");
 
 			const TYPE* pRetChar = StrT::FindChar<TYPE>(k_t1, (TYPE)'f');
-			UNITTEST2_TRUE(pRetChar != nullptr && *pRetChar == 'f');
+			UNITTEST_TRUE(pRetChar != nullptr && *pRetChar == 'f');
 
 			pRetChar = StrT::GetNonWhitespace<TYPE>(k_tSent);
-			UNITTEST2_TRUE(pRetChar != nullptr);
+			UNITTEST_TRUE(pRetChar != nullptr);
 
 			StrLen_t nLen = StrT::FindCharN<TYPE>(k_t1, (TYPE)'f');
-			UNITTEST2_TRUE(nLen == 2);
+			UNITTEST_TRUE(nLen == 2);
 
 			pRetChar = StrT::FindCharRev<TYPE>(k_t1, (TYPE)'f');
-			UNITTEST2_TRUE(pRetChar != nullptr && *pRetChar == 'f');	// f1
+			UNITTEST_TRUE(pRetChar != nullptr && *pRetChar == 'f');	// f1
 
 			nLen = StrT::FindWord<TYPE>(k_tSent, CSTRCONST("sentence"));
-			UNITTEST2_TRUE(nLen == 18);
+			UNITTEST_TRUE(nLen == 18);
 
 			pRetChar = StrT::FindTokens<TYPE>(k_tSent, k_t2);
-			UNITTEST2_TRUE(pRetChar != nullptr);
+			UNITTEST_TRUE(pRetChar != nullptr);
 
 			const TYPE* pszTest = CSTRCONST("abcdefabcdefg");
 			const TYPE* pszRet = StrT::FindStr<TYPE>(pszTest, CSTRCONST("abcdefg"));
-			UNITTEST2_TRUE(pszRet == pszTest + 6);
+			UNITTEST_TRUE(pszRet == pszTest + 6);
 
 			pszTest = CSTRCONST("abcabcabcabc");
 			pszRet = StrT::FindStr<TYPE>(pszTest, CSTRCONST("abca"));
-			UNITTEST2_TRUE(pszRet == pszTest + 0);
+			UNITTEST_TRUE(pszRet == pszTest + 0);
 
 			pszRet = StrT::FindStrI<TYPE>(pszTest, CSTRCONST("AbCa"));
-			UNITTEST2_TRUE(pszRet == pszTest + 0);
+			UNITTEST_TRUE(pszRet == pszTest + 0);
 		}
 
 		template< typename TYPE>
 		static void UnitTestInt() // static
 		{
 			UINT64 ulVal = StrT::toUL<TYPE>(CSTRCONST("0xFFFFFFFF"), nullptr, 8);
-			UNITTEST2_TRUE(ulVal == 0xFFFFFFFF);
+			UNITTEST_TRUE(ulVal == 0xFFFFFFFF);
 			ulVal = StrT::toUL<TYPE>(CSTRCONST("0xFFFFFFFF"), nullptr);
-			UNITTEST2_TRUE(ulVal == 0xFFFFFFFF);
+			UNITTEST_TRUE(ulVal == 0xFFFFFFFF);
 
 			ulVal = StrT::toUL<TYPE>(CSTRCONST("FFFFFFFF"), nullptr);
-			UNITTEST2_TRUE(ulVal == 0);
+			UNITTEST_TRUE(ulVal == 0);
 
 			ulVal = StrT::toUL<TYPE>(CSTRCONST("FFFFFFFF"), nullptr, 16);
-			UNITTEST2_TRUE(ulVal == 0xFFFFFFFF);
+			UNITTEST_TRUE(ulVal == 0xFFFFFFFF);
 
 			INT64 iVal64 = StrT::toIL<TYPE>(CSTRCONST("1234567"), nullptr, 10);
-			UNITTEST2_TRUE(iVal64 == 1234567);
+			UNITTEST_TRUE(iVal64 == 1234567);
 
 			int iVal = StrT::toI<TYPE>(CSTRCONST("-123"));
-			UNITTEST2_TRUE(iVal == -123);
+			UNITTEST_TRUE(iVal == -123);
 
 			iVal = StrT::toI<TYPE>(CSTRCONST("123"));
-			UNITTEST2_TRUE(iVal == 123);
+			UNITTEST_TRUE(iVal == 123);
 
 			iVal = StrT::toI<TYPE>(CSTRCONST("0x123"));
-			UNITTEST2_TRUE(iVal == 0x123);
+			UNITTEST_TRUE(iVal == 0x123);
 
 			TYPE szTmp[StrNum::k_LEN_MAX_DIGITS_INT + 32];
 			StrLen_t nLenRet = StrT::ILtoA<TYPE>(123123, szTmp, STRMAX(szTmp), 10);
-			UNITTEST2_TRUE(!StrT::Cmp<TYPE>(szTmp, CSTRCONST("123123")));
+			UNITTEST_TRUE(!StrT::Cmp<TYPE>(szTmp, CSTRCONST("123123")));
 
 			nLenRet = StrT::ULtoAK<TYPE>(123123, szTmp, STRMAX(szTmp), 1024, true);
-			UNITTEST2_TRUE(nLenRet == 8);
+			UNITTEST_TRUE(nLenRet == 8);
 		}
 
 		template< typename TYPE>
@@ -136,44 +136,44 @@ namespace Gray
 			const double kValN = 123.123;
 
 			double dVal = StrT::toDouble<TYPE>(kValS, nullptr);
-			UNITTEST2_TRUE(dVal == kValN);	// NOT 123.12299999
+			UNITTEST_TRUE(dVal == kValN);	// NOT 123.12299999
 
 			StrLen_t nLenRet = StrT::DtoA<TYPE>(dVal, szTmp, STRMAX(szTmp));
-			UNITTEST2_TRUE(!StrT::Cmp<TYPE>(szTmp, kValS));
+			UNITTEST_TRUE(!StrT::Cmp<TYPE>(szTmp, kValS));
 		}
 
 		template< typename TYPE>
 		static void UnitTestMatch() // static
 		{
 			StrLen_t nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("*.c"), false);
-			UNITTEST2_TRUE(nLenMatch == 5);
+			UNITTEST_TRUE(nLenMatch == 5);
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("*.c.d"), false);
-			UNITTEST2_TRUE(nLenMatch == 0);
+			UNITTEST_TRUE(nLenMatch == 0);
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("*.d"), false);
-			UNITTEST2_TRUE(nLenMatch == 0);
+			UNITTEST_TRUE(nLenMatch == 0);
 
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("*.b.*"), false);
-			UNITTEST2_TRUE(nLenMatch == 5);
+			UNITTEST_TRUE(nLenMatch == 5);
 
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("a*b"), false, 5);
-			UNITTEST2_TRUE(nLenMatch == 3);
+			UNITTEST_TRUE(nLenMatch == 3);
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("A*B"), true, 5);
-			UNITTEST2_TRUE(nLenMatch == 3);
+			UNITTEST_TRUE(nLenMatch == 3);
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("A*B"), false, 5);
-			UNITTEST2_TRUE(nLenMatch == 0);
+			UNITTEST_TRUE(nLenMatch == 0);
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("a.b.c.d"), false, 5);
-			UNITTEST2_TRUE(nLenMatch == -5);
+			UNITTEST_TRUE(nLenMatch == -5);
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("*.b.c.d"), false, 5);
-			UNITTEST2_TRUE(nLenMatch == -5);
+			UNITTEST_TRUE(nLenMatch == -5);
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("*.d"), false, 5);
-			UNITTEST2_TRUE(nLenMatch == 0);
+			UNITTEST_TRUE(nLenMatch == 0);
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("*c.d"), false, 5);
-			UNITTEST2_TRUE(nLenMatch == -5);
+			UNITTEST_TRUE(nLenMatch == -5);
 
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("d.*"), false);
-			UNITTEST2_TRUE(nLenMatch == 0);
+			UNITTEST_TRUE(nLenMatch == 0);
 			nLenMatch = StrT::MatchRegEx<TYPE>(k_t3, CSTRCONST("*.d"), false);
-			UNITTEST2_TRUE(nLenMatch == 0);
+			UNITTEST_TRUE(nLenMatch == 0);
 		}
 
 		template< typename TYPE>
@@ -181,27 +181,27 @@ namespace Gray
 		{
 			// No TYPE arg.
 			const TYPE* pszRet = StrX<TYPE>::GetTableElem(0, nullptr, 0, 0);
-			UNITTEST2_TRUE(pszRet != nullptr && *pszRet == '?');
+			UNITTEST_TRUE(pszRet != nullptr && *pszRet == '?');
 
 			// StrX<TYPE>::GetTableElem();
 
 			ITERATE_t iCountRet = StrX<TYPE>::GetTableCount(nullptr, 0);
-			UNITTEST2_TRUE(iCountRet == 0);
+			UNITTEST_TRUE(iCountRet == 0);
 
 			iCountRet = StrX<TYPE>::GetTableCountSorted(nullptr, 0);
-			UNITTEST2_TRUE(iCountRet == 0);
+			UNITTEST_TRUE(iCountRet == 0);
 
 			iCountRet = StrT::TableFind<TYPE>(k_t3, nullptr, 0);
-			UNITTEST2_TRUE(iCountRet == -1);
+			UNITTEST_TRUE(iCountRet == -1);
 
 			iCountRet = StrT::TableFindHead<TYPE>(k_t3, nullptr, 0);
-			UNITTEST2_TRUE(iCountRet == -1);
+			UNITTEST_TRUE(iCountRet == -1);
 
 			iCountRet = StrT::TableFindSorted<TYPE>(k_t3, nullptr, 0);
-			UNITTEST2_TRUE(iCountRet == -1);
+			UNITTEST_TRUE(iCountRet == -1);
 
 			iCountRet = StrT::TableFindHeadSorted<TYPE>(k_t3, nullptr, 0);
-			UNITTEST2_TRUE(iCountRet == -1);
+			UNITTEST_TRUE(iCountRet == -1);
 		}
 
 		template< typename TYPE>
@@ -209,22 +209,22 @@ namespace Gray
 		{
 			TYPE szTmp[StrT::k_LEN_MAX];
 			StrLen_t nLenRet = StrT::CopyLen<TYPE>(szTmp, k_t1, 16);
-			UNITTEST2_TRUE(nLenRet == 7);
+			UNITTEST_TRUE(nLenRet == 7);
 
 			nLenRet = StrT::CopyLen<TYPE>(szTmp, CSTRCONST("123 "), STRMAX(szTmp));
-			UNITTEST2_TRUE(nLenRet == 4);
+			UNITTEST_TRUE(nLenRet == 4);
 
 			const TYPE* pRetChar = StrT::TrimWhitespace(szTmp);
-			UNITTEST2_TRUE(pRetChar == szTmp);
-			UNITTEST2_TRUE(StrT::Len(szTmp) == 3);
+			UNITTEST_TRUE(pRetChar == szTmp);
+			UNITTEST_TRUE(StrT::Len(szTmp) == 3);
 			pRetChar = StrT::StripBlock(szTmp);
-			UNITTEST2_TRUE(pRetChar != nullptr && *pRetChar == '1'); // ""
+			UNITTEST_TRUE(pRetChar != nullptr && *pRetChar == '1'); // ""
 
 			nLenRet = StrT::CopyLen<TYPE>(szTmp, CSTRCONST("this are a string"), STRMAX(szTmp)); // sic
-			UNITTEST2_TRUE(nLenRet);
+			UNITTEST_TRUE(nLenRet);
 
 			StrT::ReplaceX<TYPE>(szTmp, STRMAX(szTmp), 5, 3, CSTRCONST("is"));
-			UNITTEST2_TRUE(!StrT::Cmp<TYPE>(szTmp, CSTRCONST("this is a string")));
+			UNITTEST_TRUE(!StrT::Cmp<TYPE>(szTmp, CSTRCONST("this is a string")));
 		}
 
 		template< typename TYPE>
@@ -233,13 +233,13 @@ namespace Gray
 			TYPE szTmp[StrT::k_LEN_MAX];
 			TYPE* ppCmds[128];
 			ITERATE_t iCountRet = StrT::ParseCmdsTmp<TYPE>(szTmp, STRMAX(szTmp), CSTRCONST("0"), ppCmds, _countof(ppCmds), nullptr, STRP_DEF);
-			UNITTEST2_TRUE(iCountRet == 1);
-			UNITTEST2_TRUE(ppCmds[0] == szTmp);
+			UNITTEST_TRUE(iCountRet == 1);
+			UNITTEST_TRUE(ppCmds[0] == szTmp);
 
 			const TYPE* pszCmd = CSTRCONST("0 ,1 ,2.234,3.0 ");
 			iCountRet = StrT::ParseCmdsTmp<TYPE>(szTmp, STRMAX(szTmp), pszCmd, ppCmds, 3, nullptr, STRP_DEF);
-			UNITTEST2_TRUE(iCountRet == 3);
-			UNITTEST2_TRUE(ppCmds[2] == szTmp + 6);
+			UNITTEST_TRUE(iCountRet == 3);
+			UNITTEST_TRUE(ppCmds[2] == szTmp + 6);
 		}
 
 		template< typename TYPE>
@@ -247,48 +247,48 @@ namespace Gray
 		{
 			static cStrConst k_tEsc = CSTRCONST("sd\nf\tsd\tf2\n");
 			const StrLen_t iLenStr = StrT::Len<TYPE>(k_tEsc);
-			UNITTEST2_TRUE(iLenStr == 11);
+			UNITTEST_TRUE(iLenStr == 11);
 
 			// @todo > 127?
 			TYPE szTmpEsc[127];
-			UNITTEST2_TRUE(STRMAX(szTmpEsc) == 126);
+			UNITTEST_TRUE(STRMAX(szTmpEsc) == 126);
 			for (int i = 0; i < (int)STRMAX(szTmpEsc); i++)
 				szTmpEsc[i] = (TYPE)(i + 1);
 			szTmpEsc[STRMAX(szTmpEsc)] = '\0';
 			const StrLen_t iLenEsc = StrT::Len<TYPE>(szTmpEsc);
-			UNITTEST2_TRUE(iLenEsc == 126);
+			UNITTEST_TRUE(iLenEsc == 126);
 
 			TYPE szTmpE1[128];
 			StrLen_t iLenE = StrT::EscSeqAdd<TYPE>(szTmpE1, k_tEsc, STRMAX(szTmpE1));
-			UNITTEST2_TRUE(iLenE == 15);
+			UNITTEST_TRUE(iLenE == 15);
 
 			TYPE szTmpE2[1024];
 			iLenE = StrT::EscSeqAdd<TYPE>(szTmpE2, szTmpEsc, STRMAX(szTmpE2));
-			UNITTEST2_TRUE(iLenE == 225); // 225 for 127, 725 for ?
+			UNITTEST_TRUE(iLenE == 225); // 225 for 127, 725 for ?
 
 			TYPE szTmpD1[STRMAX(szTmpE1)];
 			StrLen_t iLenD = StrT::EscSeqRemove<TYPE>(szTmpD1, szTmpE1, STRMAX(szTmpD1));
-			UNITTEST2_TRUE(iLenD == iLenStr);
-			UNITTEST2_TRUE(!StrT::Cmp<TYPE>(szTmpD1, k_tEsc));
+			UNITTEST_TRUE(iLenD == iLenStr);
+			UNITTEST_TRUE(!StrT::Cmp<TYPE>(szTmpD1, k_tEsc));
 
 			static const cStrConst k_Q = CSTRCONST("\"abcdefgh\"");
 			const TYPE* pszQ = k_Q;
 			iLenD = StrT::EscSeqRemoveQ<TYPE>(szTmpD1, pszQ, STRMAX(szTmpD1), StrT::k_LEN_MAX);
-			UNITTEST2_TRUE(iLenD == 10);
+			UNITTEST_TRUE(iLenD == 10);
 
 			iLenE = StrT::EscSeqAddQ<TYPE>(szTmpE1, k_tEsc, STRMAX(szTmpE1));	// Quoted
-			UNITTEST2_TRUE(iLenE == 17);
+			UNITTEST_TRUE(iLenE == 17);
 
 			TYPE szTmpD2[STRMAX(szTmpE2)];
 			iLenD = StrT::EscSeqRemove<TYPE>(szTmpD2, szTmpE2, STRMAX(szTmpD2));
-			//	UNITTEST2_TRUE(iLenD == _countof(szTmpEsc));
+			//	UNITTEST_TRUE(iLenD == _countof(szTmpEsc));
 			for (int i = 0; i < (int)STRMAX(szTmpEsc); i++)
 			{
-				UNITTEST2_TRUE(szTmpEsc[i] == (TYPE)(i + 1));
-				UNITTEST2_TRUE(szTmpD2[i] == (TYPE)(i + 1));
+				UNITTEST_TRUE(szTmpEsc[i] == (TYPE)(i + 1));
+				UNITTEST_TRUE(szTmpD2[i] == (TYPE)(i + 1));
 			}
-			UNITTEST2_TRUE(szTmpEsc[STRMAX(szTmpEsc)] == '\0');
-			UNITTEST2_TRUE(szTmpD2[STRMAX(szTmpEsc)] == '\0');
+			UNITTEST_TRUE(szTmpEsc[STRMAX(szTmpEsc)] == '\0');
+			UNITTEST_TRUE(szTmpD2[STRMAX(szTmpEsc)] == '\0');
 		}
 
 		template< typename TYPE>
@@ -304,14 +304,13 @@ namespace Gray
 			UnitTestParse<TYPE>();
 			UnitTestESC<TYPE>();
 
-			UNITTEST2_TRUE(StrT::Cmp<TYPE>(StrX<TYPE>::GetBoolStr(true), CSTRCONST("1")) == 0);
-			UNITTEST2_TRUE(StrT::Cmp<TYPE>(StrX<TYPE>::GetBoolStr(false), CSTRCONST("0")) == 0);
+			UNITTEST_TRUE(StrT::Cmp<TYPE>(StrX<TYPE>::GetBoolStr(true), CSTRCONST("1")) == 0);
+			UNITTEST_TRUE(StrT::Cmp<TYPE>(StrX<TYPE>::GetBoolStr(false), CSTRCONST("0")) == 0);
 
-			// TODO FIXME
-			// StrFormat<TYPE>::UnitTestFormat(StrT::sprintfN<TYPE>);	// StrT::sprintfN<TYPE>
+			// tests for StrT::sprintfN<TYPE> are in StrFormat
 		}
 
-		UNITTEST2_METHOD(StrT)
+		UNITTEST_METHOD(StrT)
 		{
 			UnitTestStrT<char>();
 			UnitTestStrT<wchar_t>();

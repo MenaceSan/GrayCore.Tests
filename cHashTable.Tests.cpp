@@ -35,22 +35,22 @@ namespace Gray
 		}
 	};
 
-	UNITTEST2_CLASS(cHashTable)
+	UNITTEST_CLASS(cHashTable)
 	{
-		UNITTEST2_METHOD(cHashTable)
+		UNITTEST_METHOD(cHashTable)
 		{
 			//! @todo add and remove stuff. cUnitTestHashRef
 
 			cHashTableStruct<cUnitTestHashStruct, HASHCODE_t, 5> hashtable1;
-			UNITTEST2_TRUE(hashtable1.get_HashArrayQty() == 32);
+			UNITTEST_TRUE(hashtable1.k_HASH_ARRAY_QTY == 32);
 			hashtable1.Add(cUnitTestHashStruct(123));
-			// UNITTEST2_TRUE(hashtable1.FindArgForKey(123) == t1.get_Ptr());
+			// UNITTEST_TRUE(hashtable1.FindArgForKey(123) == t1.get_Ptr());
 
 			cHashTableRef<cUnitTestHashRef, HASHCODE_t, 5> hashtable2;
-			UNITTEST2_TRUE(hashtable1.get_HashArrayQty() == 32);
+			UNITTEST_TRUE(hashtable1.k_HASH_ARRAY_QTY == 32);
 			cRefPtr<cUnitTestHashRef> t2(new cUnitTestHashRef(123));
 			hashtable2.Add(t2);
-			UNITTEST2_TRUE(hashtable2.FindArgForKey(123) == t2);
+			UNITTEST_TRUE(hashtable2.FindArgForKey(123) == t2);
 
 		}
 	};

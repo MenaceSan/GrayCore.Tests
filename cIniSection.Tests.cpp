@@ -6,9 +6,9 @@
 
 namespace Gray
 {
-	UNITTEST2_CLASS(cIniSection)
+	UNITTEST_CLASS(cIniSection)
 	{
-		UNITTEST2_METHOD(cIniSection)
+		UNITTEST_METHOD(cIniSection)
 		{
 			// Test read a blob of data as a section.
 
@@ -24,12 +24,12 @@ namespace Gray
 				"\r\n";
 
 			StrLen_t iRead = section.SetLinesParse(k_SectionData, _countof(k_SectionData), nullptr, STRP_START_WHITE | STRP_MERGE_CRNL | STRP_END_WHITE | STRP_EMPTY_STOP);
-			UNITTEST2_TRUE(iRead == 33);
-			UNITTEST2_TRUE(section.get_LineQty() == 5);
+			UNITTEST_TRUE(iRead == 33);
+			UNITTEST_TRUE(section.get_LineQty() == 5);
 
 			static const IniChar_t* k_tSent = "This is a sentence. And another. // comment";
 			iRead = cIniReader::FindScriptLineEnd(k_tSent);	// k_tSent
-			UNITTEST2_TRUE(iRead == 32);
+			UNITTEST_TRUE(iRead == 32);
 		}
 	};
 	UNITTEST2_REGISTER(cIniSection, UNITTEST_LEVEL_Core);
