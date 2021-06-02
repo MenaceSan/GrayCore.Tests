@@ -28,21 +28,21 @@ namespace Gray
 
 				// Check that the ratio is mostly constant
 				bSuccess = true;
-				for (unsigned long millisecs = 1; millisecs <= 4; millisecs++)
+				for (unsigned long milliSec = 1; milliSec <= 4; milliSec++)
 				{
 					cTimePerf tStart(true);
-					unsigned long iCount = cTimeSys::WaitSpin(millisecs);
+					unsigned long iCount = cTimeSys::WaitSpin(milliSec);
 					UNITTEST_TRUE(iCount > 0);
 
 					TIMEPERF_t cycles = tStart.get_AgePerf();
 					if (ratio <= 0)
 					{
-						ratio = cycles / millisecs;
+						ratio = cycles / milliSec;
 						continue;
 					}
 					// Allow variation up to 20%
-					if (cycles / millisecs < ratio - ratio / 5 ||
-						cycles / millisecs > ratio + ratio / 5)
+					if (cycles / milliSec < ratio - ratio / 5 ||
+						cycles / milliSec > ratio + ratio / 5)
 					{
 						hardfail++;
 						ratio = 0;

@@ -5,7 +5,7 @@
 #include "cArraySort.h"
 #include "cArrayT.h"
 #include "cRandom.h"
-#include "cNewPtr.h"
+#include "cUniquePtr.h"
 
 namespace Gray
 {
@@ -112,11 +112,11 @@ namespace Gray
 			aVals.QSort();
 			UNITTEST_TRUE(aVals.isArraySorted());
 
-			// Test a list of cNewPtr things sorted.
+			// Test a list of cUniquePtr things sorted.
 			UNITTEST_TRUE(cUnitTestArraySort::sm_nAllocated == 0);
 
 			{
-				cArraySortFacadeValue< cNewPtr<cUnitTestArraySort>, cUnitTestArraySort*, int > aSortNew;
+				cArraySortFacadeValue< cUniquePtr<cUnitTestArraySort>, cUnitTestArraySort*, int > aSortNew;
 				aSortNew.Add(new cUnitTestArraySort(1));
 				aSortNew.Add(new cUnitTestArraySort(2));
 				aSortNew.Add(new cUnitTestArraySort(5));
@@ -147,7 +147,7 @@ namespace Gray
 		UNITTEST_METHOD(cArraySort)
 		{
 			cArrayT<UINT> aTest1(1);
-			STATIC_ASSERT(sizeof(aTest1) == sizeof(void*), cArrayT);
+			STATIC_ASSERT(sizeof(aTest1) == sizeof(cRefPtr<int>), cArrayT);
 
 			TestArraySet< cArrayT<UINT> >();
 			TestArraySet< cArrayVal<UINT> >();

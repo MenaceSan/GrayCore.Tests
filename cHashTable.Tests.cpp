@@ -3,7 +3,7 @@
 //
 #include "pch.h"
 #include "cHashTable.h"
-#include "cNewPtr.h"
+#include "cUniquePtr.h"
 
 namespace Gray
 {

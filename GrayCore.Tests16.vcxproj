@@ -258,11 +258,6 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GrayCore\GrayCore16.vcxproj">
-      <Project>{792db699-0265-43b2-9438-4d0b202272e3}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <CopyFileToFolders Include="Resources\cIniFileUnitTest.ini">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">true</DeploymentContent>
       <FileType>Document</FileType>
@@ -270,6 +265,11 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">true</DeploymentContent>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GrayCore\GrayCore16.vcxproj">
+      <Project>{792db699-0265-43b2-9438-4d0b202272e3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

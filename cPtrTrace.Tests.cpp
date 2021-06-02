@@ -5,18 +5,18 @@
 #include "cPtrTrace.h"
 #include "cPtrTraceMgr.h"
 #include "cLogEvent.h"
-#include "cNewPtr.h"
+#include "cUniquePtr.h"
 
 namespace Gray
 {
 	UNITTEST_CLASS(cPtrTrace)
 	{
-		void TestNewPtr()
+		void TestUniquePtr()
 		{
 			// Test the problem auto_ptr<> has with hidden transfer/dupe of ownership.
-			cNewPtr<BYTE> p1(new BYTE[128]);
+			cUniquePtr<BYTE> p1(new BYTE[128]);
 			UNITTEST_TRUE(p1.isValidPtr());
-			cNewPtr<BYTE> p2;
+			cUniquePtr<BYTE> p2;
 			UNITTEST_TRUE(p1.isValidPtr());
 			UNITTEST_TRUE(!p2.isValidPtr());
 			p2 = p1;	// Transfer of ownership ? hidden!?
@@ -30,13 +30,13 @@ namespace Gray
 			cUnitTests& uts = cUnitTests::I();
 			cPtrTraceMgr& traceMgr = cPtrTraceMgr::I();
 
-			TestNewPtr();
+			TestUniquePtr();
 
 			bool bPrevActive = cPtrTrace::sm_bActive;
 			ITERATE_t nPrevCount = traceMgr.m_aTraces.GetSize();
 			cPtrTrace::sm_bActive = true;
 
-#ifdef USE_IUNK_TRACE
+#if defined(USE_PTRTRACE_IUNK) || defined(USE_PTRTRACE_REF)
 			{
 				int iRefCount = 0;
 				cIUnkPtr<cLogEvent> p1(new cLogEvent(LOG_ATTR_0, LOGLEV_ANY, "UnitTest", ""));
@@ -47,7 +47,7 @@ namespace Gray
 				IUNK_ATTACH(p2);
 				iRefCount = p1.get_RefCount();
 				UNITTEST_TRUE(iRefCount == 2);
-				traceMgr.TraceDump(*uts.m_pLog, 2 + nPrevCount);
+				traceMgr.TraceDump(uts.m_pLog, 2 + nPrevCount);
 				p2 = nullptr;	// ReleasePtr
 				iRefCount = p1.get_RefCount();
 				UNITTEST_TRUE(iRefCount == 1);
@@ -66,7 +66,7 @@ namespace Gray
 #endif
 
 			cPtrTrace::sm_bActive = bPrevActive;
-			traceMgr.TraceDump(*uts.m_pLog, nPrevCount);
+			traceMgr.TraceDump(uts.m_pLog, nPrevCount);
 		}
 	};
 	UNITTEST2_REGISTER(cPtrTrace, UNITTEST_LEVEL_Core);

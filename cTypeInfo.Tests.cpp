@@ -26,6 +26,8 @@ namespace Gray
 		};
 		class cTestClass3 : public cTestClass2, public cTestClass1
 		{
+			int _val;
+
 			virtual void f1()
 			{
 			}
@@ -99,13 +101,14 @@ namespace Gray
 
 		void TestClass1()
 		{
+			// compile time type info. typeid()
 			cTestClass3 oTC3;
-			const cTypeInfo& tTC3 = (const cTypeInfo&) typeid(oTC3);
-			const cTypeInfo& tTC1 = (const cTypeInfo&) typeid(cTestClass1);
-			const cTypeInfo& tTC2 = (const cTypeInfo&) typeid(cTestClass2);
+			const cTypeInfo& tTC3 = GETTYPEINFO(oTC3);
+			const cTypeInfo& tTC1 = GETTYPEINFO(cTestClass1);
+			const cTypeInfo& tTC2 = GETTYPEINFO(cTestClass2);
 			UNITTEST_TRUE(0 != tTC3.get_HashCode());
 
-			const cTypeInfo& tRef0 = (const cTypeInfo&) typeid(cRefBase);
+			const cTypeInfo& tRef0 = GETTYPEINFO(cRefBase);
 			UNITTEST_TRUE(tRef0.get_HashCode() != tTC3.get_HashCode());
 
 			const char* pszName2 = tTC3.get_Name();		// "class cUnitTest_cTypeInfo::cTestClass3"
@@ -123,11 +126,18 @@ namespace Gray
 			UNITTEST_TRUE((void*)pTC1 != (void*)pTC2);
 			cTestClass1* pTC1b = DYNPTR_CAST(cTestClass1, pTC2);	// convert cTestClass2 back to peer cTestClass1. __RTDynamicCast
 			UNITTEST_TRUE(pTC1 == pTC1b);
+
+			// Type should still be detected as cTestClass3
+
+
+			// Enumerate base classes and virtual methods from the vtable. vtable. __vfptr
+			// void* pVTable = oTC3._val;
+
 		}
 
 		UNITTEST_METHOD(cTypeInfo)
 		{
-			// Enumerate methods from the vtable. __vfptr
+			// Enumerate methods from the typeid()
 
 			TestFloatTypes<float>();
 			TestFloatTypes<double>();
@@ -135,8 +145,6 @@ namespace Gray
 			TestRef();
 			TestClass1();
 
-			// Enumerate base classes and virtual methods from the vtable.
-			// void* pVTable = pTC3->_vptr;
 		}
 	};
 	UNITTEST2_REGISTER(cTypeInfo, UNITTEST_LEVEL_Core);

@@ -5,7 +5,7 @@
 #pragma once
 #include "../GrayCore/include/cUnitTest.h"
 #include "../GrayCore/include/cLogMgr.h"
-#include "../GrayCore/include/cNewPtr.h"
+#include "../GrayCore/include/cUniquePtr.h"
 
 	// use _LIB && _WINDLL && _MFC_VER to identify the type of LIB build. or it may just be who is including us.
 #ifndef GRAYCORE_TEST_LINK
@@ -30,7 +30,7 @@ namespace Gray
 // #define UNITTEST_TRUE2(x, d)	::Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsTrue(x)
 
 #define UNITTEST_MSN(n)	n##TestsMS // UNITTEST_N(n) ## MS
-#define UNITTEST2_REGISTER(n,lvl)	UNITTEST_REGISTER(n,lvl); UNITTEST_EXT_EXP(n); TEST_CLASS(UNITTEST_MSN(n)) { public: cNewPtr<UNITTEST_N(n)> m_pTest; UNITTEST_MSN(n)() : m_pTest(new UNITTEST_N(n)) {} TEST_METHOD(RunTest) { m_pTest->RunUnitTest(); } }
+#define UNITTEST2_REGISTER(n,lvl)	UNITTEST_REGISTER(n,lvl); UNITTEST_EXT_EXP(n); TEST_CLASS(UNITTEST_MSN(n)) { public: cUniquePtr<UNITTEST_N(n)> m_pTest; UNITTEST_MSN(n)() : m_pTest(new UNITTEST_N(n)) {} TEST_METHOD(RunTest) { m_pTest->RunUnitTest(); } }
 
 #else
 
