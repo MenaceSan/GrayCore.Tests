@@ -68,7 +68,6 @@ namespace Gray
 
 		UNITTEST_METHOD(GrayCore)
 		{
-			static_assert(!USE_UNICODE_FN, "USE_UNICODE_FN");
 			UNITTEST_TRUE(true);
 
 			cUnitTests& uts = cUnitTests::I();

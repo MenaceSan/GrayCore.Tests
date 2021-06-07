@@ -9,8 +9,8 @@ namespace Gray
 	struct cAppImplTestCmd : public cAppCommand
 	{
 		const int m_nTestNum;
-		cStringF m_sSwitch;		//!< abbreviated -switch or /switch (case sensative) optional, nullptr allowed
-		cStringA m_sName;		//!< symbolic name for -switch or /switch (case insensative). MUST be unique.
+		cStringF m_sSwitch;		//!< abbreviated -switch or /switch (case Sensitive) optional, nullptr allowed
+		cStringA m_sName;		//!< symbolic name for -switch or /switch (case inSensitive). MUST be unique.
 		bool m_bCalled = false;
 
 		cAppImplTestCmd(int nTestNum)
@@ -37,9 +37,9 @@ namespace Gray
 			cAppImpl* pInst = cAppImpl::get_SingleU();
 			if (pInst == nullptr)
 			{
-				pInst = new cAppImpl("TestApp");
+				pInst = new cAppImpl(_FN("TestApp"));
 				created = true;
-				pInst->m_State.InitArgsF("-t1=234234 -t2 123 -t2=234 -t1");
+				pInst->m_State.InitArgsF(_FN("-t1=234234 -t2 123 -t2=234 -t1"));
 			}
 			else
 			{
@@ -47,11 +47,11 @@ namespace Gray
 				int i = pInst->m_State.m_Args.get_ArgsQty();
 
 				cAppArgs& argset = pInst->m_State.m_Args;
-				argset.m_asArgs.Add("-t1=234234");	// s_t1
-				argset.m_asArgs.Add("-t2");	// s_t2
-				argset.m_asArgs.Add("123");
-				argset.m_asArgs.Add("-t2=234");
-				argset.m_asArgs.Add("-t1");
+				argset.m_asArgs.Add(_FN("-t1=234234"));	// s_t1
+				argset.m_asArgs.Add(_FN("-t2"));	// s_t2
+				argset.m_asArgs.Add(_FN("123"));
+				argset.m_asArgs.Add(_FN("-t2=234"));
+				argset.m_asArgs.Add(_FN("-t1"));
 
 				// argset.m_asArgs.InitArgsLine(pInst->m_State.m_Args.get_ArgsQty(), pInst->m_State.m_Args.get_ArgsStr());
 			}

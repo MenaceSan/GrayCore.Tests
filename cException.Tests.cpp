@@ -22,6 +22,49 @@ namespace Gray
 	UNITTEST_CLASS(cException)
 	{
 	public:
+		void TestSomeJumper(cExceptionJmp& jmp) noexcept
+		{
+			char szStackTest2[123];
+			StrT::CopyLen(szStackTest2, "JUNK", _countof(szStackTest2));
+			// Do the longjmp
+			jmp.Jump(1);
+		}
+
+		void TestJmp()
+		{
+			// cExceptionJmp
+
+			static const char k_TestVal[4] = "123";
+
+			char szStackTest[123];
+			const char* pszStackTest = szStackTest;
+			StrT::CopyLen(szStackTest, k_TestVal, _countof(szStackTest));
+
+			cExceptionJmp jmp1;
+
+			int ret = jmp1.Init();
+			switch (ret)
+			{
+			case 0:
+				// this is dangerous in C++. Unwin
+				TestSomeJumper(jmp1);
+				// Will NEVER get here.
+				UNITTEST_TRUE(false);
+				break;
+			case 1:
+				// This is the longjump() return case.
+				break;
+			default:
+				UNITTEST_TRUE(false);
+				break;
+			}
+
+			UNITTEST_TRUE(ret==1);
+
+			// Is the stack ok ?
+			UNITTEST_TRUE(pszStackTest == szStackTest);
+			UNITTEST_TRUE(StrT::Cmp(pszStackTest, k_TestVal) == 0);
+		}
 
 		void TestThrow1()
 		{
@@ -80,6 +123,7 @@ namespace Gray
 
 		UNITTEST_METHOD(cException)
 		{
+			// TestJmp();
 			TestThrow1();
 			TestSystem();
 		}
