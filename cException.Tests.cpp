@@ -123,7 +123,7 @@ namespace Gray
 
 		UNITTEST_METHOD(cException)
 		{
-			// TestJmp();
+			// TestJmp(); // M$ VS has a bug that prevents this from working in some cases.
 			TestThrow1();
 			TestSystem();
 		}
