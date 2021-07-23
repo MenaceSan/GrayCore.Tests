@@ -232,12 +232,12 @@ namespace Gray
 		{
 			TYPE szTmp[StrT::k_LEN_MAX];
 			TYPE* ppCmds[128];
-			ITERATE_t iCountRet = StrT::ParseCmdsTmp<TYPE>(szTmp, STRMAX(szTmp), CSTRCONST("0"), ppCmds, _countof(ppCmds), nullptr, STRP_DEF);
+			ITERATE_t iCountRet = StrT::ParseArrayTmp<TYPE>(szTmp, STRMAX(szTmp), CSTRCONST("0"), ppCmds, _countof(ppCmds), nullptr, STRP_DEF);
 			UNITTEST_TRUE(iCountRet == 1);
 			UNITTEST_TRUE(ppCmds[0] == szTmp);
 
 			const TYPE* pszCmd = CSTRCONST("0 ,1 ,2.234,3.0 ");
-			iCountRet = StrT::ParseCmdsTmp<TYPE>(szTmp, STRMAX(szTmp), pszCmd, ppCmds, 3, nullptr, STRP_DEF);
+			iCountRet = StrT::ParseArrayTmp<TYPE>(szTmp, STRMAX(szTmp), pszCmd, ppCmds, 3, nullptr, STRP_DEF);
 			UNITTEST_TRUE(iCountRet == 3);
 			UNITTEST_TRUE(ppCmds[2] == szTmp + 6);
 		}

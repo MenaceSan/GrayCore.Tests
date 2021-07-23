@@ -3,6 +3,7 @@
 //
 #include "pch.h"
 #include "StrFormat.h"
+#include "StrBuilder.h"
 #include "cTypes.h"
 #include "cIniBase.h"		//  IIniBaseGetter
 

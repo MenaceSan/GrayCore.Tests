@@ -17,7 +17,7 @@ namespace Gray
 		{
 			//! k_asTextLines
 			//! dump contexts of a section.
-			ASSERT_N(pSection != nullptr);
+			ASSERT_NN(pSection);
 			ITERATE_t iLines = 0;
 			for (iLines = 0; iLines < pSection->get_LineQty(); iLines++)
 			{

@@ -26,7 +26,7 @@ namespace Gray
 		{
 			char szStackTest2[123];
 			StrT::CopyLen(szStackTest2, "JUNK", _countof(szStackTest2));
-			// Do the longjmp
+			// Do the longjmp()
 			jmp.Jump(1);
 		}
 
