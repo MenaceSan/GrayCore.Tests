@@ -42,12 +42,12 @@ namespace Gray
 			//! @todo add and remove stuff. cUnitTestHashRef
 
 			cHashTableStruct<cUnitTestHashStruct, HASHCODE_t, 5> hashtable1;
-			UNITTEST_TRUE(hashtable1.k_HASH_ARRAY_QTY == 32);
+			UNITTEST_TRUE(hashtable1.k_HASH_BUCKET_QTY == 32);
 			hashtable1.Add(cUnitTestHashStruct(123));
 			// UNITTEST_TRUE(hashtable1.FindArgForKey(123) == t1.get_Ptr());
 
 			cHashTableRef<cUnitTestHashRef, HASHCODE_t, 5> hashtable2;
-			UNITTEST_TRUE(hashtable1.k_HASH_ARRAY_QTY == 32);
+			UNITTEST_TRUE(hashtable1.k_HASH_BUCKET_QTY == 32);
 			cRefPtr<cUnitTestHashRef> t2(new cUnitTestHashRef(123));
 			hashtable2.Add(t2);
 			UNITTEST_TRUE(hashtable2.FindArgForKey(123) == t2);

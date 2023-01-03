@@ -35,7 +35,7 @@ namespace Gray
 				UNITTEST_TRUE(testtime1 == testtime2);
 
 				cString sTimeTest2 = testtime2.GetTimeFormStr((TIME_FORMAT_TYPE)i, nTimeZoneOffset);
-				UNITTEST_TRUE(!sTimeTest1.CompareNoCase(sTimeTest2));
+				UNITTEST_TRUE(sTimeTest1.IsEqualNoCase(sTimeTest2));
 			}
 
 			cStringF sFilePath = cFilePath::CombineFilePathX(uts.get_TestOutDir(), _FN(GRAY_NAMES) _FN("TimeUnitTest") _FN(MIME_EXT_txt));
@@ -101,11 +101,11 @@ namespace Gray
 			TIMESECD_t uVal1 = 1 * (24 * 60 * 60) + 2 * (60 * 60) + 3 * 60 + 4;
 
 			cString s1 = cTimeInt::GetTimeSpanStr(uVal1, TIMEUNIT_Day, 4);
-			UNITTEST_TRUE(!s1.CompareNoCase(_GT("1 day 2 hours 3 minutes 4 seconds")));
+			UNITTEST_TRUE(s1.IsEqualNoCase(_GT("1 day 2 hours 3 minutes 4 seconds")));
 			cString s2 = cTimeInt::GetTimeDeltaBriefStr(uVal1);
-			UNITTEST_TRUE(!s2.CompareNoCase(_GT("1d 2h 3m 4s")));
+			UNITTEST_TRUE(s2.IsEqualNoCase(_GT("1d 2h 3m 4s")));
 			cString s3 = cTimeInt::GetTimeDeltaSecondsStr(uVal1);
-			UNITTEST_TRUE(!s3.CompareNoCase(_GT("26 hours 3 minutes 4 seconds")));
+			UNITTEST_TRUE(s3.IsEqualNoCase(_GT("26 hours 3 minutes 4 seconds")));
 		}
 	};
 	UNITTEST2_REGISTER(cTimeInt, UNITTEST_LEVEL_Core);

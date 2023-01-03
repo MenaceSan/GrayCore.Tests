@@ -57,7 +57,7 @@ namespace Gray
 
 		void TestRoot()
 		{
-			// a_Root
+			UNITTEST_TRUE(a_Root.GetLength() > 2);
 			cAtomRef aRoot = cAtomRef::FindAtomStr(k_Root);
 			UNITTEST_TRUE(!aRoot.IsEmpty());		// k_Root
 			UNITTEST_TRUE(aRoot == a_Root);

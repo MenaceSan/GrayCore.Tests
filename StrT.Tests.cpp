@@ -310,8 +310,32 @@ namespace Gray
 			// tests for StrT::sprintfN<TYPE> are in StrFormat
 		}
 
+		void TestHashCode()
+		{
+			const auto h1a = StrT::GetHashCode32("arrastra");
+			const auto h1b = StrT::GetHashCode32("asclepius");
+			UNITTEST_TRUE(h1a == h1b);
+
+			// 'asclepius' = 'arrastra'
+			// 'bencher' = 'barkhan'
+			// 'confirmity' = 'adroitness'
+			// 'lumbers' = 'befortune'
+			// 'megalocornea' = 'arsenic'
+			// 'nonpacifist' = 'nonfeverishness'
+			// 'odontoceti' = 'entozoologically'
+			// 'phoresis' = 'madeiran'
+			// 'preevidence' = 'gravelled'
+			// 'questionlessness' = 'nothingness'
+			// 'sandiferous' = 'phrasiness'
+			// 'shute' = 'biland'
+			// 'sycamores' = 'phoradendron'
+			// 'tenuirostres' = 'barmfel'
+			// 'topazes' = 'estragole'
+		}
+
 		UNITTEST_METHOD(StrT)
 		{
+			TestHashCode();
 			UnitTestStrT<char>();
 			UnitTestStrT<wchar_t>();
 		}

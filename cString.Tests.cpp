@@ -44,12 +44,14 @@ namespace Gray
 	{
 		UNITTEST_METHOD(cString)
 		{
+			// sizeof(cString) should be minimal. size of pointer.
 			const size_t nSizeStrA = sizeof(cStringA);	// 8
 			STATIC_ASSERT(nSizeStrA == sizeof(void*), nSizeStrA);
 			const size_t nSizeStrW = sizeof(cStringW);	// 8
-			STATIC_ASSERT(nSizeStrA == nSizeStrW, cStringW);
-			const size_t nSizeStrD = sizeof(CStringData); // 40
-			STATIC_ASSERT(nSizeStrD > sizeof(void*) + sizeof(int), CStringData);
+			STATIC_ASSERT(nSizeStrA == nSizeStrW, cStringW);	// same
+
+			const size_t nSizeStrD = sizeof(cStringDataT<char>); // >= 40
+			STATIC_ASSERT(nSizeStrD > sizeof(void*) + sizeof(int), cStringDataT<char>);
 
 			UnitTestStrT<char>();
 			UnitTestStrT<wchar_t>();
