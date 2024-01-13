@@ -2,19 +2,16 @@
 //! @file cThreadLockRW.Tests.cpp
 //
 #include "pch.h"
-#include "cThreadLockRW.h"
-#include "cThreadLocalSys.h"
+#include <GrayCore/include/cThreadLocalSys.h>
+#include <GrayCore/include/cThreadLockRW.h>
 
-namespace Gray
-{
-	UNITTEST_CLASS(cThreadLockRW)
-	{
-		UNITTEST_METHOD(cThreadLockRW)
-		{
-			//! TODO cThreadLockRW
-				//! Test reentrant and upgrade features.
+namespace Gray {
+struct UNITTEST_N(cThreadLockRW) : public cUnitTest {
+    UNITTEST_METHOD(cThreadLockRW) {
+        //! TODO cThreadLockRW
+        //! Test reentrant and upgrade features.
 
-			cThreadLockRW lockRW;
+        cThreadLockRW lockRW;
 #if 0
 			lockRW.IncReadLockCount();
 			lockRW.Lock();
@@ -25,7 +22,7 @@ namespace Gray
 			lockRW.Unlock();
 			lockRW.DecReadLockCount();
 #endif
-		}
-	};
-	UNITTEST2_REGISTER(cThreadLockRW, UNITTEST_LEVEL_Core);
-}
+    }
+};
+UNITTEST2_REGISTER(cThreadLockRW, UNITTEST_LEVEL_t::_Core);
+}  // namespace Gray

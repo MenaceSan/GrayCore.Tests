@@ -2,40 +2,33 @@
 //! @file cArraySortString.Tests.cpp
 //
 #include "pch.h"
-#include "cArraySortString.h"
+#include <GrayCore/include/cArraySortString.h>
 
-namespace Gray
-{
-	UNITTEST_CLASS(cArraySortString)
-	{
- 
-		UNITTEST_METHOD(cArraySortString)
-		{
-			//! Test sorted arrays. pick a simple template.
+namespace Gray {
+struct UNITTEST_N(cArraySortString) : public cUnitTest {
+    UNITTEST_METHOD(cArraySortString) {
+        //! Test sorted arrays. pick a simple template.
 
-			cArrayString<> arrayUns;
-			UNITTEST_TRUE(arrayUns.GetSize() == 0);
+        cArrayString<> arrayUns;
+        UNITTEST_TRUE(arrayUns.GetSize() == 0);
 
-			cArraySortStringA array1;
-			for (ITERATE_t i = 0; !cUnitTest::k_asTextLines[i].isNull(); i++)
-			{
-				array1.AddStr(cUnitTest::k_asTextLines[i]);
-			}
-			UNITTEST_TRUE(array1.GetSize() == cUnitTest::k_TEXTLINES_QTY);
+        cArraySortStringA array1;
+        for (ITERATE_t i = 0; !cUnitTest::k_asTextLines[i].isNull(); i++) {
+            array1.AddStr(cUnitTest::k_asTextLines[i]);
+        }
+        UNITTEST_TRUE(array1.GetSize() == cUnitTest::k_TEXTLINES_QTY);
 
-			StrLen_t iLength = 0;
-			GRAY_FOREACH(cString, sVal, array1)
-			{
-				iLength += sVal.GetLength();
-			}
-			UNITTEST_TRUE(iLength >= 66);
+        StrLen_t iLength = 0;
+        for (cString sVal : array1) {
+            iLength += sVal.GetLength();
+        }
+        UNITTEST_TRUE(iLength >= 66);
 
-			cStringA* ppData = array1.GetData();
-			UNITTEST_TRUE(ppData != nullptr);
+        const cStringA* ppData = array1.get_DataConst();
+        UNITTEST_TRUE(ppData != nullptr);
 
-			UNITTEST_TRUE(array1.isArraySorted());
-		}
-	};
-
-	UNITTEST2_REGISTER(cArraySortString, UNITTEST_LEVEL_Core);
-}
+        UNITTEST_TRUE(array1.isSpanSorted());
+    }
+};
+UNITTEST2_REGISTER(cArraySortString, UNITTEST_LEVEL_t::_Core);
+}  // namespace Gray

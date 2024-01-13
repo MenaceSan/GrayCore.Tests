@@ -3,9 +3,9 @@
 // ONLY included from a test DLL.
 
 #pragma once
-#include "../GrayCore/include/cUnitTest.h"
-#include "../GrayCore/include/cLogMgr.h"
-#include "../GrayCore/include/cUniquePtr.h"
+#include <GrayCore/include/cUnitTest.h>
+#include <GrayCore/include/cLogMgr.h>
+#include <GrayCore/include/cUniquePtr.h>
 
 	// use _LIB && _WINDLL && _MFC_VER to identify the type of LIB build. or it may just be who is including us.
 #ifndef GRAYCORE_TEST_LINK

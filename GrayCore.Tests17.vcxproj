@@ -90,7 +90,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../GrayCore/include;$(IncludePath) </IncludePath>
+    <IncludePath>../;$(IncludePath)</IncludePath>
     <OutDir>../../bin/$(Platform)$(PlatformToolset)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)$(PlatformToolset)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -98,11 +98,11 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../bin/$(Platform)$(PlatformToolset)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)$(PlatformToolset)\$(Configuration)\</IntDir>
-    <IncludePath>../GrayCore/include;$(IncludePath) </IncludePath>
+    <IncludePath>../;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>../GrayCore/include;$(IncludePath) </IncludePath>
+    <IncludePath>../;$(IncludePath)</IncludePath>
     <OutDir>../../bin/$(Platform)$(PlatformToolset)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)$(PlatformToolset)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -110,7 +110,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../bin/$(Platform)$(PlatformToolset)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)$(PlatformToolset)\$(Configuration)\</IntDir>
-    <IncludePath>../GrayCore/include;$(IncludePath) </IncludePath>
+    <IncludePath>../;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
     <ClCompile>
@@ -267,7 +267,7 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GrayCore\GrayCore16.vcxproj">
+    <ProjectReference Include="..\GrayCore\GrayCore17.vcxproj">
       <Project>{792db699-0265-43b2-9438-4d0b202272e3}</Project>
     </ProjectReference>
   </ItemGroup>

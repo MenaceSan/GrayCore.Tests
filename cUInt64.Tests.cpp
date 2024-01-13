@@ -2,104 +2,96 @@
 //! @file cUInt64.Tests.cpp
 //
 #include "pch.h"
-#include "cUInt64.h"
+#include <GrayCore/include/cUInt64.h>
 
-namespace Gray
-{
-	UNITTEST_CLASS(cUInt64)
-	{
-		void UnitTestStr(const cUInt64 & d1, RADIX_t r)
-		{
-			char szTmp1[1024];
-			d1.GetStr(szTmp1, STRMAX(szTmp1), r);
+namespace Gray {
+struct UNITTEST_N(cUInt64) : public cUnitTest {
+    void UnitTestStr(const cUInt64& d1, RADIX_t r) {
+        char szTmp1[1024];
+        d1.GetStr(szTmp1, STRMAX(szTmp1), r);
 
-			cUInt64 d2(szTmp1, r);
-			UNITTEST_TRUE(d1 == d2);
-			char szTmp2[1024];
-			d2.GetStr(szTmp2, STRMAX(szTmp2), r);
-			UNITTEST_TRUE(!StrT::Cmp(szTmp2, szTmp1));
+        cUInt64 d2(szTmp1, r);
+        UNITTEST_TRUE(d1 == d2);
+        char szTmp2[1024];
+        d2.GetStr(szTmp2, STRMAX(szTmp2), r);
+        UNITTEST_TRUE(!StrT::Cmp(szTmp2, szTmp1));
 
-			cUInt64 d3;
-			d3.SetStr(szTmp2, r);
-			UNITTEST_TRUE(d1 == d3);
-			UNITTEST_TRUE(d1 == d2);
-		}
-		void UnitTestStr(RADIX_t r)
-		{
-			cUInt64 d1;
-			d1.SetRandomBits(64);
-			UnitTestStr(d1, r);
-		}
+        cUInt64 d3;
+        d3.SetStr(szTmp2, r);
+        UNITTEST_TRUE(d1 == d3);
+        UNITTEST_TRUE(d1 == d2);
+    }
+    void UnitTestStr(RADIX_t r) {
+        cUInt64 d1;
+        d1.SetRandomBits(64);
+        UnitTestStr(d1, r);
+    }
 
-		void UnitTestPrimes()
-		{
-			cUnitTests& uts = cUnitTests::I();
+    void UnitTestPrimes() {
+        cUnitTests& uts = cUnitTests::I();
 
-			for (cUInt64::UNIT_t i = 2; i < 200; i++)
-			{
-				cUInt64 n(i);
-				if (n.isPrime())
-				{
-					uts.m_pLog->addDebugInfoF("Prime=%d", i);
-				}
-			}
-		}
+        for (cUInt64::UNIT_t i = 2; i < 200; i++) {
+            cUInt64 n(i);
+            if (n.isPrime()) {
+                uts.m_pLog->addDebugInfoF("Prime=%d", i);
+            }
+        }
+    }
 
-		UNITTEST_METHOD(cUInt64)
-		{
-			//! Hold numbers. simple assignment
-			const cUInt64 nu1(1);
-			const cUInt64 nu2(2);
-			const cUInt64 nu19(19);
-			const cUInt64 nu25(25);
+    UNITTEST_METHOD(cUInt64) {
+        //! Hold numbers. simple assignment
+        const cUInt64 nu1(1);
+        const cUInt64 nu2(2);
+        const cUInt64 nu19(19);
+        const cUInt64 nu25(25);
 
-			UNITTEST_TRUE(nu19 == 19);
+        UNITTEST_TRUE(nu19 == 19);
 
-			cUInt64 nux1(1234567890);
-			UNITTEST_TRUE(nux1.get_Val<UINT32>() == 1234567890);
-			cUInt64 nux2(nux1);
-			UNITTEST_TRUE(nux1 == nux2);
-			UNITTEST_TRUE(nux2.get_Val<UINT32>() == 1234567890);
-			nux2 = nu25;
-			UNITTEST_TRUE(nux2 == nu25);
-			UNITTEST_TRUE(nux2 == 25);
-			cUInt64 nux3;
+        cUInt64 nux1(1234567890);
+        UNITTEST_TRUE(nux1.get_Val<UINT32>() == 1234567890);
+        cUInt64 nux2(nux1);
+        UNITTEST_TRUE(nux1 == nux2);
+        UNITTEST_TRUE(nux2.get_Val<UINT32>() == 1234567890);
+        nux2 = nu25;
+        UNITTEST_TRUE(nux2 == nu25);
+        UNITTEST_TRUE(nux2 == 25);
+        cUInt64 nux3;
 
-			UnitTestPrimes();
+        UnitTestPrimes();
 
-			// strings to numbers
-			static const char k_TmpX[] = "1234567890123456789";	// as big as 64 bits will hold.
-			static const char k_Tmp16[] = "10000000000000000";	// 16 power.
+        // strings to numbers
+        static const char k_TmpX[] = "1234567890123456789";  // as big as 64 bits will hold.
+        static const char k_Tmp16[] = "10000000000000000";   // 16 power.
 
-			bool bRet = nux1.SetStr(k_TmpX);
-			UNITTEST_TRUE(bRet);
+        bool bRet = nux1.SetStr(k_TmpX);
+        UNITTEST_TRUE(bRet);
 
-			char szTmp[1024];
-			StrLen_t iLen = nux1.GetStr(szTmp, STRMAX(szTmp));
-			UNITTEST_TRUE(iLen);
-			UNITTEST_TRUE(cMem::IsEqual(szTmp, k_TmpX, sizeof(k_TmpX) - 1));
+        char szTmp[1024];
+        StrLen_t iLen = nux1.GetStr(szTmp, STRMAX(szTmp));
+        UNITTEST_TRUE(iLen);
+        UNITTEST_TRUE(cMem::IsEqual(szTmp, k_TmpX, sizeof(k_TmpX) - 1));
 
-			UnitTestStr(2);
-			UnitTestStr(10);
-			UnitTestStr(16);
-			UnitTestStr(26);
+        UnitTestStr(2);
+        UnitTestStr(10);
+        UnitTestStr(16);
+        UnitTestStr(26);
 
-			// Simple Tests
-			UNITTEST_TRUE(nu25.isOdd());
-			nux1.SetStr(k_Tmp16, 0x10);	// hex.
+        // Simple Tests
+        UNITTEST_TRUE(nu25.isOdd());
+        nux1.SetStr(k_Tmp16, 0x10);  // hex.
 
-			UNITTEST_TRUE(cUInt64((cUInt64::UNIT_t)0).get_Highest1Bit() == 0);
-			UNITTEST_TRUE(cUInt64(1).get_Highest1Bit() == 1);
-			UNITTEST_TRUE(cUInt64(4095).get_Highest1Bit() == 12);
-			UNITTEST_TRUE(cUInt64(4096).get_Highest1Bit() == 13);
+        UNITTEST_TRUE(cUInt64((cUInt64::UNIT_t)0).get_Highest1Bit() == 0);
+        UNITTEST_TRUE(cUInt64(1).get_Highest1Bit() == 1);
+        UNITTEST_TRUE(cUInt64(4095).get_Highest1Bit() == 12);
+        UNITTEST_TRUE(cUInt64(4096).get_Highest1Bit() == 13);
 
-			// Primitives.
-			UINT32 u32 = nu19.get_Val<UINT32>();
-			UNITTEST_TRUE(u32 == 19);
-			UINT64 u64 = nu25.get_Val<UINT64>();
-			UNITTEST_TRUE(u64 == 25);
+        // Primitives.
+        UINT32 u32 = nu19.get_Val<UINT32>();
+        UNITTEST_TRUE(u32 == 19);
+        UINT64 u64 = nu25.get_Val<UINT64>();
+        UNITTEST_TRUE(u64 == 25);
 
-#if 0	// TODO someday Make all these tests work for CUint64
+#if 0  // TODO someday Make all these tests work for CUint64
 			static const char k_Tmp9s[] = "999999999999999999";	// +1 to get k_Tmp18
 			static const char k_Tmp18[] = "1000000000000000000";	// 18 power
 			static const char k_Tmp9[] = "1000000000";	// 9 power
@@ -243,9 +235,7 @@ namespace Gray
 				UNITTEST_TRUE(p1024.isPrime());
 			}
 #endif
-
-
-		}
-	};
-	UNITTEST2_REGISTER(cUInt64, UNITTEST_LEVEL_Core);
-}
+    }
+};
+UNITTEST2_REGISTER(cUInt64, UNITTEST_LEVEL_t::_Core);
+}  // namespace Gray
