@@ -11,7 +11,7 @@ struct UNITTEST_N(cRandom) : public cUnitTest {
         cRandomOS& rSys = cRandomOS::I();
 
         BYTE s1[16];
-        rSys.GetNoise(s1, sizeof(s1));
+        rSys.GetNoise(TOSPAN(s1));
 
         g_Rand.InitSeedOS();
         UINT u1 = g_Rand.get_RandUns();
@@ -19,20 +19,20 @@ struct UNITTEST_N(cRandom) : public cUnitTest {
         UNITTEST_TRUE(u2 != u1);
 
         BYTE s2[16];
-        rSys.GetNoise(s2, sizeof(s2));
+        rSys.GetNoise(TOSPAN(s2));
         UNITTEST_TRUE(s2 != s1);
 
         // Test seed repeatability.
         cRandomBase::RAND_t uSeed = 123;
-        g_Rand.InitSeed(TOSPANR(uSeed));
+        g_Rand.InitSeed(TOSPANT(uSeed));
         u1 = g_Rand.get_RandUns();
-        UNITTEST_TRUE(u1 == 0x68d00118);
+        UNITTEST_TRUE(u1 == 2564704154);
 
         g_Rand.InitSeed(TOSPAN(s2));
         u2 = g_Rand.get_RandUns();
         UNITTEST_TRUE(u1 != u2);
 
-        g_Rand.InitSeed(TOSPANR(uSeed));
+        g_Rand.InitSeed(TOSPANT(uSeed));
         u2 = g_Rand.get_RandUns();
         UNITTEST_TRUE(u1 == u2);  // Must repeat.
     }

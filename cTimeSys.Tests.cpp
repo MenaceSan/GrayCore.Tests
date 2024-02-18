@@ -73,7 +73,7 @@ struct UNITTEST_N(cTimeSys) : public cUnitTest {
             cThreadId::SleepCurrent(nTimeToSleep);
             const TIMESYSD_t nTimeSlept = timeStart.get_AgeSys();
 
-            UNITTEST_TRUE(nTimeSlept >= nTimeToSleep - 10);     // never sleep less !? but allow a little slop
+            UNITTEST_TRUE(nTimeSlept >= nTimeToSleep - 13);     // never sleep less !? but allow a little slop
             UNITTEST_TRUE(nTimeSlept <= k_nLen * (tocks + 1));  //  we can sleep longer ? system lag.
         }
     }

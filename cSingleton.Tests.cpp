@@ -1,13 +1,12 @@
-//
 //! @file cSingleton.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cSingleton.h>
 
 namespace Gray {
-struct cUnitTestSing : public cSingleton<cUnitTestSing> {
+struct cUnitTestSing final : public cSingleton<cUnitTestSing> {
+    SINGLETON_IMPL(cUnitTestSing);
     cUnitTestSing() : cSingleton<cUnitTestSing>(this, typeid(cUnitTestSing)) {}
-    CHEAPOBJECT_IMPL;
 };
 
 struct UNITTEST_N(cSingleton) : public cUnitTest {

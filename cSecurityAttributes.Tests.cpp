@@ -1,6 +1,5 @@
-//
 //! @file cSecurityAttributes.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cFile.h>
 #include <GrayCore/include/cOSUser.h>

@@ -48,9 +48,9 @@ struct UNITTEST_N(cFilePath) : public cUnitTest {
 
             // MakeProperPath
             FILECHAR_t szOut[_MAX_PATH];
-            StrLen_t nLen2 = cFilePath::MakeProperPath(szOut, STRMAX(szOut), pszTest);
-            StrLen_t nLen1 = StrT::CopyLen(szOut, pszTest, STRMAX(szOut));
-            StrLen_t nLen3 = cFilePath::MakeProperPath(szOut);
+            StrLen_t nLen2 = cFilePath::MakeProperPath(TOSPAN(szOut), pszTest);
+            StrLen_t nLen1 = StrT::Copy(TOSPAN(szOut), pszTest);
+            StrLen_t nLen3 = cFilePath::MakeProperPath(TOSPAN(szOut));
 
             UNITTEST_TRUE(nLen1 >= nLen2);
             UNITTEST_TRUE(nLen2 == nLen3);

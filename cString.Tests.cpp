@@ -33,8 +33,8 @@ void GRAYCALL UnitTestStrT()  // static
     sTmp.ReleaseBuffer(0);
     UNITTEST_TRUE(sTmp.GetLength() == 0);
 
-    pBuffer = sTmp.GetBuffer(100);
-    StrT::CopyLen<_TYPE_CH>(pBuffer, CSTRCONST("TEST"), 100);
+    const StrLen_t lenRet = StrT::Copy<_TYPE_CH>(sTmp.GetSpanWrite(100), CSTRCONST("TEST"));
+    UNITTEST_TRUE(lenRet == 4);
     sTmp.ReleaseBuffer(k_StrLen_UNK);
     UNITTEST_TRUE(sTmp.GetLength() == 4);
 }

@@ -10,8 +10,8 @@ __DECL_ALIGN(32) struct cTestHeapObject2 : public cHeapObject {
     DWORD a[128];                                  // add some size to allocate.
 };
 __DECL_ALIGN(64)
-struct cTestHeapObject3 : public cHeapObject { // default new operator.
-    DWORD a[128];  // add some size to allocate.
+struct cTestHeapObject3 : public cHeapObject {  // default new operator.
+    DWORD a[128];                               // add some size to allocate.
 };
 
 struct UNITTEST_N(cHeap) : public cUnitTest {
@@ -74,15 +74,13 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
         // Allocate a bunch of blocks and make sure they stay put til freed
         cBlob testBlob[32];
         for (ITERATE_t i = 0; i < (ITERATE_t)_countof(testBlob) && !k_asTextLines[i].isNull(); i++) {
-            const GChar_t* pszLine = k_asTextLines[i];
-            StrLen_t iLen = StrT::Len(pszLine);
-            testBlob[i].AllocSpan(pszLine, iLen);
+            testBlob[i].SetCopyAlloc(StrT::ToSpanStr<GChar_t>(k_asTextLines[i]));
             UNITTEST_TRUE(testBlob[i].isValidRead());
         }
         for (ITERATE_t j = 0; j < (ITERATE_t)_countof(testBlob) && !k_asTextLines[j].isNull(); j++) {
             UNITTEST_TRUE(testBlob[j].isValidRead());
             const GChar_t* pszLine = k_asTextLines[j];
-            UNITTEST_TRUE(testBlob[j].IsEqualSpan(StrT::ToSpan(pszLine)));
+            UNITTEST_TRUE(testBlob[j].IsEqualSpan(StrT::ToSpanStr(pszLine)));
             testBlob[j].SetBlobNull();
         }
 
@@ -102,7 +100,7 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
         // NOT Aligned allocate. but always aligned to void* at least.
         for (int i = 1; i < 200; i++) {
             void* pData1N = cHeap::AllocPtr(i);
-            cValArray::FillSize<BYTE>(pData1N, i, 0x11);
+            cMem::Fill(pData1N, i, 0x11);
             UINT_PTR uValPtr = PtrCastToNum(pData1N);
             const auto alignRem = (uValPtr % (2 * sizeof(void*)));
             UNITTEST_TRUE(alignRem == 0);                      // should always be true.
@@ -113,7 +111,7 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
         // Aligned allocate.
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
         void* pData1A = cHeapAlign::AllocPtr(100, cHeap::k_SizeAlignDef * 2);
-        cValArray::FillSize<BYTE>(pData1A, 100, 0x22);
+        cMem::Fill(pData1A, 100, 0x22);
         UNITTEST_TRUE(cHeapAlign::IsHeapAlign(pData1A));  // Should report it is aligned.
         cHeapAlign::FreePtr(pData1A);
 #endif

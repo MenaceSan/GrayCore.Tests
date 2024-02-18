@@ -18,8 +18,7 @@ class cUnitTestHashStruct {
 
 struct cUnitTestHashRef : public cRefBase, public cUnitTestHashStruct {
     cUnitTestHashRef(HASHCODE_t nHashCode = 0) : cUnitTestHashStruct(nHashCode) {}
-    HASHCODE_t get_HashCode() const noexcept  // resolve ambiguous.
-    {
+    HASHCODE_t get_HashCode() const noexcept { // resolve ambiguous.
         return cUnitTestHashStruct::get_HashCode();
     }
 };

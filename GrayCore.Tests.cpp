@@ -1,11 +1,12 @@
-//
 //! @file GrayCore.Tests.cpp
 //! Support M$ testing framework.
 
 #include "pch.h"
 #include <GrayCore/include/cLogEvent.h>
+#include <GrayCore/include/cOSModDyn.h>
 
 namespace Gray {
+cOSModDynImpl g_Module(GRAY_NAMES "CoreTests");
 
 #ifdef USE_UNITTESTS_MS
 // NOTE: This requires runtime path set to find CppUnitTestFramework.dll or CppUnitTestFramework.x64.dll as well.
@@ -42,11 +43,23 @@ TEST_MODULE_INITIALIZE(Initialize) {
     if (log.FindSinkType(typeid(cUnitTestsMsLogger), true) == nullptr) {
         log.AddSink(new cUnitTestsMsLogger());  // route logs here.
     }
+#ifdef USE_HEAP_STATS
+    // check for memory leaks over life of tests.
+    const auto& stats = cHeap::g_Stats;
+    log.addDebugInfoF("Heap Init: allocs=%u, current=%zu, max=%zu", stats._Allocs, stats._Total, stats._Max);
+#endif
 }
 TEST_MODULE_CLEANUP(Cleanup) {
     // module cleanup code
     cUnitTests& uts = cUnitTests::I();
     cLogMgr& log = cLogMgr::I();
+
+#ifdef USE_HEAP_STATS
+    // check for memory leaks over life of tests.
+    const auto& stats = cHeap::g_Stats;
+    log.addDebugInfoF("Heap Cleanup: allocs=%u, current=%zu, max=%zu", stats._Allocs, stats._Total, stats._Max);
+#endif
+
     log.RemoveSinkType(typeid(cUnitTestsMsLogger), true);
     cDebugAssert::sm_pAssertCallback = uts.m_pAssertOrig;  // restore.
 }
@@ -62,3 +75,5 @@ struct UNITTEST_N(GrayCore) : public cUnitTest {  // https://docs.microsoft.com/
 
 UNITTEST2_REGISTER(GrayCore, UNITTEST_LEVEL_t::_Core);
 }  // namespace Gray
+
+cOSModDynImpl_DEF(Gray);  // DLL/SO

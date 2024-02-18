@@ -1,44 +1,49 @@
-﻿//
-//! @file StrU.Tests.cpp
-//
+﻿//! @file StrU.Tests.cpp
+
 #include "pch.h"
 #include <GrayCore/include/StrU.h>
+#include <GrayCore/include/cString.h>
 
 namespace Gray {
 struct UNITTEST_N(StrU) : public cUnitTest {
-    static bool GRAYCALL UnitTestU(const wchar_t* pwText, StrLen_t nLen) {
+    static bool GRAYCALL UnitTestU(const cSpan<wchar_t>& src) {
         // Does the input Unicode wchar_t string match its equivalent UTF8 string ?
-        if (nLen <= k_StrLen_UNK) nLen = StrT::Len(pwText);
 
-        char szTmp8[1024];
-        const StrLen_t iLen8 = StrU::UNICODEtoUTF8(szTmp8, STRMAX(szTmp8), pwText, nLen);
-        if (iLen8 <= 0)  // should be same or larger than nLen
-            return false;
+        const StrLen_t lenA1 = StrU::UNICODEtoUTF8Size(src);
+        if (lenA1 <= 1) return false;
+        if (lenA1 < src.GetSize()) return false;  // should be same or larger than nLen
+
+        char szTmpA[1024];
+        if (lenA1 >= STRMAX(szTmpA)) return false;
+        const StrLen_t lenA = StrU::UNICODEtoUTF8(TOSPAN(szTmpA), src);
+        if (lenA != lenA1) return false;
 
         wchar_t wTmpU[1024];
-        if (iLen8 >= STRMAX(wTmpU)) return false;
-        const StrLen_t iLenU = StrU::UTF8toUNICODE(wTmpU, STRMAX(wTmpU), szTmp8, iLen8);
-        if (iLenU != nLen) return false;
-        if (StrT::Cmp<wchar_t>(wTmpU, pwText))  // back to original text?
+        if (src.GetSize() >= STRMAX(wTmpU)) return false;
+        const StrLen_t iLenU = StrU::UTF8toUNICODE(TOSPAN(wTmpU), ToSpan(szTmpA, lenA));
+        if (iLenU != src.GetSize()) return false;
+        if (StrT::Cmp<wchar_t>(wTmpU, src))  // back to original text?
             return false;
         return true;
     }
 
-    static bool GRAYCALL UnitTest8(const char* pszText, StrLen_t nLen) {
+    static bool GRAYCALL UnitTestA(const cSpan<char>& src) {
         // Does the input UTF8 / ASCII string match its equivalent Unicode string ?
 
-        if (nLen <= k_StrLen_UNK) nLen = StrT::Len(pszText);
+        const StrLen_t iLenU1 = StrU::UTF8toUNICODELen(src);
+        if (iLenU1 <= 1) return false;
+        if (iLenU1 > src.GetSize()) return false;  // should be same or smaller than nLen
 
         wchar_t wTmpU[1024];
-        if (nLen >= STRMAX(wTmpU)) return false;
-        const StrLen_t iLenU = StrU::UTF8toUNICODE(wTmpU, STRMAX(wTmpU), pszText, nLen);
-        if (iLenU <= 0)  // should be same or smaller than nLen
-            return false;
+        if (iLenU1 >= STRMAX(wTmpU)) return false;
+        const StrLen_t iLenU = StrU::UTF8toUNICODE(TOSPAN(wTmpU), src);
+        if (iLenU != iLenU1) return false;
 
-        char szTmp8[1024];
-        const StrLen_t iLen8 = StrU::UNICODEtoUTF8(szTmp8, STRMAX(szTmp8), wTmpU, iLenU);
-        if (iLen8 != nLen) return false;
-        if (StrT::Cmp<char>(szTmp8, pszText))  // back to original text?
+        char szTmpA[1024];
+        if (src.GetSize() >= STRMAX(szTmpA)) return false;
+        const StrLen_t lenA = StrU::UNICODEtoUTF8(TOSPAN(szTmpA), ToSpan(wTmpU, iLenU));
+        if (lenA != src.GetSize()) return false;
+        if (StrT::Cmp<char>(szTmpA, src))  // back to original text?
             return false;
         return true;
     }
@@ -52,20 +57,29 @@ struct UNITTEST_N(StrU) : public cUnitTest {
         }
         badU[STRMAX(badU)] = '\0';
 
-        UNITTEST_TRUE(UnitTestU(badU, k_StrLen_UNK));
+        UNITTEST_TRUE(UnitTestU(StrT::ToSpanStr(badU)));
     }
 
     UNITTEST_METHOD(StrU) {
         // TryBadU();
 
         // https://www.cl.cam.ac.uk/~mgk25/ucs/examples/quickbrown.txt
-        static const wchar_t* kGreekU = L"Σὲ γνωρίζω ἀπὸ τὴν κόψη";
-        static const char* kGreek8 = "Î£á½² Î³Î½Ï‰Ïá½·Î¶Ï‰ á¼€Ï€á½¸ Ï„á½´Î½ Îºá½¹ÏˆÎ·";  // in UTF8
+        static const wchar_t kGreekU[] = L"Σὲ γνωρίζω ἀπὸ τὴν κόψη";
+        static const char kGreekA[] = "Î£á½² Î³Î½Ï‰Ïá½·Î¶Ï‰ á¼€Ï€á½¸ Ï„á½´Î½ Îºá½¹ÏˆÎ·";  // in UTF8
 
-        UNITTEST_TRUE(UnitTestU(kGreekU, k_StrLen_UNK));
+        cStringW sU = kGreekU;
+        cStringW sU2 = kGreekA;
+        UNITTEST_TRUE(sU == sU2);
 
-        UNITTEST_TRUE(UnitTest8(k_sTextBlob, k_TEXTBLOB_LEN));
-        UNITTEST_TRUE(UnitTest8(kGreek8, k_StrLen_UNK));
+        cStringA sA = kGreekA;
+        cStringA sA2 = kGreekU;
+        UNITTEST_TRUE(sA == sA2);
+
+        UNITTEST_TRUE(UnitTestU(TOSPAN_LIT(kGreekU)));
+        UNITTEST_TRUE(UnitTestA(TOSPAN_LIT(kGreekA)));
+
+        UNITTEST_TRUE(UnitTestU(ToSpan<wchar_t>(k_sTextBlob)));
+        UNITTEST_TRUE(UnitTestA(ToSpan<char>(k_sTextBlob)));
     }
 };
 UNITTEST2_REGISTER(StrU, UNITTEST_LEVEL_t::_Core);

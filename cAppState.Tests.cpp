@@ -1,6 +1,5 @@
-//
 //! @file cAppState.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cAppState.h>
 #include <GrayCore/include/cString.h>

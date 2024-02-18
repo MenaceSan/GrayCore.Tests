@@ -1,15 +1,13 @@
-//
 //! @file cArchive.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cArchive.h>
 #include <GrayCore/include/cStreamQueue.h>
 #include <GrayCore/include/cUnitTest.h>
 
 namespace Gray {
-class cUnitTestArchive1 {
+struct cUnitTestArchive1 : public cObject {
     // A class with a bunch of types to serialize.
- public:
     size_t m_nSize;
     int m_i1;
     int m_i2;
@@ -20,7 +18,6 @@ class cUnitTestArchive1 {
     cString m_s3;
     // cArrayVal
 
- public:
     cUnitTestArchive1() : m_nSize(654321), m_i1(1), m_i2(22), m_u1(333), m_u2(444444), m_s1("test"), m_s2(L"Junk Test String"), m_s3(cUnitTestCur::k_sTextBlob.get_CPtr()) {}
 
     void SetZero() {
@@ -34,14 +31,14 @@ class cUnitTestArchive1 {
         m_s3.SetErase();
     }
 
-    HRESULT Serialize(cArchive& a) {
+    HRESULT Serialize(cArchive& a) override {
         // Read or write all members of this structure.
         HRESULT hRes;
         hRes = a.SerializeSize(m_nSize);
-        hRes = a.Serialize(m_i1);
-        hRes = a.Serialize(m_i2);
-        hRes = a.Serialize(m_u1);
-        hRes = a.Serialize(m_u2);
+        hRes = a.SerializeT(m_i1);
+        hRes = a.SerializeT(m_i2);
+        hRes = a.SerializeT(m_u1);
+        hRes = a.SerializeT(m_u2);
         hRes = m_s1.Serialize(a);
         hRes = m_s2.Serialize(a);
         hRes = m_s3.Serialize(a);

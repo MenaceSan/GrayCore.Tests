@@ -1,7 +1,8 @@
 //
 //! @file cFile.Tests.cpp
-//
+// clang-format off
 #include "pch.h"
+// clang-format on
 #include <GrayCore/include/cFile.h>
 #include <GrayCore/include/cMime.h>
 
@@ -28,7 +29,7 @@ GRAYCORE_TEST_LINK void GRAYCALL UnitTest_Read(cStreamInput& stmIn, bool bString
         StrLen_t iLenStr = StrT::Len(pszLine);
         UNITTEST_TRUE(iLenStr < (StrLen_t)STRMAX(szTmp));
         size_t nSizeBytes = (iLenStr + 1) * sizeof(GChar_t);
-        HRESULT hResRead = bString ? stmIn.ReadStringLine(szTmp, STRMAX(szTmp)) : stmIn.ReadX(szTmp, nSizeBytes);
+        HRESULT hResRead = bString ? stmIn.ReadStringLine( TOSPAN(szTmp)) : stmIn.ReadX(szTmp, nSizeBytes);
         UNITTEST_TRUE(hResRead == (HRESULT)(bString ? (iLenStr + 1) : nSizeBytes));
         UNITTEST_TRUE(cMem::IsEqual(szTmp, pszLine, iLenStr * sizeof(GChar_t)));  // pszLine has no newline.
         UNITTEST_TRUE(szTmp[iLenStr] == '\n');
@@ -75,8 +76,7 @@ struct UNITTEST_N(cFile) : public cUnitTest {
 
         // grow
         auto lengthFile = filestatus1.GetFileLength();  // 84
-        testfile2.SetLength(CastN(STREAM_POS_t, lengthFile + 1024));
-        hRes = HResult::GetLast();
+        hRes = testfile2.SetLength(CastN(STREAM_POS_t, lengthFile + 1024));
         UNITTEST_TRUE(SUCCEEDED(hRes));
 
         testfile2.Close();

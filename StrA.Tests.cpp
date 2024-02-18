@@ -12,7 +12,7 @@ struct UNITTEST_N(StrA) : public cUnitTest {
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
         };
         char szTmp1[_MAX_PATH];
-        StrLen_t iRet2 = StrA::MakeNamedBitmask(szTmp1, STRMAX(szTmp1), 0x123, k_aszNames, _countof(k_aszNames));
+        StrLen_t iRet2 = StrA::MakeNamedBitmask(TOSPAN(szTmp1), 0x123, k_aszNames, _countof(k_aszNames));
         UNITTEST_TRUE(iRet2 >= 7);
         // "0,1,5,8"
     }

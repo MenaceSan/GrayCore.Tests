@@ -29,7 +29,7 @@ struct UNITTEST_N(cFileText) : public cUnitTest {
         HRESULT hRes = testfileB.OpenX(sFilePathB, OF_CREATE | OF_WRITE | OF_BINARY);
         UNITTEST_TRUE(SUCCEEDED(hRes));
         hRes = TestWrite(testfileB);
-        // UNITTEST_TRUE(hRes == cUnitTests::k_TEXTBLOB_LEN);
+        // UNITTEST_TRUE(hRes == cUnitTests::k_sTextBlob._Len);
 
         // Write OF_TEXT
         cStringF sFilePathT = cFilePath::CombineFilePathX(uts.get_TestOutDir(), _FN(GRAY_NAMES) _FN("CFileTextT") _FN(MIME_EXT_txt));
@@ -37,7 +37,7 @@ struct UNITTEST_N(cFileText) : public cUnitTest {
         hRes = testfileT.OpenX(sFilePathT, OF_CREATE | OF_WRITE | OF_TEXT);
         UNITTEST_TRUE(SUCCEEDED(hRes));
         hRes = TestWrite(testfileT);
-        // UNITTEST_TRUE(hRes == cUnitTests::k_TEXTBLOB_LEN);
+        // UNITTEST_TRUE(hRes == cUnitTests::k_sTextBlob._Len);
 
         // Read it back.
         cFileText testfileR;

@@ -1,6 +1,5 @@
-//
 //! @file cMem.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cMem.h>
 
@@ -8,10 +7,10 @@ namespace Gray {
 template <class TYPE>
 void UnitTestMem(const TYPE nValH) {
     TYPE nValRev = nValH;
-    cValArray::ReverseArrayBlocks(&nValRev, sizeof(nValRev), 1);
+    cValSpan::ReverseArrayBlocks(&nValRev, sizeof(nValRev), 1);
 
     TYPE nValRev2 = nValH;
-    cValArray::ReverseArray<BYTE>((BYTE*)&nValRev2, sizeof(nValRev2));
+    cValSpan::ReverseArray<BYTE>((BYTE*)&nValRev2, sizeof(nValRev2));
     UNITTEST_TRUE(nValRev2 == nValRev);
 
     TYPE nValRev3 = cMemT::ReverseType(nValH);
@@ -28,10 +27,33 @@ void UnitTestMem(const TYPE nValH) {
 }
 
 struct UNITTEST_N(cMem) : public cUnitTest {
-    UNITTEST_METHOD(cMem) {
+
+    void TestSpan() {
         cSpanStatic<128> memSpanStatic;
-        static const size_t k_SizeStatic = sizeof(memSpanStatic);  // i should not be able to write to this !?
+        STATIC_ASSERT(sizeof(memSpanStatic)  == 128, cSpanStatic);
+        static const size_t k_SizeStatic = sizeof(memSpanStatic);   
         UNITTEST_TRUE(k_SizeStatic == 128);
+
+        wchar_t tmp2[123];
+        STATIC_ASSERT(_countof(tmp2) == 123, tmp2);
+        STATIC_ASSERT(sizeof(tmp2) == 123 * 2, tmp2);
+
+        const cSpan<wchar_t> span2a(tmp2, _countof(tmp2));  // same as TOSPAN()?. keep this!
+        UNITTEST_TRUE(span2a.get_Count() == 123 );
+        UNITTEST_TRUE(span2a.get_DataSize() == 123 * 2 );
+
+        auto span2b(TOSPAN(tmp2));
+        UNITTEST_TRUE(span2b.get_Count() == 123);
+        UNITTEST_TRUE(span2b.get_DataSize() == 123 * 2);
+
+        wchar_t* ppCmds[128];
+        auto span3(TOSPAN(ppCmds));
+        UNITTEST_TRUE(span3.get_Count() == 128);
+        UNITTEST_TRUE(span3.get_DataSize() == 128 * sizeof(wchar_t*));
+
+    }
+
+    UNITTEST_METHOD(cMem) {
 
         // IsValid
         static const int k_Val = 123;                          // i should not be able to write to this !?
@@ -76,14 +98,14 @@ struct UNITTEST_N(cMem) : public cUnitTest {
         UnitTestMem<UINT64>(0x123456789abcdef0ULL);
         UnitTestMem<ULONG>(0x12345678);  // Maybe 32 or 64 bit ?
 
-        char szTmp[k_TEXTBLOB_LEN * 4 + 10];
-        StrLen_t nLen = cMem::ConvertToString(szTmp, STRMAX(szTmp), (const BYTE*)(const char*)k_sTextBlob.m_A, k_TEXTBLOB_LEN);
-        UNITTEST_TRUE(nLen >= k_TEXTBLOB_LEN);
+        char szTmp[k_TEXTBLOB_LEN * 4];
+        StrLen_t nLen = StrT::ConvertToCSV(TOSPAN(szTmp), ToSpan<char>(k_sTextBlob));
+        UNITTEST_TRUE(nLen >= k_sTextBlob._Len); // 2087 / 566
 
         BYTE bTmp[k_TEXTBLOB_LEN + 10];
-        size_t nSizeRet = cMem::ReadFromCSV(bTmp, STRMAX(bTmp), szTmp);
-        UNITTEST_TRUE(nSizeRet == (size_t)k_TEXTBLOB_LEN);
-        UNITTEST_TRUE(cMem::IsEqual(bTmp, (const char*)k_sTextBlob.m_A, nSizeRet));
+        size_t nSizeRet = TOSPAN(bTmp).ReadFromCSV(szTmp);
+        UNITTEST_TRUE(nSizeRet == (size_t)k_sTextBlob._Len);
+        UNITTEST_TRUE(ToSpan<char>(k_sTextBlob).IsEqualData(bTmp));
         UNITTEST_TRUE(!cMem::IsCorruptApp(szTmp, sizeof(szTmp)));
         UNITTEST_TRUE(!cMem::IsCorruptApp(bTmp, sizeof(bTmp)));
     }

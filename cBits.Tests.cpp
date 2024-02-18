@@ -1,6 +1,5 @@
-//
 //! @file cBits.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cBits.h>
 #include <GrayCore/include/cTriState.h>

@@ -14,7 +14,7 @@ struct UNITTEST_N(StrChar) : public cUnitTest {
         const wchar_t chNeg = -1;
         UNITTEST_TRUE(chNeg >= 0);  // should not be signed!!
 
-        for (WORD uRadix = StrChar::k_uRadixMin; uRadix <= StrChar::k_uRadixMax; uRadix++) {
+        for (RADIX_t uRadix = StrChar::k_uRadixMin; uRadix <= StrChar::k_uRadixMax; uRadix++) {
             for (UINT uVal = 0; uVal < uRadix; uVal++) {
                 char ch = StrChar::U2Radix(uVal, uRadix);
                 UINT uVal2 = StrChar::Radix2U(ch, uRadix);

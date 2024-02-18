@@ -1,17 +1,17 @@
 //
-//! @file cStreamTextReader.Tests.cpp
+//! @file cTextReader.Tests.cpp
 //
 #include "pch.h"
 #include <GrayCore/include/cFileText.h>
 #include <GrayCore/include/cMime.h>
-#include <GrayCore/include/cStreamTextReader.h>
+#include <GrayCore/include/cTextReader.h>
 
 namespace Gray {
-struct UNITTEST_N(cStreamTextReader) : public cUnitTest {
+struct UNITTEST_N(cTextReader) : public cUnitTest {
     const FILECHAR_t* k_TestFileIni = _FN("cIniFileUnitTest") _FN(MIME_EXT_ini);  // static
 
-    UNITTEST_METHOD(cStreamTextReader) {
-        //! test reading cStreamTextReader.
+    UNITTEST_METHOD(cTextReader) {
+        //! test reading cTextReader.
         //! @note any text changes to this file can invalidate the test results.
 
         cStringF sFilePath = cFilePath::CombineFilePathX(get_TestInpDir(), k_TestFileIni);
@@ -25,7 +25,7 @@ struct UNITTEST_N(cStreamTextReader) : public cUnitTest {
         int iLineNumber = 1;  // 1 based.
         for (;;) {
             char line[StrT::k_LEN_Default];
-            hRes = tr.ReadStringLine(line, STRMAX(line));
+            hRes = tr.ReadStringLine(TOSPAN(line));
             UNITTEST_TRUE(SUCCEEDED(hRes));
             if (hRes == 0) break;
 
@@ -46,5 +46,5 @@ struct UNITTEST_N(cStreamTextReader) : public cUnitTest {
         UNITTEST_TRUE(tr.get_CurrentLineNumber() == iLineNumber);
     }
 };
-UNITTEST2_REGISTER(cStreamTextReader, UNITTEST_LEVEL_t::_Core);
+UNITTEST2_REGISTER(cTextReader, UNITTEST_LEVEL_t::_Core);
 }  // namespace Gray

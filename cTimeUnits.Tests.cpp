@@ -91,16 +91,16 @@ struct UNITTEST_N(cTimeUnits) : public cUnitTest {
         Tu2.AddSeconds((2 * cTimeUnits::k_nSecondsPerDay) + (1 * 60 * 60) + 5);  // "2 days 1 hour 5 seconds"
 
         GChar_t szTmp[256];
-        StrLen_t iLen = Tu2.GetTimeSpanStr(szTmp, STRMAX(szTmp), TIMEUNIT_t::_Day, 2);
+        StrLen_t iLen = Tu2.GetTimeSpanStr(TOSPAN(szTmp), TIMEUNIT_t::_Day, 2);
         UNITTEST_TRUE(iLen == 13);  // "2 days 1 hour" -> 5 seconds lost.
         UNITTEST_TRUE(StrT::Cmp<GChar_t>(szTmp, _GT("2 days 1 hour")) == 0);
 
-        iLen = Tu2.GetTimeSpanStr(szTmp, STRMAX(szTmp), TIMEUNIT_t::_Day, 3);
+        iLen = Tu2.GetTimeSpanStr(TOSPAN(szTmp), TIMEUNIT_t::_Day, 3);
         UNITTEST_TRUE(iLen == 23);  // "2 days 1 hour 5 seconds"
 
         Tu2 = cTimeUnits(2015, 1, 1, 12, 30, 55);                                 // need start time for month lengths.
         Tu2.AddSeconds((52 * cTimeUnits::k_nSecondsPerDay) + (1 * 60 * 60) + 5);  // "52 days 1 hour 5 seconds"
-        iLen = Tu2.GetFormStr(szTmp, STRMAX(szTmp), TIMEFORMAT_t::_DEFTZ);
+        iLen = Tu2.GetFormStr(TOSPAN(szTmp), TIMEFORMAT_t::_DEFTZ);
         UNITTEST_TRUE(iLen == 21);  //
         UNITTEST_TRUE(StrT::Cmp<GChar_t>(szTmp, _GT("2015-02-22 13:31:00 Z")) == 0);
 
@@ -109,14 +109,14 @@ struct UNITTEST_N(cTimeUnits) : public cUnitTest {
         cTimeParser p1(_GT("2015/01/02T14:03:03EST"), nullptr);
         HRESULT hRes = p1.GetTimeUnits(Tu2);
         UNITTEST_TRUE(hRes == 22);
-        iLen = Tu2.GetFormStr(szTmp, STRMAX(szTmp), TIMEFORMAT_t::_ISO_TZ);
+        iLen = Tu2.GetFormStr(TOSPAN(szTmp), TIMEFORMAT_t::_ISO_TZ);
         UNITTEST_TRUE(iLen == 22);  //
         UNITTEST_TRUE(StrT::Cmp<GChar_t>(szTmp, _GT("2015/01/02T14:03:03EST")) == 0);
 
         cTimeParser p2(_GT("2015/01/02 11:03:03.001 PM EST"), nullptr);
         hRes = p2.GetTimeUnits(Tu2);
         UNITTEST_TRUE(hRes == 30);
-        iLen = Tu2.GetFormStr(szTmp, STRMAX(szTmp), TIMEFORMAT_t::_ISO_TZ);
+        iLen = Tu2.GetFormStr(TOSPAN(szTmp), TIMEFORMAT_t::_ISO_TZ);
         UNITTEST_TRUE(iLen == 22);  //
         UNITTEST_TRUE(StrT::Cmp<GChar_t>(szTmp, _GT("2015/01/02T23:03:03EST")) == 0);
 

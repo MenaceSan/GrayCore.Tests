@@ -1,7 +1,7 @@
-//
 //! @file cAppConsole.Tests.cpp
-//
+// clang-format off
 #include "pch.h"
+// clang-format on
 #include <GrayCore/include/StrCharAscii.h>
 #include <GrayCore/include/cAppConsole.h>
 

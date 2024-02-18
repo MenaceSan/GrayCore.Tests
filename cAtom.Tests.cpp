@@ -1,6 +1,5 @@
-//
 //! @file cAtom.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cAtom.h>
 #include <GrayCore/include/cAtomManager.h>

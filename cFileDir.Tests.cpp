@@ -78,7 +78,7 @@ struct UNITTEST_N(cFileDir) : public cUnitTest {
             hRes1 = fileTest.OpenX(sTestFile, OF_WRITE | OF_CREATE);
             UNITTEST_TRUE(hRes1 == S_OK);
             hRes1 = fileTest.WriteString(k_sTextBlob.get_CPtr());
-            UNITTEST_TRUE(hRes1 == cUnitTestCur::k_TEXTBLOB_LEN);
+            UNITTEST_TRUE(hRes1 == cUnitTestCur::k_sTextBlob._Len);
             fileTest.Close();
         }
 

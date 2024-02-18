@@ -1,77 +1,88 @@
-//
 //! @file cQueue.Tests.cpp
-//
 #include "pch.h"
-#include <GrayCore/include/cQueue.h>
 #include <GrayCore/include/cQueueChunked.h>
+#include <GrayCore/include/cQueueDyn.h>
 
 namespace Gray {
 struct UNITTEST_N(cQueue) : public cUnitTest {
-    const GChar_t* UnitTest_GetSrc(ITERATE_t i, ITERATE_t& riSrcLenMax) {
-        //! k_sTextBlob = cUnitTests::k_TEXTBLOB_LEN
-        i %= cUnitTests::k_TEXTBLOB_LEN;
-        riSrcLenMax = cUnitTests::k_TEXTBLOB_LEN - i;
-        return static_cast<const GChar_t*>(cUnitTests::k_sTextBlob) + i;
+    static const StrLen_t kUNITTEST_CHUNK = 10;
+
+    /// get cSpan to write to Q
+    cSpan<GChar_t> GetSpanTest(StrLen_t i) {
+        auto spanText = ToSpan<GChar_t>(cUnitTests::k_sTextBlob);
+        i %= spanText.GetSize();  // k_sTextBlob = cUnitTests::k_sTextBlob._Len
+        return ToSpan(spanText.get_DataConst() + i, cValT::Min(kUNITTEST_CHUNK, spanText.GetSize() - i));
     }
 
-    UNITTEST_METHOD(cQueue) {
-        // Read test cQueueRead
-        cQueueRead<GChar_t> qr(k_sTextBlob, 0, cUnitTests::k_TEXTBLOB_LEN);
-
-        for (StrLen_t i = 0; i < cUnitTests::k_TEXTBLOB_LEN; i++) {
-            GChar_t szTmp[2];
-            qr.ReadQty(szTmp, _countof(szTmp));  // STRMAX
-        }
-
-        // Read/Write test. cQueueBytes
-        cQueueBytes qb;
-        for (StrLen_t i = 0; i < cUnitTests::k_TEXTBLOB_LEN; i++) {
-        }
-
-        const int UNITTEST_CHUNK = 10;
-
-        ITERATE_t iSrcLenMax;
-
-        //! Read/Write a bunch of stuff to cQueueStatic
-        cQueueStatic<GChar_t, 512> qs;
-        int k = 0;
-        for (;;) {
-            const GChar_t* pSrc = UnitTest_GetSrc(k, iSrcLenMax);
-            int nWriteQty = qs.WriteQty(pSrc, cValT::Min(UNITTEST_CHUNK, iSrcLenMax));
-            if (nWriteQty <= 0) break;
-            k += nWriteQty;
-        }
-        UNITTEST_TRUE(qs.isFullQ());
-        ITERATE_t j = 0;
-        for (;;) {
-            const GChar_t* pSrc = UnitTest_GetSrc(j, iSrcLenMax);
-            GChar_t junk[UNITTEST_CHUNK];
-            ITERATE_t nReadQty = qs.ReadQty(junk, cValT::Min(iSrcLenMax, (int)_countof(junk)));
-            if (nReadQty <= 0) break;
-            UNITTEST_TRUE(cMem::IsEqual(pSrc, junk, nReadQty));
-            j += nReadQty;
-        }
-        UNITTEST_TRUE(k == j);
-        UNITTEST_TRUE(qs.isEmptyQ());
-
+    void TestChunked() {
         // Read/Write a bunch of stuff to cQueueChunked
-        cQueueChunked<GChar_t> qc(512);
-        for (k = 0; k < 10000;) {
-            const GChar_t* pSrc = UnitTest_GetSrc(k, iSrcLenMax);
-            int nWriteQty = qc.WriteQty(pSrc, cValT::Min(UNITTEST_CHUNK, iSrcLenMax));
-            k += nWriteQty;
+        cQueueChunked<512, GChar_t> qc;
+        StrLen_t k = 0;
+        for (; k < 10000;) {
+            const auto src = GetSpanTest(k);
+            qc.WriteSpanQ(src);
+            k += src.GetSize();
         }
-        for (j = 0;;) {
-            const GChar_t* pSrc = UnitTest_GetSrc(j, iSrcLenMax);
-            GChar_t junk[UNITTEST_CHUNK];
-            ITERATE_t nReadQty = qc.ReadQty(junk, cValT::Min(iSrcLenMax, (int)_countof(junk)));
+
+        StrLen_t j = 0;
+        for (;;) {
+            const auto src = GetSpanTest(j);
+            GChar_t junk[kUNITTEST_CHUNK];
+            ITERATE_t nReadQty = qc.ReadSpanQ(ToSpan(junk, src.GetSize()));
             if (nReadQty <= 0) break;
-            UNITTEST_TRUE(cMem::IsEqual(pSrc, junk, nReadQty));
+            UNITTEST_TRUE(cMem::IsEqual(src, junk, nReadQty * sizeof(GChar_t)));
             j += nReadQty;
         }
 
         UNITTEST_TRUE(k == j);
         UNITTEST_TRUE(qc.isEmptyQ());
+    }
+
+    void TestStatic() {
+        //! Read/Write a bunch of stuff to cQueueStatic
+        cQueueStatic<512, GChar_t> qs;
+        ITERATE_t k = 0;
+        for (;;) {
+            const auto src = GetSpanTest(k);
+            ITERATE_t nWriteQty2 = qs.WriteSpanQ(src);
+            if (nWriteQty2 <= 0) break;
+            k += nWriteQty2;
+        }
+        UNITTEST_TRUE(qs.isFullQ());
+        ITERATE_t j = 0;
+        for (;;) {
+            const auto src = GetSpanTest(j);
+            GChar_t junk[kUNITTEST_CHUNK];
+            ITERATE_t nReadQty = qs.ReadSpanQ(ToSpan(junk, src.GetSize()));
+            if (nReadQty <= 0) break;
+            UNITTEST_TRUE(cMem::IsEqual(src, junk, nReadQty * sizeof(GChar_t)));
+            j += nReadQty;
+        }
+        UNITTEST_TRUE(k == j);
+        UNITTEST_TRUE(qs.isEmptyQ());
+    }
+
+    void TestRead() {
+        // Read test cQueueRead
+        cQueueRead<GChar_t> qr(ToSpan<GChar_t>(cUnitTests::k_sTextBlob));
+        for (StrLen_t i = 0; i < cUnitTests::k_sTextBlob._Len; i++) {
+            GChar_t szTmp[2];
+            qr.ReadSpanQ(TOSPAN(szTmp));
+        }
+    }
+
+    void TestBytes() {
+        // Read/Write test. cQueueBytes
+        cQueueBytes qb;
+        for (StrLen_t i = 0; i < cUnitTests::k_sTextBlob._Len; i++) {
+        }
+    }
+
+    UNITTEST_METHOD(cQueue) {
+        TestChunked();
+        TestBytes();
+        TestRead();
+        TestStatic();
     }
 };
 UNITTEST2_REGISTER(cQueue, UNITTEST_LEVEL_t::_Core);

@@ -17,7 +17,7 @@ GRAYCORE_TEST_LINK void GRAYCALL UnitTest_StreamIntegrity(cStreamOutput& stmOut,
 
     size_t iSizeBlock = g_Rand.GetRandUX(1024) + 100;  // TODO Make random range bigger !! 2k ?
     cBlob blobWrite(iSizeBlock * 2);
-    g_Rand.GetNoise(blobWrite.get_DataW(), iSizeBlock);
+    g_Rand.GetNoise(cMemSpan(blobWrite, iSizeBlock));
     cMem::Copy(blobWrite.get_DataW<BYTE>() + iSizeBlock, blobWrite.get_DataC(), iSizeBlock);  // double it.
 
     size_t iSizeWriteTotal = 0;
@@ -97,7 +97,7 @@ struct UNITTEST_N(cStream) : public cUnitTest {
             UNITTEST_TRUE(nRetSeek == 0);
         } else {
             UNITTEST_TRUE(nRetSeek == k_SizeWrite);
-            q.SeekX(0, SEEK_Set);
+            q.SeekX(0, SEEK_t::_Set);
         }
 
         ITERATE_t iIterations2 = 0;

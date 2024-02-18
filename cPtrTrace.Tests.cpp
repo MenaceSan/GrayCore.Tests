@@ -34,7 +34,7 @@ struct UNITTEST_N(cPtrTrace) : public cUnitTest {
 
 #if defined(USE_PTRTRACE_IUNK) || defined(USE_PTRTRACE_REF)
         {
-            int iRefCount = 0;
+            REFCOUNT_t iRefCount = 0;
             cIUnkPtr<cLogEvent> p1(new cLogEvent(LOG_ATTR_0, LOGLVL_t::_ANY, "UnitTest" ));
             IUNK_TRACE(p1);
             iRefCount = p1.get_RefCount();

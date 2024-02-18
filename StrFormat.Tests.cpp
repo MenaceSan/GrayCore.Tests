@@ -1,7 +1,8 @@
 //
 //! @file StrFormat.Tests.cpp
-//
+// clang-format off
 #include "pch.h"
+// clang-format on
 #include <GrayCore/include/StrBuilder.h>
 #include <GrayCore/include/StrFormat.h>
 #include <GrayCore/include/cHeap.h>
@@ -57,71 +58,70 @@ struct StrFormatTest {
 };
 
 template <typename TYPE>
-StrLen_t UnitTestFormat1(typename StrFormat<TYPE>::STRFORMAT_t pFormat, TYPE* pszOut, StrLen_t nLenOut, const TYPE* pszFormat, int eArgs)  // static
-{
+StrLen_t UnitTestFormat1(typename StrFormat<TYPE>::STRFORMAT_t pFormat, cSpanX<TYPE>& ret, const TYPE* pszFormat, int eArgs) {  // static
     // Supply test arguments.
     switch (eArgs) {
         case STRFORMATTEST_0:
-            return (*pFormat)(pszOut, nLenOut, pszFormat);
+            return (*pFormat)(ret, pszFormat);
         case STRFORMATTEST_null:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, nullptr);
+            return (*pFormat)(ret, pszFormat, nullptr);
 
         case STRFORMATTEST_s1:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, StrArg<TYPE>("abc"));
+            return (*pFormat)(ret, pszFormat, StrArg<TYPE>("abc"));
         case STRFORMATTEST_s2:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, StrArg<TYPE>("abcdef"));
+            return (*pFormat)(ret, pszFormat, StrArg<TYPE>("abcdef"));
         case STRFORMATTEST_sA:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, StrArg<TYPE>("A string"));
+            return (*pFormat)(ret, pszFormat, StrArg<TYPE>("A string"));
 
         case STRFORMATTEST_i0:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 0);
+            return (*pFormat)(ret, pszFormat, 0);
         case STRFORMATTEST_i1:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 123123);
+            return (*pFormat)(ret, pszFormat, 123123);
         case STRFORMATTEST_i2:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 5, 10);  // m_bWidthArg
+            return (*pFormat)(ret, pszFormat, 5, 10);  // m_bWidthArg
         case STRFORMATTEST_i5:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 100, 100, 100, 100, 100);
+            return (*pFormat)(ret, pszFormat, 100, 100, 100, 100, 100);
 
         case STRFORMATTEST_im2:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 1977, 650000L);
+            return (*pFormat)(ret, pszFormat, 1977, 650000L);
 
         case STRFORMATTEST_in:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, -200, 5);
+            return (*pFormat)(ret, pszFormat, -200, 5);
 
         case STRFORMATTEST_x1:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 0xA3);
+            return (*pFormat)(ret, pszFormat, 0xA3);
         case STRFORMATTEST_xlg:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, (INT64)0x123ABCL);
+            return (*pFormat)(ret, pszFormat, (INT64)0x123ABCL);
 
         case STRFORMATTEST_c1:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 'z');
+            return (*pFormat)(ret, pszFormat, 'z');
         case STRFORMATTEST_c2:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 'a', 65);
+            return (*pFormat)(ret, pszFormat, 'a', 65);
 
         case STRFORMATTEST_f0:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 0.0);
+            return (*pFormat)(ret, pszFormat, 0.0);
         case STRFORMATTEST_fp1:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 0.123);
+            return (*pFormat)(ret, pszFormat, 0.123);
         case STRFORMATTEST_f2:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 1.123456789012345);
+            return (*pFormat)(ret, pszFormat, 1.123456789012345);
         case STRFORMATTEST_f3:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 3.1416, 3.1416, 3.1416);
+            return (*pFormat)(ret, pszFormat, 3.1416, 3.1416, 3.1416);
         case STRFORMATTEST_f100:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 100.0);
+            return (*pFormat)(ret, pszFormat, 100.0);
 
         case STRFORMATTEST_fn:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, -123.456);
+            return (*pFormat)(ret, pszFormat, -123.456);
         case STRFORMATTEST_fnz:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, -1.797693e-100);
+            return (*pFormat)(ret, pszFormat, -1.797693e-100);
         case STRFORMATTEST_flg:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, 1.797693e+100);
+            return (*pFormat)(ret, pszFormat, 1.797693e+100);
         case STRFORMATTEST_fmax:
-            return (*pFormat)(pszOut, nLenOut, pszFormat, cTypeLimit<double>::Max());
+            return (*pFormat)(ret, pszFormat, cTypeLimit<double>::Max());
 
             // NaN, Inf ?
 
             // case STRFORMATTEST_b1:
-            //	return (*pFormat)(pszOut, nLenOut, pszFormat, 0x550F);
+            //	return (*pFormat)(ret, pszFormat, 0x550F);
         default:
             break;
     }
@@ -131,15 +131,13 @@ StrLen_t UnitTestFormat1(typename StrFormat<TYPE>::STRFORMAT_t pFormat, TYPE* ps
 }
 
 template <typename TYPE>
-void GRAYCALL UnitTestFormatX(typename StrFormat<TYPE>::STRFORMAT_t pFormat, TYPE* pszOut, StrLen_t nLenOut, StrLen_t nLenAlloc)  // static
-{
+void GRAYCALL UnitTestFormatX(typename StrFormat<TYPE>::STRFORMAT_t pFormat, cSpanX<TYPE>& ret, StrLen_t nLenAlloc) {  // static
     //! @note ASSUME sprintf() will '\0' terminate the far end even if it isn't needed? (or overflows)
     //! @arg nLenOut = includes room for '\0'
     //! https://www.cs.fsu.edu/~myers/c++/notes/c_io.html
 
     // clang-format off
-	static const StrFormatTest k_UnitTestData[] =
-	{
+	static const StrFormatTest k_UnitTestData[] = {
 		{ STRFORMATTEST_f3,		"floats: %4.2f %+.0e %E \n", "floats: 3.14 +3e+00 3.141600E+00 \n" },
 
 		// Test strings via "%s".
@@ -240,27 +238,27 @@ void GRAYCALL UnitTestFormatX(typename StrFormat<TYPE>::STRFORMAT_t pFormat, TYP
         cStringT<TYPE> sFormat = test.m_pszFormat;
         cStringT<TYPE> sExpected = test.m_pszExpected;
 
-        StrLen_t nLenX = sExpected.GetLength();
-        if (nLenX >= nLenOut) nLenX = nLenOut - 1;
-        UNITTEST_TRUE(nLenX < nLenAlloc - 1);
+        const StrLen_t nLenExp = cValT::Min(sExpected.GetLength(), ret.GetSize() - 1);
+        UNITTEST_TRUE(nLenExp < nLenAlloc - 1);
 
-        if (pszOut != nullptr) {
-            cValArray::FillSize<BYTE>(pszOut, nLenAlloc * sizeof(TYPE), cHeap::kFillUnusedStack);  // fill background.
+        if (!ret.isNull()) {
+            cMem::Fill(ret.get_DataWork(), nLenAlloc * sizeof(TYPE), cHeap::kFillUnusedStack);  // fill background.
         }
 
-        StrLen_t nLenRet = UnitTestFormat1<TYPE>(pFormat, pszOut, nLenOut, sFormat, test.m_eArgs);
+        StrLen_t nLenRet = UnitTestFormat1<TYPE>(pFormat, ret, sFormat, test.m_eArgs);
         if (nLenRet == -1) {
             // M$ version will return this if the nLenOut size is too small.
-            UNITTEST_TRUE(2 == nLenX);
-            nLenRet = nLenX;
+            UNITTEST_TRUE(2 == nLenExp);
+            nLenRet = nLenExp;
         } else {
-            UNITTEST_TRUE(nLenRet == nLenX);
+            UNITTEST_TRUE(nLenRet == nLenExp);
         }
 
-        if (pszOut != nullptr) {
+        if (!ret.isNull()) {
             // NOTE: M$ vsnprintf() will fill unused data in _DEBUG mode. with 0xFE
-            UNITTEST_TRUE(pszOut[nLenX] == '\0');
-            UNITTEST_TRUE(!StrT::CmpN<TYPE>(pszOut, sExpected, nLenX));
+            TYPE* pszOut = ret.get_DataWork();
+            UNITTEST_TRUE(pszOut[nLenExp] == '\0');
+            UNITTEST_TRUE(!StrT::CmpN<TYPE>(pszOut, sExpected, nLenExp));
             BYTE chEnd2 = (BYTE)pszOut[nLenAlloc - 1];
             UNITTEST_TRUE(chEnd2 == cHeap::kFillUnusedStack);
         }
@@ -268,38 +266,35 @@ void GRAYCALL UnitTestFormatX(typename StrFormat<TYPE>::STRFORMAT_t pFormat, TYP
 }
 
 template <typename TYPE>
-void GRAYCALL UnitTestFormat(typename StrFormat<TYPE>::STRFORMAT_t pFormat)  // static
-{
+void GRAYCALL UnitTestFormat(typename StrFormat<TYPE>::STRFORMAT_t pFormat) { // static
     // http://www.cplusplus.com/reference/cstdio/printf/
     // pFormat = StrT::sprintfN<TYPE>
 
     UNITTEST_TRUE(pFormat != nullptr);
 
     TYPE szTmp[StrT::k_LEN_Default];
-    UnitTestFormatX(pFormat, szTmp, STRMAX(szTmp), _countof(szTmp));
-    UnitTestFormatX(pFormat, szTmp, 3, _countof(szTmp));  // Test buffer size overflows.
+    UnitTestFormatX(pFormat, TOSPAN(szTmp), _countof(szTmp));
+    UnitTestFormatX(pFormat, ToSpan(szTmp, 3), _countof(szTmp));  // Test buffer size overflows/truncation.
 
 #if 0
-		UnitTestFormatX(pFormat, nullptr, 0);	// Test size estimation.
+    UnitTestFormatX(pFormat, cBlob::k_EmptyBlob);                     // Test size estimation.
 
-		//*****************************
+	//*****************************
+	// Support C# style string {0} ?
+	// nLenRet = (*pFormat)(TOSPAN(szTmp), CSTRCONST("test{0}test"), StrArg<TYPE>("fedcba"));
+	// UNITTEST_TRUE(nLenRet == 11);	
 
-		// Support C# style string {0} ?
-		// nLenRet = (*pFormat)(szTmp, STRMAX(szTmp), CSTRCONST("test{0}test"), StrArg<TYPE>("fedcba"));
-		// UNITTEST_TRUE(nLenRet == 11);	
-
-		// bad pointer. (throw exception?)
-		nLenRet = (*pFormat)(szTmp, STRMAX(szTmp), CSTRCONST("test%stest"), 12312323);
-		UNITTEST_TRUE(nLenRet == 11);
+	// bad pointer. (throw exception?)
+	nLenRet = (*pFormat)(TOSPAN(szTmp), CSTRCONST("test%stest"), 12312323);
+	UNITTEST_TRUE(nLenRet == 11);
 #endif
 }
 
 struct UNITTEST_N(StrFormat) : public cUnitTest {
     void TestTemplateBlocks() {
         // StrA::ReplaceTemplateBlock
-        class cUnitTestBlock : public IIniBaseGetter {
-         public:
-            virtual HRESULT PropGet(const char* pszPropTag, OUT cStringI& rsVal) const {
+        struct cUnitTestBlock : public IIniBaseGetter {
+            HRESULT PropGet(const char* pszPropTag, OUT cStringI& rsVal) const override {
                 if (!Gray::StrT::CmpI(pszPropTag, "blocks")) {
                     rsVal = "TESTBLOCK";
                     return S_OK;
@@ -322,13 +317,13 @@ struct UNITTEST_N(StrFormat) : public cUnitTest {
         StrLen_t iRet1 = StrTemplate::ReplaceTemplateBlock(s1, "Test with recursive <?<?blo1?><?cks2?>?>. and junk <?IntentionalUnknownProperty?>.", &testBlock, false);
         UNITTEST_TRUE(iRet1 == 82);
         UNITTEST_TRUE(s1.get_Length() == 71);
-        UNITTEST_TRUE(StrT::Cmp(s1.get_Str(), "Test with recursive TESTBLOCK. and junk <?IntentionalUnknownProperty?>.") == 0);
+        UNITTEST_TRUE(StrT::Cmp(s1.get_CPtr(), "Test with recursive TESTBLOCK. and junk <?IntentionalUnknownProperty?>.") == 0);
 
         StrBuilder<> s2;
         StrLen_t iRet2 = StrTemplate::ReplaceTemplateBlock(s2, "Test input string with <?blocks?>. And another <?blocks?>.", &testBlock, false);
         UNITTEST_TRUE(iRet2 == 58);
         UNITTEST_TRUE(s2.get_Length() == 56);
-        UNITTEST_TRUE(StrT::Cmp(s2.get_Str(), "Test input string with TESTBLOCK. And another TESTBLOCK.") == 0);
+        UNITTEST_TRUE(StrT::Cmp(s2.get_CPtr(), "Test input string with TESTBLOCK. And another TESTBLOCK.") == 0);
     }
 
     void TestBuilder() {
@@ -337,7 +332,7 @@ struct UNITTEST_N(StrFormat) : public cUnitTest {
         StrBuilder<> s1;
         s1.AddFormat("%s - %d - %s - %s", "sdf", 123, "ABC", "XYZ", "IGNOREDJUNK");
         UNITTEST_TRUE(s1.get_Length() == 21);
-        UNITTEST_TRUE(StrT::Cmp(s1.get_Str(), "sdf - 123 - ABC - XYZ") == 0);
+        UNITTEST_TRUE(StrT::Cmp(s1.get_CPtr(), "sdf - 123 - ABC - XYZ") == 0);
     }
 
     UNITTEST_METHOD(StrFormat) {

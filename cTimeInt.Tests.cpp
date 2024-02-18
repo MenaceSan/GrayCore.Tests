@@ -1,6 +1,5 @@
-//
 //! @file cTimeInt.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cFile.h>
 #include <GrayCore/include/cFileDir.h>
@@ -22,8 +21,7 @@ struct UNITTEST_N(cTimeInt) : public cUnitTest {
         for (ITERATE_t i = 0; i < static_cast<int>(TIMEFORMAT_t::_QTY); i++) {
             cString sTimeTest1 = testtime1.GetTimeFormStr((TIMEFORMAT_t)i, nTimeZone);
 
-            if (i == static_cast<int>(TIMEFORMAT_t::_ASN))  // we don't read this type.
-                continue;
+            if (i == static_cast<int>(TIMEFORMAT_t::_ASN)) continue;  // we don't read this type.                
 
             cTimeInt testtime2;
             hRes = testtime2.SetTimeStr(sTimeTest1, nTimeZone);

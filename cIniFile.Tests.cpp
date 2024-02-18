@@ -1,6 +1,5 @@
-//
 //! @file cIniFile.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cFilePath.h>
 #include <GrayCore/include/cIniFile.h>
@@ -16,7 +15,7 @@ struct UNITTEST_N(cIniFile) : public cUnitTest {
         ASSERT_NN(pSection);
         ITERATE_t iLines = 0;
         for (iLines = 0; iLines < pSection->get_LineQty(); iLines++) {
-            IniChar_t* pszLine = pSection->GetLineEnum(iLines);
+            const IniChar_t* pszLine = pSection->GetLineEnum(iLines);
             UNITTEST_TRUE(pszLine != nullptr);
             // DEBUG_MSG(( "%s", LOGSTR(pszLine) ));
         }
@@ -35,7 +34,7 @@ struct UNITTEST_N(cIniFile) : public cUnitTest {
         UNITTEST_TRUE(SUCCEEDED(hRes));
 
         // read headless section first. has no [SECTION] header.
-        cIniSectionEntryPtr pSection = file.FindSection(nullptr);
+        cRefPtr<cIniSectionEntry> pSection = file.FindSection(nullptr);
         if (pSection != nullptr) {
             UnitTest_Section(pSection);
         }

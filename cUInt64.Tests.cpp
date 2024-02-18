@@ -1,23 +1,21 @@
-//
 //! @file cUInt64.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cUInt64.h>
 
 namespace Gray {
 struct UNITTEST_N(cUInt64) : public cUnitTest {
     void UnitTestStr(const cUInt64& d1, RADIX_t r) {
-        char szTmp1[1024];
-        d1.GetStr(szTmp1, STRMAX(szTmp1), r);
+        auto sTmp1 = d1.GetStr(r);
 
-        cUInt64 d2(szTmp1, r);
+        cUInt64 d2(sTmp1, r);
         UNITTEST_TRUE(d1 == d2);
-        char szTmp2[1024];
-        d2.GetStr(szTmp2, STRMAX(szTmp2), r);
-        UNITTEST_TRUE(!StrT::Cmp(szTmp2, szTmp1));
+        
+        auto sTmp2 = d2.GetStr(r);
+        UNITTEST_TRUE(!StrT::Cmp<GChar_t>(sTmp2, sTmp1));
 
         cUInt64 d3;
-        d3.SetStr(szTmp2, r);
+        d3.SetStr(sTmp2, r);
         UNITTEST_TRUE(d1 == d3);
         UNITTEST_TRUE(d1 == d2);
     }
@@ -66,10 +64,9 @@ struct UNITTEST_N(cUInt64) : public cUnitTest {
         bool bRet = nux1.SetStr(k_TmpX);
         UNITTEST_TRUE(bRet);
 
-        char szTmp[1024];
-        StrLen_t iLen = nux1.GetStr(szTmp, STRMAX(szTmp));
-        UNITTEST_TRUE(iLen);
-        UNITTEST_TRUE(cMem::IsEqual(szTmp, k_TmpX, sizeof(k_TmpX) - 1));
+        auto sTmp = nux1.GetStr();
+        UNITTEST_TRUE(sTmp.GetLength() > 1);
+        UNITTEST_TRUE(TOSPAN_LIT(k_TmpX).IsEqualData(sTmp));
 
         UnitTestStr(2);
         UnitTestStr(10);
@@ -126,11 +123,11 @@ struct UNITTEST_N(cUInt64) : public cUnitTest {
 			nux1 = k_TmpX;
 			nux2 = nux1;
 			nux2 <<= 31;
-			// iLen = nux2.GetStr( szTmp, STRMAX(szTmp));
+			// iLen = nux2.GetStr( TOSPAN(szTmp));
 
 			nux3 = nux1;
 			nux3 *= cUInt64(1UL << 31);
-			// iLen = nux3.GetStr( szTmp, STRMAX(szTmp));
+			// iLen = nux3.GetStr( TOSPAN(szTmp));
 
 			UNITTEST_TRUE(nux2 == nux3);
 			nux2 >>= 31;
@@ -157,7 +154,7 @@ struct UNITTEST_N(cUInt64) : public cUnitTest {
 			nux2 = k_Tmp16;
 			nux3 = nux1 + nux2;
 			nux3 += nux1;
-			iLen = nux3.GetStr(szTmp, STRMAX(szTmp));
+			iLen = nux3.GetStr(TOSPAN(szTmp));
 			UNITTEST_TRUE(nux3 == cUInt64("200000000000000010000000000000000"));
 
 			// Subtract
@@ -175,14 +172,14 @@ struct UNITTEST_N(cUInt64) : public cUnitTest {
 			// Multiply()
 			nux1.SetStr(k_Tmp32);
 			nux1.OpMultiply(2);
-			// iLen = nux1.GetStr( szTmp, STRMAX(szTmp));
+			// iLen = nux1.GetStr( TOSPAN(szTmp));
 			UNITTEST_TRUE(nux1 == cUInt64("200000000000000000000000000000000"));
 
 			nux2 = k_Tmp16;
 			nux3 = nux2 * nux2;
 			UNITTEST_TRUE(nux3 == cUInt64(k_Tmp32));
 			nux3 *= nux1;
-			// iLen = nux3.GetStr( szTmp, STRMAX(szTmp));
+			// iLen = nux3.GetStr( TOSPAN(szTmp));
 			UNITTEST_TRUE(nux3 == cUInt64("20000000000000000000000000000000000000000000000000000000000000000"));
 
 			// Divide.
@@ -193,7 +190,7 @@ struct UNITTEST_N(cUInt64) : public cUnitTest {
 			nux1.SetStr(k_Tmp32);
 			nux2.SetStr(k_Tmp16);
 			nux3 = nux1 / nux2;
-			iLen = nux3.GetStr(szTmp, STRMAX(szTmp));
+			iLen = nux3.GetStr(TOSPAN(szTmp));
 			UNITTEST_TRUE(nux3 == nux2);
 
 			// Modulus.

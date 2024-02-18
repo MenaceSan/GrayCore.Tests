@@ -17,7 +17,7 @@ struct cUnitTestException : public cException {
 struct UNITTEST_N(cException) : public cUnitTest {
     void TestSomeJumper(cExceptionJmp& jmp) noexcept {
         char szStackTest2[123];
-        StrT::CopyLen(szStackTest2, "JUNK", _countof(szStackTest2));
+        StrT::Copy(TOSPAN(szStackTest2), "JUNK");
         // Do the longjmp()
         jmp.Jump(1);
     }
@@ -29,7 +29,7 @@ struct UNITTEST_N(cException) : public cUnitTest {
 
         char szStackTest[123];
         const char* pszStackTest = szStackTest;
-        StrT::CopyLen(szStackTest, k_TestVal, _countof(szStackTest));
+        StrT::Copy(TOSPAN(szStackTest), k_TestVal);
 
         cExceptionJmp jmp1;
 

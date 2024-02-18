@@ -4,8 +4,8 @@
 #include "pch.h"
 #include <GrayCore/include/cArraySort.h>
 #include <GrayCore/include/cArrayT.h>
+#include <GrayCore/include/cArrayUnique.h>
 #include <GrayCore/include/cRandom.h>
-#include <GrayCore/include/cUniquePtr.h>
 
 namespace Gray {
 class cUnitTestArraySort {
@@ -152,6 +152,15 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
         }
     }
 
+    void TestArrayUnique() {
+        cArrayUnique<cUnitTestArraySort> au;
+        au.Add(new cUnitTestArraySort(1));
+        au.Add(new cUnitTestArraySort(2));
+
+        UNITTEST_TRUE(au.GetAtCheck(1) != nullptr);
+        UNITTEST_TRUE(au.GetAtCheck(3) == nullptr);
+    }
+
     UNITTEST_METHOD(cArraySort) {
         cArrayT<UINT> aTest1(1);
         STATIC_ASSERT(sizeof(aTest1) == sizeof(cRefPtr<int>), cArrayT);
@@ -159,6 +168,7 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
         TestArraySet<cArrayT<UINT> >();
         TestArraySet<cArrayVal<UINT> >();
         TestArraySort();
+        TestArrayUnique();
     }
 };
 UNITTEST2_REGISTER(cArraySort, UNITTEST_LEVEL_t::_Core);
