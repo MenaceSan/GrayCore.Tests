@@ -1,4 +1,3 @@
-//
 //! @file cRandom.Tests.cpp
 //
 #include "pch.h"

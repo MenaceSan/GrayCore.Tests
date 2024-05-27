@@ -70,6 +70,18 @@ struct UNITTEST_N(cIniFile) : public cUnitTest {
         UNITTEST_TRUE(pszLine != nullptr);
         UNITTEST_TRUE(!StrT::Cmp(pszLine, pszTestLine));
 
+        // Find a particular line.
+        const auto pTestSec = file2.FindSection("TestSection");
+        UNITTEST_TRUE(pTestSec != nullptr);
+        const auto pTestKey = pTestSec->FindArgForKey("TestKeyZZ", "BAD");
+        UNITTEST_TRUE(pTestKey != nullptr);
+        UNITTEST_TRUE(StrT::Cmp(pTestKey, "\"ZZ\"") == 0);
+
+        cStringA sTestVal;
+        hRes = pTestSec->PropGet("TestKeyZZ", sTestVal);
+        UNITTEST_TRUE(SUCCEEDED(hRes));
+        // UNITTEST_TRUE(StrT::Cmp(pTestKey, "ZZ") == 0);
+
 #if 0
 			filewrite.WriteString(
 				"//\n"

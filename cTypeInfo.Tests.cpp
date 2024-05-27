@@ -1,4 +1,3 @@
-//
 //! @file cTypeInfo.Tests.cpp
 //
 #include "pch.h"

@@ -78,8 +78,8 @@ struct UNITTEST_N(StrU) : public cUnitTest {
         UNITTEST_TRUE(UnitTestU(TOSPAN_LIT(kGreekU)));
         UNITTEST_TRUE(UnitTestA(TOSPAN_LIT(kGreekA)));
 
-        UNITTEST_TRUE(UnitTestU(ToSpan<wchar_t>(k_sTextBlob)));
-        UNITTEST_TRUE(UnitTestA(ToSpan<char>(k_sTextBlob)));
+        UNITTEST_TRUE(UnitTestU(ToSpanStr<wchar_t>(k_sTextBlob)));
+        UNITTEST_TRUE(UnitTestA(ToSpanStr<char>(k_sTextBlob)));
     }
 };
 UNITTEST2_REGISTER(StrU, UNITTEST_LEVEL_t::_Core);

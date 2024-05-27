@@ -1,4 +1,3 @@
-//
 //! @file cHeap.Tests.cpp
 //
 #include "pch.h"
@@ -53,9 +52,9 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
         // test physical memory and the heap.
         cUnitTests& uts = cUnitTests::I();
 
-        auto align1 = cHeap::GetAlign(CastNumToPtr<>(0x12331));
+        auto align1 = cHeap::GetAlign(CastNumToPtr(0x12331));
         UNITTEST_TRUE(align1 == 1);
-        auto align16 = cHeap::GetAlign(CastNumToPtr<>(0x12350));
+        auto align16 = cHeap::GetAlign(CastNumToPtr(0x12350));
         UNITTEST_TRUE(align16 == 16);
 
         for (int i = 0; i < 10; i++) {
@@ -73,11 +72,11 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
 
         // Allocate a bunch of blocks and make sure they stay put til freed
         cBlob testBlob[32];
-        for (ITERATE_t i = 0; i < (ITERATE_t)_countof(testBlob) && !k_asTextLines[i].isNull(); i++) {
+        for (ITERATE_t i = 0; i < (ITERATE_t)_countof(testBlob) && i < _countof(cUnitTests::k_asTextLines); i++) {
             testBlob[i].SetCopyAlloc(StrT::ToSpanStr<GChar_t>(k_asTextLines[i]));
             UNITTEST_TRUE(testBlob[i].isValidRead());
         }
-        for (ITERATE_t j = 0; j < (ITERATE_t)_countof(testBlob) && !k_asTextLines[j].isNull(); j++) {
+        for (ITERATE_t j = 0; j < (ITERATE_t)_countof(testBlob) && j < _countof(cUnitTests::k_asTextLines); j++) {
             UNITTEST_TRUE(testBlob[j].isValidRead());
             const GChar_t* pszLine = k_asTextLines[j];
             UNITTEST_TRUE(testBlob[j].IsEqualSpan(StrT::ToSpanStr(pszLine)));
@@ -92,7 +91,7 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
             size_t nSizeTest = blob2.get_AllocSize();
             if (nSizeAlloc == 0) {
                 // Alloc 0 ? may return nullptr or not.
-                uts.m_pLog->addInfoF("Heap alloc(%d) = ptr 0%x, size=%d", (int)nSizeAlloc, (int)PtrCastToNum(blob2.get_DataC()), (int)nSizeTest);
+                uts.m_pLog->addInfoF("Heap alloc(%d) = ptr 0%x, size=%d", (int)nSizeAlloc, (int)CastPtrToNum(blob2.GetTPtrC()), (int)nSizeTest);
             }
             UNITTEST_TRUE(nSizeTest >= nSizeAlloc);
         }
@@ -101,7 +100,7 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
         for (int i = 1; i < 200; i++) {
             void* pData1N = cHeap::AllocPtr(i);
             cMem::Fill(pData1N, i, 0x11);
-            UINT_PTR uValPtr = PtrCastToNum(pData1N);
+            UINT_PTR uValPtr = CastPtrToNum(pData1N);
             const auto alignRem = (uValPtr % (2 * sizeof(void*)));
             UNITTEST_TRUE(alignRem == 0);                      // should always be true.
             UNITTEST_TRUE(!cHeapAlign::IsHeapAlign(pData1N));  // Should NOT report it is aligned.

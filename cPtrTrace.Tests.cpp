@@ -1,4 +1,3 @@
-//
 //! @file cPtrTrace.Tests.cpp
 //
 #include "pch.h"

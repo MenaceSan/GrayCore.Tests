@@ -1,4 +1,3 @@
-//
 //! @file cInterlockedVal.Tests.cpp
 //
 #include "pch.h"

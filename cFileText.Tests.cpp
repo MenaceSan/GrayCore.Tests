@@ -1,4 +1,3 @@
-//
 //! @file cFileText.Tests.cpp
 //
 #include "pch.h"

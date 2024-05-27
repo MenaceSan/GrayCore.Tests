@@ -1,4 +1,3 @@
-//
 //! @file cTextReader.Tests.cpp
 //
 #include "pch.h"
@@ -42,7 +41,7 @@ struct UNITTEST_N(cTextReader) : public cUnitTest {
             UNITTEST_TRUE(hRes <= k_MaxLineLen);
         }
 
-        UNITTEST_TRUE(iLineNumber == 56);  // Fix this if source changes.
+        UNITTEST_TRUE(iLineNumber == 57);  // Fix this if source changes.
         UNITTEST_TRUE(tr.get_CurrentLineNumber() == iLineNumber);
     }
 };

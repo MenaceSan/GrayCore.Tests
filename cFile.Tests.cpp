@@ -1,4 +1,3 @@
-//
 //! @file cFile.Tests.cpp
 // clang-format off
 #include "pch.h"
@@ -7,38 +6,37 @@
 #include <GrayCore/include/cMime.h>
 
 namespace Gray {
-GRAYCORE_TEST_LINK void GRAYCALL UnitTest_Write(cStreamOutput& testfile1)  // static
-{
+GRAYCORE_TEST_LINK void GRAYCALL UnitTest_Write(cStreamOutput& testfile1) { // static
     //! Write strings to cStreamOutput.
-    for (ITERATE_t i = 0; !cUnitTests::k_asTextLines[i].isNull(); i++) {
+    for (ITERATE_t i = 0; i < _countof(cUnitTests::k_asTextLines); i++) {
         HRESULT hRes = testfile1.WriteString(cUnitTests::k_asTextLines[i].get_CPtr());
         UNITTEST_TRUE(SUCCEEDED(hRes));
         testfile1.WriteString(_GT(STR_NL));
     }
 }
 
-GRAYCORE_TEST_LINK void GRAYCALL UnitTest_Read(cStreamInput& stmIn, bool bString)  // static
-{
+GRAYCORE_TEST_LINK void GRAYCALL UnitTest_Read(cStreamInput& stmIn, bool bString) { // static
     //! Read strings from cStreamInput (as binary or text).
     //! Other side of UnitTest_Write()
 
     GChar_t szTmp[256];
 
-    for (ITERATE_t j = 0; !cUnitTests::k_asTextLines[j].isNull(); j++) {
+    for (ITERATE_t j = 0; j < _countof(cUnitTests::k_asTextLines); j++) {
         const GChar_t* pszLine = cUnitTests::k_asTextLines[j];
-        StrLen_t iLenStr = StrT::Len(pszLine);
+        const StrLen_t iLenStr = StrT::Len(pszLine);
+        ASSERT(iLenStr == cUnitTests::k_asTextLines[j]._Len);
         UNITTEST_TRUE(iLenStr < (StrLen_t)STRMAX(szTmp));
-        size_t nSizeBytes = (iLenStr + 1) * sizeof(GChar_t);
-        HRESULT hResRead = bString ? stmIn.ReadStringLine( TOSPAN(szTmp)) : stmIn.ReadX(szTmp, nSizeBytes);
+        const size_t nSizeBytes = (iLenStr + 1) * sizeof(GChar_t);
+        HRESULT hResRead = bString ? stmIn.ReadStringLine( TOSPAN(szTmp)) : stmIn.ReadX(cMemSpan(szTmp, nSizeBytes));
         UNITTEST_TRUE(hResRead == (HRESULT)(bString ? (iLenStr + 1) : nSizeBytes));
         UNITTEST_TRUE(cMem::IsEqual(szTmp, pszLine, iLenStr * sizeof(GChar_t)));  // pszLine has no newline.
         UNITTEST_TRUE(szTmp[iLenStr] == '\n');
     }
 
     // Check for proper read past end of file.
-    HRESULT hResRead = stmIn.ReadX(szTmp, STRMAX(szTmp));
+    HRESULT hResRead = stmIn.ReadX(TOSPAN(szTmp));
     UNITTEST_TRUE(hResRead == 0);
-    hResRead = stmIn.ReadX(szTmp, STRMAX(szTmp));
+    hResRead = stmIn.ReadX(TOSPAN(szTmp));
     UNITTEST_TRUE(hResRead == 0);
 }
 

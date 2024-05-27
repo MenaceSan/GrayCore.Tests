@@ -1,16 +1,36 @@
-//
 //! @file cString.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cString.h>
 
 namespace Gray {
-template <typename _TYPE_CH>
-void GRAYCALL UnitTestStrT()  // static
-{
-    // k_asTextLines
 
+template <typename _TYPE_CH>
+void GRAYCALL TestStrChange() {  // static
     typedef cStringT<_TYPE_CH> THIS_t;
+
+    THIS_t a("abc");
+    THIS_t b = a;
+    UNITTEST_TRUE(a == b);
+    UNITTEST_TRUE(a.c_str() == b.c_str());
+
+    a.SetAt(1,'B');
+    UNITTEST_TRUE(a != b);
+    UNITTEST_TRUE(a.c_str() != b.c_str());
+    UNITTEST_TRUE(a == CSTRCONST("aBc"));
+
+    a.SetAt(1, 'b');
+    UNITTEST_TRUE(a == b);
+    UNITTEST_TRUE(a.c_str() != b.c_str());
+    UNITTEST_TRUE(a == CSTRCONST("abc"));
+}
+
+template <typename _TYPE_CH>
+void GRAYCALL TestStrT() {  // static
+    // k_asTextLines
+    typedef cStringT<_TYPE_CH> THIS_t;
+
+    TestStrChange<_TYPE_CH>();
 
     THIS_t sTmp = StrT::Cast<_TYPE_CH>(CSTRCONST("sdfsdf"));
     UNITTEST_TRUE(sTmp.GetLength() == 6);
@@ -19,7 +39,7 @@ void GRAYCALL UnitTestStrT()  // static
     UNITTEST_TRUE(ch == 's');
     UNITTEST_TRUE(sTmp[2] == 'f');
 
-    StrLen_t iRetA = sTmp.Insert(0, CSTRCONST("ABC"));
+    const StrLen_t iRetA = sTmp.InsertSpan(0, ToSpanStr<_TYPE_CH>(CSTRCONST("ABC")));
     UNITTEST_TRUE(sTmp[2] == 'C');
     UNITTEST_TRUE(iRetA == 9);
 
@@ -32,6 +52,7 @@ void GRAYCALL UnitTestStrT()  // static
     _TYPE_CH* pBuffer = sTmp.GetBuffer(0);
     sTmp.ReleaseBuffer(0);
     UNITTEST_TRUE(sTmp.GetLength() == 0);
+    UNITTEST_TRUE(sTmp.IsEmpty());
 
     const StrLen_t lenRet = StrT::Copy<_TYPE_CH>(sTmp.GetSpanWrite(100), CSTRCONST("TEST"));
     UNITTEST_TRUE(lenRet == 4);
@@ -50,8 +71,8 @@ struct UNITTEST_N(cString) : public cUnitTest {
         const size_t nSizeStrD = sizeof(cStringHeadT<char>);  // >= 40
         STATIC_ASSERT(nSizeStrD > sizeof(void*) + sizeof(int), cStringHeadT<char>);
 
-        UnitTestStrT<char>();
-        UnitTestStrT<wchar_t>();
+        TestStrT<char>();
+        TestStrT<wchar_t>();
     }
 };
 UNITTEST2_REGISTER(cString, UNITTEST_LEVEL_t::_Core);

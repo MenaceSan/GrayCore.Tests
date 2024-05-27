@@ -1,12 +1,12 @@
-//
 //! @file cHashTable.Tests.cpp
-//
+
 #include "pch.h"
 #include <GrayCore/include/cHashTable.h>
 #include <GrayCore/include/cUniquePtr.h>
 
 namespace Gray {
 class cUnitTestHashStruct {
+    typedef cUnitTestHashStruct THIS_t;
     HASHCODE_t m_nHashCode;
 
  public:

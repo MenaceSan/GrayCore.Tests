@@ -1,4 +1,3 @@
-//
 //! @file cTimeZone.Tests.cpp
 //
 #include "pch.h"

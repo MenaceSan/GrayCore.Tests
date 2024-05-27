@@ -48,7 +48,7 @@ struct UNITTEST_N(StrNum) : public cUnitTest {
         StrLen_t iLen = StrT::sprintfN<char>(ret, szFormat, dVal);  // %.2f
                                          
         // Trim zeros after the .
-        char* pszOut = ret.get_DataWork();
+        char* pszOut = ret.get_PtrWork();
         if (StrT::HasChar<char>(pszOut, '.')) {
             iLen = StrNum::GetTrimCharsLen(ToSpan(pszOut, iLen), '0');
             if (iLen > 0 && pszOut[iLen - 1] == '.') {  // get rid of the dot too.

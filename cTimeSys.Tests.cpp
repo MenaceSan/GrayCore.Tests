@@ -1,4 +1,3 @@
-//
 //! @file cTimeSys.Tests.cpp
 //
 #include "pch.h"

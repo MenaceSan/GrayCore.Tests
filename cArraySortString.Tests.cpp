@@ -1,4 +1,3 @@
-//
 //! @file cArraySortString.Tests.cpp
 //
 #include "pch.h"
@@ -13,10 +12,10 @@ struct UNITTEST_N(cArraySortString) : public cUnitTest {
         UNITTEST_TRUE(arrayUns.GetSize() == 0);
 
         cArraySortStringA array1;
-        for (ITERATE_t i = 0; !cUnitTest::k_asTextLines[i].isNull(); i++) {
+        for (ITERATE_t i = 0; i<_countof(k_asTextLines); i++) {
             array1.AddStr(cUnitTest::k_asTextLines[i]);
         }
-        UNITTEST_TRUE(array1.GetSize() == cUnitTest::k_TEXTLINES_QTY);
+        UNITTEST_TRUE(array1.GetSize() == _countof(k_asTextLines));
 
         StrLen_t iLength = 0;
         for (cString sVal : array1) {
@@ -24,7 +23,7 @@ struct UNITTEST_N(cArraySortString) : public cUnitTest {
         }
         UNITTEST_TRUE(iLength >= 66);
 
-        const cStringA* ppData = array1.get_DataConst();
+        const cStringA* ppData = array1.get_PtrConst();
         UNITTEST_TRUE(ppData != nullptr);
 
         UNITTEST_TRUE(array1.isSpanSorted());

@@ -2,15 +2,15 @@
 
 #include "pch.h"
 #include <GrayCore/include/cArrayRef.h>
+#include <GrayCore/include/cLogEvent.h>
 #include <GrayCore/include/cRandom.h>
+#include <GrayCore/include/cRefLockable.h>
 #include <GrayCore/include/cThreadBase.h>
 #include <GrayCore/include/cThreadLockRW.h>
-#include <GrayCore/include/cThreadLockRef.h>
-#include <GrayCore/include/cLogEvent.h>
 
 namespace Gray {
 
-struct cTestThreadLockRW : public cThreadLockRW {
+struct cTestObjectBase {
     static const size_t kBufferSize = 128;
     BYTE _Buffer[kBufferSize + sizeof(UINT)];
     cInterlockedInt _ThreadsRunning;
@@ -26,7 +26,6 @@ struct cTestThreadLockRW : public cThreadLockRW {
     UINT& RefCheckSum() {
         return *PtrCast<UINT>(_Buffer + kBufferSize);
     }
-
     void DoWriteInt() {
         // Write verifiable data to buffer. MUST not be corrupt!
         g_Rand.GetNoise(cMemSpan(_Buffer, kBufferSize));
@@ -36,7 +35,12 @@ struct cTestThreadLockRW : public cThreadLockRW {
     bool IsReadInt() {
         return RefCheckSum() == GetCheckSum();
     }
+};
 
+/// <summary>
+/// Test object that may be read/write locked for a thread.
+/// </summary>
+struct cTestThreadLockRW : public cThreadLockRW, public cTestObjectBase {
     void DoRead() {
         // Lock for Read
         cThreadGuardRead guard(*this);
@@ -70,6 +74,13 @@ struct cTestThreadLockRW : public cThreadLockRW {
     }
 };
 
+/// <summary>
+/// Test object that may be read/write locked for a thread.
+/// </summary>
+struct cTestThreadLockRef : public cRefLockableRW, public cTestObjectBase {
+    // Read and WRite
+};
+
 struct cTestThreadWorker : public cThreadRef {
     cTestThreadLockRW& _Data;
     cTestThreadWorker(cTestThreadLockRW& data) : _Data(data) {}
@@ -92,7 +103,7 @@ struct UNITTEST_N(cThreadLockRW) : public cUnitTest {
     void TestRW() {
         // Test cThreadLockRW
         // TODO TEST Test upgrade feature?
-        // TODO TEST cThreadGuardRef
+        // TODO TEST cRefGuardPtr
 
         cTestThreadLockRW testData;
         UNITTEST_TRUE(testData.isIdle());
@@ -129,11 +140,10 @@ struct UNITTEST_N(cThreadLockRW) : public cUnitTest {
     }
 
     void TestRef() {
-        // TODO cThreadLockRef.h cThreadLockableRef
+        // TODO cRefLockable.h 
 
-        cArrayRef<cLogEvent> a;
-        cThreadLockableRef lock;
-
+        cArrayRef<cTestThreadLockRef> a;
+        
     }
 
     UNITTEST_METHOD(cThreadLockRW) {

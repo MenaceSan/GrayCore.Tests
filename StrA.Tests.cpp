@@ -11,7 +11,7 @@ struct UNITTEST_N(StrA) : public cUnitTest {
         static const char* k_aszNames[] = {
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
         };
-        char szTmp1[_MAX_PATH];
+        char szTmp1[cFilePath::k_MaxLen];
         StrLen_t iRet2 = StrA::MakeNamedBitmask(TOSPAN(szTmp1), 0x123, k_aszNames, _countof(k_aszNames));
         UNITTEST_TRUE(iRet2 >= 7);
         // "0,1,5,8"

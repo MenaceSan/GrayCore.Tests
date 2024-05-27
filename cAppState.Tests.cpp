@@ -11,13 +11,14 @@ struct UNITTEST_N(cAppState) : public cUnitTest {
         cAppState& app = cAppState::I();
 
         cAppArgs args2;
-        args2.InitArgsWin(_FN(""));
+        args2.InitArgsLine(_FN(""));
+        UNITTEST_TRUE(args2.get_ArgsQty() == 1);
 
-        args2.InitArgsWin(_FN("a b c"));
+        args2.InitArgsLine(_FN("a b c"));
 
-        args2.InitArgsWin(_FN("a=1 b=2 c=3"));
+        args2.InitArgsLine(_FN("a=1 b=2 c=3"));
 
-        args2.InitArgsWin(_FN("a='sdf sdf' b='123123' c='sdf sdf sdf sdf '"));
+        args2.InitArgsLine(_FN("a='sdf sdf' b='123123' c='sdf sdf sdf sdf '"));
 
 #ifdef _WIN32
         _IMAGE_DOS_HEADER* pHeader = (_IMAGE_DOS_HEADER*)app.get_HModule();  //!< the current applications instance handle/base address. _IMAGE_DOS_HEADER

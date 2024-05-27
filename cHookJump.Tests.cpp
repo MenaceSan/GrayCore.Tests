@@ -1,4 +1,3 @@
-//
 //! @file cHookJump.Tests.cpp
 //
 #include "pch.h"
@@ -32,7 +31,7 @@ struct UNITTEST_N(cHookJump) : public cUnitTest {
     {
         // sm_HookAPI. replace OutputDebugString() with this.
 
-        cHookChain<> lock(sm_cHookJump_HookAPI1);
+        cHookChain<FARPROC> lock(sm_cHookJump_HookAPI1);
         sm_Hook_Calls++;
 
         ::OutputDebugStringA("PREFIX WITH CUSTOM:");  // old/raw call.
@@ -78,7 +77,7 @@ struct UNITTEST_N(cHookJump) : public cUnitTest {
         UNITTEST_TRUE(iRet == 2);
 
         {
-            cHookChain<> lock(tester);
+            cHookChain<FARPROC> lock(tester);
             iRet = HookJump1();  // cUnitTest_HookJump1 still as cUnitTest_HookJump2.
             UNITTEST_TRUE(iRet == 2);
             iRet = lock.m_pFuncChain();  // cUnitTest_HookJump1 was restored just for Chain.

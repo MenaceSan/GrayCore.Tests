@@ -1,4 +1,3 @@
-//
 //! @file cFloatDeco.Tests.cpp
 //
 #include "pch.h"

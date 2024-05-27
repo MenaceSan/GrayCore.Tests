@@ -7,10 +7,10 @@ namespace Gray {
 template <class TYPE>
 void UnitTestMem(const TYPE nValH) {
     TYPE nValRev = nValH;
-    cValSpan::ReverseArrayBlocks(&nValRev, sizeof(nValRev), 1);
+    cSpanUnk(TOSPANT(nValRev), 1).ReverseSpan();
 
     TYPE nValRev2 = nValH;
-    cValSpan::ReverseArray<BYTE>((BYTE*)&nValRev2, sizeof(nValRev2));
+    cSpanX<BYTE>(TOSPANT(nValRev2)).ReverseSpan();
     UNITTEST_TRUE(nValRev2 == nValRev);
 
     TYPE nValRev3 = cMemT::ReverseType(nValH);
@@ -40,16 +40,16 @@ struct UNITTEST_N(cMem) : public cUnitTest {
 
         const cSpan<wchar_t> span2a(tmp2, _countof(tmp2));  // same as TOSPAN()?. keep this!
         UNITTEST_TRUE(span2a.get_Count() == 123 );
-        UNITTEST_TRUE(span2a.get_DataSize() == 123 * 2 );
+        UNITTEST_TRUE(span2a.get_SizeBytes() == 123 * 2 );
 
         auto span2b(TOSPAN(tmp2));
         UNITTEST_TRUE(span2b.get_Count() == 123);
-        UNITTEST_TRUE(span2b.get_DataSize() == 123 * 2);
+        UNITTEST_TRUE(span2b.get_SizeBytes() == 123 * 2);
 
         wchar_t* ppCmds[128];
         auto span3(TOSPAN(ppCmds));
         UNITTEST_TRUE(span3.get_Count() == 128);
-        UNITTEST_TRUE(span3.get_DataSize() == 128 * sizeof(wchar_t*));
+        UNITTEST_TRUE(span3.get_SizeBytes() == 128 * sizeof(wchar_t*));
 
     }
 
@@ -99,13 +99,13 @@ struct UNITTEST_N(cMem) : public cUnitTest {
         UnitTestMem<ULONG>(0x12345678);  // Maybe 32 or 64 bit ?
 
         char szTmp[k_TEXTBLOB_LEN * 4];
-        StrLen_t nLen = StrT::ConvertToCSV(TOSPAN(szTmp), ToSpan<char>(k_sTextBlob));
+        StrLen_t nLen = StrT::ConvertToCSV(TOSPAN(szTmp), ToSpanStr<char>(k_sTextBlob));
         UNITTEST_TRUE(nLen >= k_sTextBlob._Len); // 2087 / 566
 
         BYTE bTmp[k_TEXTBLOB_LEN + 10];
         size_t nSizeRet = TOSPAN(bTmp).ReadFromCSV(szTmp);
         UNITTEST_TRUE(nSizeRet == (size_t)k_sTextBlob._Len);
-        UNITTEST_TRUE(ToSpan<char>(k_sTextBlob).IsEqualData(bTmp));
+        UNITTEST_TRUE(ToSpanStr<char>(k_sTextBlob).IsEqualData(bTmp));
         UNITTEST_TRUE(!cMem::IsCorruptApp(szTmp, sizeof(szTmp)));
         UNITTEST_TRUE(!cMem::IsCorruptApp(bTmp, sizeof(bTmp)));
     }

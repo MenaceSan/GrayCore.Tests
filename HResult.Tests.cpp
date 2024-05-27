@@ -28,7 +28,7 @@ struct UNITTEST_N(HResult) : public cUnitTest {
             cString sError = cString::GetErrorStr(hResTest);
             UNITTEST_TRUE(sError.GetLength() > 0);
             // Reversible?
-            HRESULT hResRet = HResult::GetHResFromStr(sError, sError.GetLength());
+            HRESULT hResRet = HResult::GetHResFromStr(sError.get_SpanStr());
             UNITTEST_TRUE(hResRet == hResTest);
         }
     }

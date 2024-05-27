@@ -1,4 +1,3 @@
-//
 //! @file cFilePath.Tests.cpp
 //
 #include "pch.h"
@@ -47,7 +46,7 @@ struct UNITTEST_N(cFilePath) : public cUnitTest {
             UNITTEST_TRUE(sSymbolicName.GetLength());
 
             // MakeProperPath
-            FILECHAR_t szOut[_MAX_PATH];
+            FILECHAR_t szOut[cFilePath::k_MaxLen];
             StrLen_t nLen2 = cFilePath::MakeProperPath(TOSPAN(szOut), pszTest);
             StrLen_t nLen1 = StrT::Copy(TOSPAN(szOut), pszTest);
             StrLen_t nLen3 = cFilePath::MakeProperPath(TOSPAN(szOut));

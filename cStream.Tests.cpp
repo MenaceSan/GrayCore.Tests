@@ -1,4 +1,3 @@
-//
 //! @file cStream.Tests.cpp
 //
 
@@ -18,7 +17,7 @@ GRAYCORE_TEST_LINK void GRAYCALL UnitTest_StreamIntegrity(cStreamOutput& stmOut,
     size_t iSizeBlock = g_Rand.GetRandUX(1024) + 100;  // TODO Make random range bigger !! 2k ?
     cBlob blobWrite(iSizeBlock * 2);
     g_Rand.GetNoise(cMemSpan(blobWrite, iSizeBlock));
-    cMem::Copy(blobWrite.get_DataW<BYTE>() + iSizeBlock, blobWrite.get_DataC(), iSizeBlock);  // double it.
+    cMem::Copy(blobWrite.GetTPtrW<BYTE>() + iSizeBlock, blobWrite.GetTPtrC(), iSizeBlock);  // double it.
 
     size_t iSizeWriteTotal = 0;
     size_t iSizeReadTotal = 0;
@@ -32,12 +31,11 @@ GRAYCORE_TEST_LINK void GRAYCALL UnitTest_StreamIntegrity(cStreamOutput& stmOut,
     for (;; i++) {
         UNITTEST_TRUE(iSizeReadTotal <= iSizeWriteTotal);
 
-        if (iSizeWriteTotal < nSizeTotal)  // write more?
-        {
+        if (iSizeWriteTotal < nSizeTotal) { // write more?
             size_t iSizeWriteBlock = g_Rand.GetRandUX((UINT)(iSizeBlock - 1)) + 1;
             if (iSizeWriteTotal + iSizeWriteBlock > nSizeTotal) iSizeWriteBlock = nSizeTotal - iSizeWriteTotal;
             UNITTEST_TRUE(iSizeWriteBlock <= iSizeBlock);
-            hRes = stmOut.WriteX(blobWrite.get_DataC<BYTE>() + (iSizeWriteTotal % iSizeBlock), iSizeWriteBlock);
+            hRes = stmOut.WriteX(cMemSpan(blobWrite.GetTPtrC<BYTE>() + (iSizeWriteTotal % iSizeBlock), iSizeWriteBlock));
             UNITTEST_TRUE(SUCCEEDED(hRes));
             nSizeReal = (size_t)hRes;
             UNITTEST_TRUE(nSizeReal <= iSizeWriteBlock);
@@ -49,21 +47,21 @@ GRAYCORE_TEST_LINK void GRAYCALL UnitTest_StreamIntegrity(cStreamOutput& stmOut,
 
         size_t iSizeReadBlock = g_Rand.GetRandUX((UINT)(iSizeBlock - 1)) + 1;
         UNITTEST_TRUE(iSizeReadBlock <= iSizeBlock);
-        BYTE* pRead = blobRead.get_DataW();
-        hRes = stmIn.ReadX(pRead, iSizeReadBlock);
+        BYTE* pRead = blobRead.GetTPtrW();
+        hRes = stmIn.ReadX(cMemSpan(pRead, iSizeReadBlock));
         UNITTEST_TRUE(SUCCEEDED(hRes));
         nSizeReal = (size_t)hRes;
         UNITTEST_TRUE(nSizeReal <= iSizeReadBlock);
 
         // Make sure i read correctly.
-        const BYTE* pWrite = blobWrite.get_DataC<BYTE>() + (iSizeReadTotal % iSizeBlock);
+        const BYTE* pWrite = blobWrite.GetTPtrC<BYTE>() + (iSizeReadTotal % iSizeBlock);
         bool isEqual = cMem::IsEqual(pWrite, pRead, nSizeReal);
         UNITTEST_TRUE(isEqual);
         iSizeReadTotal += nSizeReal;
         UNITTEST_TRUE(iSizeReadTotal <= iSizeWriteTotal);
 
-        if (iSizeReadTotal >= nSizeTotal)  // done?
-            break;
+        if (iSizeReadTotal >= nSizeTotal) break;  // done?
+            
         if (!uts.IsTestInteractive() && tStart.get_AgeSec() > 100) {
             UNITTEST_TRUE(false);
             return;

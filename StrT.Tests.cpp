@@ -15,8 +15,11 @@ struct UNITTEST_N(StrT) : public cUnitTest {
     static void UnitTestBasic() {  // static
 
         // Basic tests first.
-        STATIC_ASSERT('\n' == 0x0a, Check_NL);  // StrChar::k_NL
-        STATIC_ASSERT('\r' == 0x0d, Check_CR);  // StrChar::k_CR
+
+        const cSpan<TYPE> sp0 = StrT::ToSpanStr<TYPE>(nullptr);
+        UNITTEST_TRUE(sp0.get_Count() == 0);
+        const cSpan<TYPE> sp1 = StrT::ToSpanStr<TYPE>(CSTRCONST(""));
+        UNITTEST_TRUE(sp1.get_Count() == 0);
 
         bool bPrintable = StrT::IsPrintable<TYPE>(k_t3, 2);
         UNITTEST_TRUE(bPrintable);
@@ -30,7 +33,7 @@ struct UNITTEST_N(StrT) : public cUnitTest {
         bIsWhitespace = StrT::IsWhitespace<TYPE>(cStrConst::k_Empty);
         UNITTEST_TRUE(bIsWhitespace);
 
-        StrLen_t nLen = StrT::Len<TYPE>(k_t1);
+        const StrLen_t nLen = StrT::Len<TYPE>(k_t1);
         UNITTEST_TRUE(nLen == 7);
 
         COMPARE_t eComp = StrT::Cmp<TYPE>(k_t1, k_t2);
@@ -48,10 +51,10 @@ struct UNITTEST_N(StrT) : public cUnitTest {
         bool bCmp = StrT::StartsWithI<TYPE>(k_t2, k_t1);
         UNITTEST_TRUE(!bCmp);
 
-        bCmp = StrT::EndsWithI<TYPE>(k_t2, k_t1);
+        bCmp = StrT::EndsWithI<TYPE>(ToSpanStr<TYPE>(k_t2), ToSpanStr<TYPE>(k_t1));
         UNITTEST_TRUE(!bCmp);
 
-        HASHCODE32_t nHashCode = StrT::GetHashCode32<TYPE>(k_t1, k_StrLen_UNK, 0);
+        HASHCODE32_t nHashCode = StrT::GetHashCode32(ToSpanStr<TYPE>(k_t1));
         UNITTEST_TRUE(nHashCode == 0x1488c5b4);
     }
 
@@ -60,23 +63,31 @@ struct UNITTEST_N(StrT) : public cUnitTest {
 
         static const cStrConst k_tSent = CSTRCONST("This is a sentence. And another. // comment");
 
-        const TYPE* pRetChar = StrT::FindChar<TYPE>(k_t1, (TYPE)'f');
-        UNITTEST_TRUE(pRetChar != nullptr && *pRetChar == 'f');
-
-        pRetChar = StrT::GetNonWhitespace<TYPE>(k_tSent);
+        const TYPE* pRetChar = StrT::GetNonWhitespace<TYPE>(k_tSent);
         UNITTEST_TRUE(pRetChar != nullptr);
+
+        // char in string.
+        pRetChar = StrT::FindChar<TYPE>(k_t1, (TYPE)'f');
+        UNITTEST_TRUE(pRetChar != nullptr && *pRetChar == 'f');
+        pRetChar = StrT::FindChar<TYPE>(k_t1, (TYPE)'Z');
+        UNITTEST_TRUE(pRetChar == nullptr);
 
         StrLen_t nLen = StrT::FindCharN<TYPE>(k_t1, (TYPE)'f');
         UNITTEST_TRUE(nLen == 2);
+        nLen = StrT::FindCharN<TYPE>(k_t1, (TYPE)'Z');
+        UNITTEST_TRUE(nLen == -1);
 
-        pRetChar = StrT::FindCharRev<TYPE>(k_t1, (TYPE)'f');
+        pRetChar = StrT::FindCharRev(ToSpanStr<TYPE>(k_t1), (TYPE)'f');
         UNITTEST_TRUE(pRetChar != nullptr && *pRetChar == 'f');  // f1
+        pRetChar = StrT::FindCharRev(ToSpanStr<TYPE>(k_t1), (TYPE)'Z');
+        UNITTEST_TRUE(pRetChar == nullptr);
 
-        nLen = StrT::FindWord<TYPE>(k_tSent, CSTRCONST("sentence"));
-        UNITTEST_TRUE(nLen == 18);
-
-        pRetChar = StrT::FindTokens<TYPE>(k_tSent, k_t2);
+        pRetChar = StrT::FindTokens<TYPE>(ToSpanStr<TYPE>(k_tSent), k_t2);
         UNITTEST_TRUE(pRetChar != nullptr);
+        pRetChar = StrT::FindTokens<TYPE>(ToSpanStr<TYPE>(k_tSent), CSTRCONST("yz"));
+        UNITTEST_TRUE(pRetChar == nullptr);
+
+        // strings in string.
 
         const TYPE* pszTest = CSTRCONST("abcdefabcdefg");
         const TYPE* pszRet = StrT::FindStr<TYPE>(pszTest, CSTRCONST("abcdefg"));
@@ -85,20 +96,30 @@ struct UNITTEST_N(StrT) : public cUnitTest {
         pszTest = CSTRCONST("abcabcabcabc");
         pszRet = StrT::FindStr<TYPE>(pszTest, CSTRCONST("abca"));
         UNITTEST_TRUE(pszRet == pszTest + 0);
+        pszRet = StrT::FindStr<TYPE>(pszTest, CSTRCONST("zzzz"));
+        UNITTEST_TRUE(pszRet == nullptr);
 
         pszRet = StrT::FindStrI<TYPE>(pszTest, CSTRCONST("AbCa"));
         UNITTEST_TRUE(pszRet == pszTest + 0);
+        pszRet = StrT::FindStrI<TYPE>(pszTest, CSTRCONST("zzzz"));
+        UNITTEST_TRUE(pszRet == nullptr);
+
+        nLen = StrT::FindWord<TYPE>(k_tSent, CSTRCONST("sdfsdf"), k_tSent._Len);
+        UNITTEST_TRUE(nLen == -1);
+        nLen = StrT::FindWord<TYPE>(k_tSent, CSTRCONST("sentence"), k_tSent._Len);
+        UNITTEST_TRUE(nLen == 10);
     }
 
     template <typename TYPE>
     static void UnitTestInt() {  // static
 
-        UINT64 ulVal = StrT::toUL<TYPE>(CSTRCONST("0xFFFFFFFF"), nullptr, 8);
+        UINT64 ulVal = StrT::toUL<TYPE>(CSTRCONST("0xFFFFFFFF"), nullptr, 8);  // even if radix base is wrong. encoding should work.
         UNITTEST_TRUE(ulVal == 0xFFFFFFFF);
+
         ulVal = StrT::toUL<TYPE>(CSTRCONST("0xFFFFFFFF"), nullptr);
         UNITTEST_TRUE(ulVal == 0xFFFFFFFF);
 
-        ulVal = StrT::toUL<TYPE>(CSTRCONST("FFFFFFFF"), nullptr);
+        ulVal = StrT::toUL<TYPE>(CSTRCONST("FFFFFFFF"), nullptr);  // radix wrong.
         UNITTEST_TRUE(ulVal == 0);
 
         ulVal = StrT::toUL<TYPE>(CSTRCONST("FFFFFFFF"), nullptr, 16);
@@ -221,8 +242,8 @@ struct UNITTEST_N(StrT) : public cUnitTest {
         nLenRet = StrT::Copy<TYPE>(TOSPAN(szTmp), CSTRCONST("this are a string"));  // sic
         UNITTEST_TRUE(nLenRet);
 
-        StrT::ReplaceX<TYPE>(TOSPAN(szTmp), 5, 3, CSTRCONST("is"));
-        UNITTEST_TRUE(!StrT::Cmp<TYPE>(szTmp, CSTRCONST("this is a string")));
+        StrT::ReplaceX<TYPE>(TOSPAN(szTmp), 5, 3, ToSpanStr<TYPE>(CSTRCONST("is")));
+        UNITTEST_TRUE(!StrT::Cmp<TYPE>(szTmp, ToSpanStr<TYPE>(CSTRCONST("this is a string"))));
     }
 
     template <typename TYPE>
@@ -241,8 +262,8 @@ struct UNITTEST_N(StrT) : public cUnitTest {
 
     template <typename TYPE>
     static StrLen_t TestFill(cSpanX<TYPE>& tmp) {
-        for (int i = 0; i < tmp.GetSize(); i++) tmp.get_DataWork()[i] = (TYPE)(i + 1);
-        tmp.get_DataWork()[tmp.GetSize() - 1] = '\0';
+        for (int i = 0; i < tmp.GetSize(); i++) tmp.get_PtrWork()[i] = (TYPE)(i + 1);
+        tmp.get_PtrWork()[tmp.GetSize() - 1] = '\0';
         return StrT::Len<TYPE>(tmp);
     }
 
@@ -289,12 +310,11 @@ struct UNITTEST_N(StrT) : public cUnitTest {
         static cStrConst k_None = CSTRCONST("none");
         UnitTestESC(StrT::ToSpanStr<TYPE>(k_None), 0);
 
-        // Test 
+        // Test
         static cStrConst k_tEsc = CSTRCONST("sd\nf\ts\"3\"d\tf\\2\n");
         const StrLen_t iLenStr = StrT::Len<TYPE>(k_tEsc);
         UNITTEST_TRUE(iLenStr == 15);
         UnitTestESC(StrT::ToSpanStr<TYPE>(k_tEsc), 7);
-
     }
 
     template <typename TYPE>
@@ -317,9 +337,9 @@ struct UNITTEST_N(StrT) : public cUnitTest {
     }
 
     void TestHashCode() {
-        const auto h1a = StrT::GetHashCode32("arrastra");
-        const auto h1b = StrT::GetHashCode32("asclepius");
-        UNITTEST_TRUE(h1a == h1b);
+        const auto h1a = StrT::GetHashCode32(TOSPAN_LIT("arrastra"));
+        const auto h1b = StrT::GetHashCode32(TOSPAN_LIT("asclepius"));
+        UNITTEST_TRUE(h1a == h1b);  // known collision.
 
         // 'asclepius' = 'arrastra'
         // 'bencher' = 'barkhan'

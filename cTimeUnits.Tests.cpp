@@ -1,4 +1,3 @@
-//
 //! @file cTimeUnits.Tests.cpp
 //
 #include "pch.h"

@@ -15,7 +15,7 @@ struct UNITTEST_N(cUInt64) : public cUnitTest {
         UNITTEST_TRUE(!StrT::Cmp<GChar_t>(sTmp2, sTmp1));
 
         cUInt64 d3;
-        d3.SetStr(sTmp2, r);
+        d3.SetStr(sTmp2.get_SpanStr(), r);
         UNITTEST_TRUE(d1 == d3);
         UNITTEST_TRUE(d1 == d2);
     }
@@ -61,7 +61,7 @@ struct UNITTEST_N(cUInt64) : public cUnitTest {
         static const char k_TmpX[] = "1234567890123456789";  // as big as 64 bits will hold.
         static const char k_Tmp16[] = "10000000000000000";   // 16 power.
 
-        bool bRet = nux1.SetStr(k_TmpX);
+        bool bRet = nux1.SetStr(TOSPAN_LIT(k_TmpX));
         UNITTEST_TRUE(bRet);
 
         auto sTmp = nux1.GetStr();
@@ -75,7 +75,7 @@ struct UNITTEST_N(cUInt64) : public cUnitTest {
 
         // Simple Tests
         UNITTEST_TRUE(nu25.isOdd());
-        nux1.SetStr(k_Tmp16, 0x10);  // hex.
+        nux1.SetStr(TOSPAN_LIT(k_Tmp16), 0x10);  // hex.
 
         UNITTEST_TRUE(cUInt64((cUInt64::UNIT_t)0).get_Highest1Bit() == 0);
         UNITTEST_TRUE(cUInt64(1).get_Highest1Bit() == 1);

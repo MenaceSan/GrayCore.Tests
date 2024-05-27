@@ -1,4 +1,3 @@
-//
 //! @file cArraySort.Tests.cpp
 //
 #include "pch.h"
@@ -35,7 +34,7 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
     UINT TestArrayOrder(const T& a) {
         UINT sum = 0;
         UINT prev = 0;
-        const UINT* pVals = a.get_DataConst();
+        const UINT* pVals = a.get_PtrConst();
         for (int i = 0; i < a.GetSize(); i++) {
             UINT val = a[i];
             UNITTEST_TRUE(val > prev || (i == 0 && val == 0));
@@ -48,6 +47,7 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
 
     template <class T>
     void TestArraySet() {
+        // for cArrayT or cArray
         T aTest1(1);
         UNITTEST_TRUE(aTest1.GetSize() == 1);
         // TestArrayOrder(aTest1);		// un-init.
@@ -55,6 +55,7 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
         T aTest2(2);
         aTest2.SetAt(0, 0);
         aTest2.SetAt(1, 6);
+
         UNITTEST_TRUE(aTest2.GetSize() == 2);
         UNITTEST_TRUE(aTest2[0] == 0);
         UNITTEST_TRUE(aTest2[1] == 6);
@@ -62,7 +63,7 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
 
         UINT vals[] = {2, 3, 4};
         T aTest3;
-        aTest3.InsertArray(0, vals, _countof(vals));
+        aTest3.InsertArray(0, TOSPAN(vals));
         UNITTEST_TRUE(aTest3.GetSize() == 3);
         UNITTEST_TRUE(aTest3[1] == 3);
         TestArrayOrder(aTest3);
@@ -76,7 +77,7 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
         UNITTEST_TRUE(aTest2.GetSize() == 7);
         UNITTEST_TRUE(TestArrayOrder(aTest2) == 21);
 
-        const UINT* pVals = aTest2.get_DataWork();
+        const UINT* pVals = aTest2.get_PtrWork();
         for (int i = 0; i < 7; i++) {
             UNITTEST_TRUE(aTest2[i] == i);
         }
@@ -85,20 +86,21 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
         UNITTEST_TRUE(TestArrayOrder(aTest2) == 18);
     }
 
-    void PopRandom(cArrayVal<UINT>& aVals, int n) {
-        for (int i = 0; i < n; i++) {
-            aVals.Add(g_Rand.get_RandUns());
+    void PopRandom(cSpanX<UINT, UINT>& aVals) {
+        for (int i = 0; i < aVals.GetSize(); i++) {
+            aVals[i] = g_Rand.GetRandUX(0x10000);
         }
     }
 
     void TestArraySort() {
         // Test QSort. Create test array of random data then sort it.
 
-        cArrayVal<UINT> aVals;
-        PopRandom(aVals, 300);
+        cArraySortVal<UINT> aVals;
+        aVals.SetSize(300);
+        PopRandom(aVals);
         UNITTEST_TRUE(aVals.GetSize() == 300);
-        UNITTEST_TRUE(!aVals.isSpanSorted());
 
+        UNITTEST_TRUE(!aVals.isSpanSorted());
         aVals.QSort();
         UNITTEST_TRUE(aVals.isSpanSorted());
 
@@ -107,12 +109,12 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
 
         {
             cArraySortFacadeValue<cUniquePtr<cUnitTestArraySort>, cUnitTestArraySort*, int> aSortNew;
-            aSortNew.Add(new cUnitTestArraySort(1));
-            aSortNew.Add(new cUnitTestArraySort(2));
-            aSortNew.Add(new cUnitTestArraySort(5));
-            aSortNew.Add(new cUnitTestArraySort(4));
-            aSortNew.Add(new cUnitTestArraySort(0));
-            aSortNew.Add(new cUnitTestArraySort(3));
+            aSortNew.AddSort(new cUnitTestArraySort(1), 0);
+            aSortNew.AddSort(new cUnitTestArraySort(2), 0);
+            aSortNew.AddSort(new cUnitTestArraySort(5), 0);
+            aSortNew.AddSort(new cUnitTestArraySort(4), 0);
+            aSortNew.AddSort(new cUnitTestArraySort(0), 0);
+            aSortNew.AddSort(new cUnitTestArraySort(3), 0);
 
             UNITTEST_TRUE(aSortNew.isSpanSorted());
             UNITTEST_TRUE(aSortNew.GetSize() == 6);
@@ -137,10 +139,24 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
         // iterate the array.
 
         cArrayVal<UINT> aVals;
-        PopRandom(aVals, 300);
+        aVals.SetSize(300);
+        PopRandom(aVals);
         UNITTEST_TRUE(aVals.GetSize() == 300);
 
-        int i = 0;
+        UNITTEST_TRUE(!aVals.HasArg3(0x100001));    // will not have this.
+        UNITTEST_TRUE(!aVals.HasArgN(0x100001));  // will not have this.
+
+        const UINT uVal = aVals[150];
+
+        UNITTEST_TRUE(aVals.HasArg3(uVal));  // will not have this.
+        int i = aVals.FindIFor3(uVal);
+        UNITTEST_TRUE(i <= 150);
+
+        UNITTEST_TRUE(aVals.HasArgN(uVal));  // will not have this.
+        i = aVals.FindIForN(uVal);
+        UNITTEST_TRUE(i <= 150);
+
+        i = 0;
         for (auto j : aVals) {
             UINT val0 = j;
             UINT val1 = aVals.GetAt(i);
@@ -149,6 +165,7 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
             UNITTEST_TRUE(val0 == val1);
             UNITTEST_TRUE(val0 == val2);
             UNITTEST_TRUE(val0 == val3);
+            i++;
         }
     }
 
@@ -168,6 +185,7 @@ struct UNITTEST_N(cArraySort) : public cUnitTest {
         TestArraySet<cArrayT<UINT> >();
         TestArraySet<cArrayVal<UINT> >();
         TestArraySort();
+        TestArrayIter();
         TestArrayUnique();
     }
 };

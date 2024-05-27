@@ -11,6 +11,9 @@ struct UNITTEST_N(StrChar) : public cUnitTest {
         UNITTEST_TRUE(StrChar::IsSpace('a') == false);
         UNITTEST_TRUE(StrChar::IsSpace('\0') == false);
 
+        STATIC_ASSERT('\n' == 0x0a, Check_NL);  // StrChar::k_NL
+        STATIC_ASSERT('\r' == 0x0d, Check_CR);  // StrChar::k_CR
+
         const wchar_t chNeg = -1;
         UNITTEST_TRUE(chNeg >= 0);  // should not be signed!!
 
@@ -22,7 +25,7 @@ struct UNITTEST_N(StrChar) : public cUnitTest {
             }
 
             UNITTEST_TRUE(StrChar::U2Radix(uRadix + 1, uRadix) == '?');
-            UNITTEST_TRUE(StrChar::Radix2U('?', uRadix) == -1);
+            UNITTEST_TRUE(StrChar::Radix2U('?', uRadix) == uRadix);
         }
     }
 };

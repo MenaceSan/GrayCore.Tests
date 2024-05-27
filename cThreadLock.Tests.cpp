@@ -1,6 +1,4 @@
-//
 //! @file cThreadLock.Tests.cpp
-//
 #include "pch.h"
 #include <GrayCore/include/cThreadLock.h>
 
@@ -13,7 +11,7 @@ struct UNITTEST_N(cThreadLock) : public cUnitTest {
         const THREADID_t tidCurrent = cThreadId::GetCurrentId();
         UNITTEST_TRUE(cThreadId::IsValidId(tidCurrent));
 
-        cThreadLockFast lockFast;
+        cThreadLockableFast lockFast;
         UNITTEST_TRUE(lockFast.isIdle());
         {
             const auto guard(lockFast.Lock());
@@ -21,7 +19,7 @@ struct UNITTEST_N(cThreadLock) : public cUnitTest {
         }
         UNITTEST_TRUE(lockFast.isIdle());
 
-        cThreadLockCrit lockCrit;
+        cThreadLockableCrit lockCrit;
         UNITTEST_TRUE(lockCrit.isIdle());
         {
             const auto guard(lockCrit.Lock());
@@ -29,7 +27,7 @@ struct UNITTEST_N(cThreadLock) : public cUnitTest {
         }
         UNITTEST_TRUE(lockCrit.isIdle());
 
-        cThreadLockMutex lockMutex;
+        cThreadLockableMutex lockMutex;
         UNITTEST_TRUE(lockMutex.isIdle());
         {
             const auto guard(lockMutex.Lock());

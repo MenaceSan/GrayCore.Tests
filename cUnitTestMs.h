@@ -1,5 +1,4 @@
-//
-// cUnitTestMs.h
+//! @file cUnitTestMs.h
 // ONLY included from a test DLL.
 
 #pragma once

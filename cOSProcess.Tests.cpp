@@ -1,4 +1,3 @@
-//
 //! @file cOSProcess.Tests.cpp
 //
 #include "pch.h"

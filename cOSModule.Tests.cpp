@@ -1,6 +1,5 @@
-//
 //! @file cOSModule.Tests.cpp
-//
+ 
 #include "pch.h"
 #include <GrayCore/include/cOSModule.h>
 #include <GrayCore/include/cRandom.h>
@@ -11,9 +10,10 @@ struct UNITTEST_N(cOSModule) : public cUnitTest {
 
     void TestCur() {
 #ifndef UNDER_CE
-        HMODULE hModCore = cOSModule::GetModuleHandleForAddr(&g_Rand);  // In Core.
+        ::HMODULE hModCore = cOSModule::GetModuleHandleForAddr(&g_Rand);  // In Core.
         cOSModule modCore(hModCore, cOSModule::k_Load_NoRefCount);
         cStringF sNameCore = modCore.get_Name();  // == "path\\GRAYCORE.DLL"
+        UNITTEST_TRUE(sNameCore.ContainsI(GRAY_NAMES "Core"));  // g_Module
         UNITTEST_TRUE(modCore.isValidModule());
 #endif
     }
@@ -36,7 +36,7 @@ struct UNITTEST_N(cOSModule) : public cUnitTest {
 #endif
 
         cOSModule mod2;
-        FARPROC pAddr;
+        FUNCPTR_t pAddr;
 
         // Not already loaded?
         cOSModule mod;

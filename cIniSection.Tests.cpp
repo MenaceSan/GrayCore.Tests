@@ -1,4 +1,3 @@
-//
 //! @file cIniSection.Tests.cpp
 //
 #include "pch.h"
@@ -18,7 +17,7 @@ struct UNITTEST_N(cIniSection) : public cUnitTest {
             "\r\n";
 
         cIniSectionData section;
-        StrLen_t iRead = section.SetLinesParse(k_SectionData, _countof(k_SectionData), nullptr, STRP_START_WHITE | STRP_MERGE_CRNL | STRP_END_WHITE | STRP_EMPTY_STOP);
+        StrLen_t iRead = section.SetLinesParse(TOSPAN_LIT(k_SectionData), nullptr, STRP_START_WHITE | STRP_MERGE_CRNL | STRP_END_WHITE | STRP_EMPTY_STOP);
         UNITTEST_TRUE(iRead == 33);
         UNITTEST_TRUE(section.get_LineQty() == 5);
 

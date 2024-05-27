@@ -1,4 +1,3 @@
-//
 //! @file cWinHeap.Tests.cpp
 //
 #include "pch.h"

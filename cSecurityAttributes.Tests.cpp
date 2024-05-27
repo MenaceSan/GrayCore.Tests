@@ -36,7 +36,7 @@ struct UNITTEST_N(cSecurityAttributes) : public cUnitTest {
         cFile fileTest;
         hRes = fileTest.OpenCreate(sPathOut, OF_WRITE | OF_CREATE, sa1);
         UNITTEST_TRUE(SUCCEEDED(hRes));
-        hRes = fileTest.WriteX("WinLocalSid\n", 5);
+        hRes = fileTest.WriteX(TOSPAN_LIT("WinLocalSid\n"));
         UNITTEST_TRUE(SUCCEEDED(hRes));
 
         cSecurityAttributes sa3;

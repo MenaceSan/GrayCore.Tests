@@ -1,4 +1,3 @@
-//
 //! @file cIniObject.Tests.cpp
 //
 #include "pch.h"

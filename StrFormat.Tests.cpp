@@ -242,7 +242,7 @@ void GRAYCALL UnitTestFormatX(typename StrFormat<TYPE>::STRFORMAT_t pFormat, cSp
         UNITTEST_TRUE(nLenExp < nLenAlloc - 1);
 
         if (!ret.isNull()) {
-            cMem::Fill(ret.get_DataWork(), nLenAlloc * sizeof(TYPE), cHeap::kFillUnusedStack);  // fill background.
+            cMem::Fill(ret.get_PtrWork(), nLenAlloc * sizeof(TYPE), cHeap::kFillUnusedStack);  // fill background.
         }
 
         StrLen_t nLenRet = UnitTestFormat1<TYPE>(pFormat, ret, sFormat, test.m_eArgs);
@@ -256,7 +256,7 @@ void GRAYCALL UnitTestFormatX(typename StrFormat<TYPE>::STRFORMAT_t pFormat, cSp
 
         if (!ret.isNull()) {
             // NOTE: M$ vsnprintf() will fill unused data in _DEBUG mode. with 0xFE
-            TYPE* pszOut = ret.get_DataWork();
+            TYPE* pszOut = ret.get_PtrWork();
             UNITTEST_TRUE(pszOut[nLenExp] == '\0');
             UNITTEST_TRUE(!StrT::CmpN<TYPE>(pszOut, sExpected, nLenExp));
             BYTE chEnd2 = (BYTE)pszOut[nLenAlloc - 1];

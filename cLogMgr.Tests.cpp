@@ -1,5 +1,4 @@
-//
-// cLogMgr.Tests.cpp
+//! @file cLogMgr.Tests.cpp
 //
 #include "pch.h"
 #include <GrayCore/include/cLogMgr.h>

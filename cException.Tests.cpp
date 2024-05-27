@@ -1,4 +1,3 @@
-//
 //! @file cException.Tests.cpp
 //
 #include "pch.h"

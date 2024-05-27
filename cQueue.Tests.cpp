@@ -9,9 +9,9 @@ struct UNITTEST_N(cQueue) : public cUnitTest {
 
     /// get cSpan to write to Q
     cSpan<GChar_t> GetSpanTest(StrLen_t i) {
-        auto spanText = ToSpan<GChar_t>(cUnitTests::k_sTextBlob);
+        auto spanText = ToSpanStr<GChar_t>(cUnitTests::k_sTextBlob);
         i %= spanText.GetSize();  // k_sTextBlob = cUnitTests::k_sTextBlob._Len
-        return ToSpan(spanText.get_DataConst() + i, cValT::Min(kUNITTEST_CHUNK, spanText.GetSize() - i));
+        return ToSpan(spanText.get_PtrConst() + i, cValT::Min(kUNITTEST_CHUNK, spanText.GetSize() - i));
     }
 
     void TestChunked() {
@@ -64,7 +64,7 @@ struct UNITTEST_N(cQueue) : public cUnitTest {
 
     void TestRead() {
         // Read test cQueueRead
-        cQueueRead<GChar_t> qr(ToSpan<GChar_t>(cUnitTests::k_sTextBlob));
+        cQueueRead<GChar_t> qr(ToSpanStr<GChar_t>(cUnitTests::k_sTextBlob));
         for (StrLen_t i = 0; i < cUnitTests::k_sTextBlob._Len; i++) {
             GChar_t szTmp[2];
             qr.ReadSpanQ(TOSPAN(szTmp));
