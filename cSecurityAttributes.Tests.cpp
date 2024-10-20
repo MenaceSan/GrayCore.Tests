@@ -18,10 +18,10 @@ struct UNITTEST_N(cSecurityAttributes) : public cUnitTest {
         cOSUserToken token;
         HRESULT hRes = token.GetSID(sidUser);
         UNITTEST_TRUE(SUCCEEDED(hRes));
-        uts.m_pLog->addInfoF("sidUser='%s'", LOGSTR(sidUser.GetStringSID()));
+        uts._pLog->addInfoF("sidUser='%s'", LOGSTR(sidUser.GetStringSID()));
 
         cSecurityId sidEveryone(WinLocalSid);
-        uts.m_pLog->addInfoF("WinLocalSid='%s'", LOGSTR(sidEveryone.GetStringSID()));
+        uts._pLog->addInfoF("WinLocalSid='%s'", LOGSTR(sidEveryone.GetStringSID()));
 
         cSecurityACL dacl1(sidEveryone, GENERIC_ALL);
         cSecurityAttributes sa1(false, dacl1.get_ACL());

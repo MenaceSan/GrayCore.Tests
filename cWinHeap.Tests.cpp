@@ -18,7 +18,7 @@ struct UNITTEST_N(cWinHeap) : public cUnitTest {
         for (DWORD i = 0; i < dwRet; i++) {
             cWinHeap heap(aProcessHeaps[i], false);
             if (!heap.isValidHeap()) {
-                uts.m_pLog->addInfoF("cWinHeap 0%x Not valid", heap.get_Handle());
+                uts._pLog->addInfoF("cWinHeap 0%x Not valid", heap.get_Handle());
                 continue;
             }
 
@@ -27,7 +27,7 @@ struct UNITTEST_N(cWinHeap) : public cUnitTest {
             // HEAP_INFORMATION_CLASS = 1 = HeapEnableTerminationOnCorruption
             heap.QueryInformation((HEAP_INFORMATION_CLASS)1, &HeapInformation, &nSizeData);
 
-            uts.m_pLog->addInfoF("cWinHeap 0%x compact=%d, term=%d", heap.get_Handle(), heap.Compact(), HeapInformation);
+            uts._pLog->addInfoF("cWinHeap 0%x compact=%d, term=%d", heap.get_Handle(), heap.Compact(), HeapInformation);
         }
     }
 };

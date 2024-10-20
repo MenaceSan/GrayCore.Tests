@@ -22,8 +22,8 @@ struct UNITTEST_N(StrU) : public cUnitTest {
         if (src.GetSize() >= STRMAX(wTmpU)) return false;
         const StrLen_t iLenU = StrU::UTF8toUNICODE(TOSPAN(wTmpU), ToSpan(szTmpA, lenA));
         if (iLenU != src.GetSize()) return false;
-        if (StrT::Cmp<wchar_t>(wTmpU, src))  // back to original text?
-            return false;
+        if (StrT::Cmp<wchar_t>(wTmpU, src)) return false;  // back to original text?
+            
         return true;
     }
 

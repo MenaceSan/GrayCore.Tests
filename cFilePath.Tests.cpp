@@ -40,7 +40,7 @@ struct UNITTEST_N(cFilePath) : public cUnitTest {
 
             // MakeSymNameStr
             cStringA sSymbolicName(cFilePath::MakeSymNameStr(pszTest));
-            uts.m_pLog->addDebugInfoF("File='%s', Symbol='%s'", LOGSTR(pszTest), LOGSTR(sSymbolicName));
+            uts._pLog->addDebugInfoF("File='%s', Symbol='%s'", LOGSTR(pszTest), LOGSTR(sSymbolicName));
 
             sSymbolicName = cFilePath::MakeSymNameStr(pszTest);
             UNITTEST_TRUE(sSymbolicName.GetLength());
@@ -48,7 +48,7 @@ struct UNITTEST_N(cFilePath) : public cUnitTest {
             // MakeProperPath
             FILECHAR_t szOut[cFilePath::k_MaxLen];
             StrLen_t nLen2 = cFilePath::MakeProperPath(TOSPAN(szOut), pszTest);
-            StrLen_t nLen1 = StrT::Copy(TOSPAN(szOut), pszTest);
+            StrLen_t nLen1 = StrT::CopyPtr(TOSPAN(szOut), pszTest);
             StrLen_t nLen3 = cFilePath::MakeProperPath(TOSPAN(szOut));
 
             UNITTEST_TRUE(nLen1 >= nLen2);

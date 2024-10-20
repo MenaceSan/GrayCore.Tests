@@ -12,27 +12,27 @@ struct UNITTEST_N(cFileDir) : public cUnitTest {
             return S_OK;
 
         cUnitTests& uts = cUnitTests::I();
-        uts.m_pLog->addDebugInfoF("%s Device Type = %d", LOGSTR(sNameDisplay), uDeviceType);
+        uts._pLog->addDebugInfoF("%s Device Type = %d", LOGSTR(sNameDisplay), uDeviceType);
 
         HRESULT hRes1 = di.UpdateInfo(pszDeviceId);
         if (FAILED(hRes1)) {
             if (pszDeviceId != nullptr && hRes1 == HRESULT_WIN32_C(ERROR_NOT_READY)) {
                 // some drives won't be ready (if removable). Thats OK.
-                uts.m_pLog->addDebugInfoF("%s Not Ready", LOGSTR(sNameDisplay));
+                uts._pLog->addDebugInfoF("%s Not Ready", LOGSTR(sNameDisplay));
             } else {
-                uts.m_pLog->addDebugInfoF("%s ERR='%s'", LOGERR(hRes1));
+                uts._pLog->addDebugInfoF("%s ERR='%s'", LOGERR(hRes1));
                 UNITTEST_TRUE(SUCCEEDED(hRes1));
             }
             return hRes1;
         }
 
-        uts.m_pLog->addDebugInfoF("%s Vol='%s','%s',ser=0%sh,clen=%u,case=%d", LOGSTR(sNameDisplay), LOGSTR(di.m_sVolumeName), LOGSTR(di.m_sTypeName), LOGSTR2(di.m_nSerialNumber, 0x10),  // Volume serial number (time stamp of last format) e.g. 0x0ca0e613
-                                  di.m_dwMaximumComponentLength,                                                                                                                           // e.g. 255 bytes
-                                  di.m_bCaseSensitive);                                                                                                                                    // e.g. 0x03e700ff, FILE_CASE_SENSITIVE_SEARCH
+        uts._pLog->addDebugInfoF("%s Vol='%s','%s',ser=0%sh,clen=%u,case=%d", LOGSTR(sNameDisplay), LOGSTR(di._sVolumeName), LOGSTR(di._sTypeName), LOGSTR2(di._nSerialNumber, 0x10),  // Volume serial number (time stamp of last format) e.g. 0x0ca0e613
+                                  di._nMaximumComponentLength,                                                                                                                           // e.g. 255 bytes
+                                  di._isCaseSensitive);                                                                                                                                    // e.g. 0x03e700ff, FILE_CASE_SENSITIVE_SEARCH
 
         FILE_SIZE_t uFreeDiskSpace = cFileDevice::GetDeviceFreeSpace(pszDeviceId);
         UNITTEST_TRUE(uFreeDiskSpace > 0 || uDeviceType == DRIVE_CDROM || uDeviceType == DRIVE_REMOTE);  // has free space or its a read only device like DVD?
-        uts.m_pLog->addDebugInfoF("%s FreeSpace=%s", LOGSTR(sNameDisplay), LOGSTR(cStringT<LOGCHAR_t>::GetSizeK(uFreeDiskSpace, 0, true)));
+        uts._pLog->addDebugInfoF("%s FreeSpace=%s", LOGSTR(sNameDisplay), LOGSTR(cStringT<LOGCHAR_t>::GetSizeK(uFreeDiskSpace, 0, true)));
 
         return S_OK;
     }
@@ -104,7 +104,7 @@ struct UNITTEST_N(cFileDir) : public cUnitTest {
 
         // NFS merges create and modified times ? Create Time NOT set.
         if (eFileSysType != FILESYS_t::_NFS) {
-            cString sTimeChange = cTimeInt(fs2.m_timeCreate).GetTimeFormStr(TIMEFORMAT_t::_DEFTZ, TZ_UTC);
+            cString sTimeChange = cTimeInt(fs2._timeCreate).GetTimeFormStr(TIMEFORMAT_t::_DEFTZ, TZ_UTC);
             UNITTEST_TRUE(!sTimeChange.Compare(k_pszTimeChange));
         }
     }

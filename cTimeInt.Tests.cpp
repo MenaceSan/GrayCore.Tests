@@ -67,7 +67,7 @@ struct UNITTEST_N(cTimeInt) : public cUnitTest {
         UNITTEST_TRUE(tnow1.GetTimeUnits(tn, TZ_LOCAL));
         UNITTEST_TRUE(tn.isReasonableTimeUnits());
 
-        uts.m_pLog->addDebugInfoF("Current local time is '%s'", LOGSTR(tnow1.GetTimeFormStr(TIMEFORMAT_t::_DEFTZ, TZ_LOCAL)));
+        uts._pLog->addDebugInfoF("Current local time is '%s'", LOGSTR(tnow1.GetTimeFormStr(TIMEFORMAT_t::_DEFTZ, TZ_LOCAL)));
 
         int iLeapYears = cTimeUnits::GetLeapYearsSince2K(1970);
         UNITTEST_TRUE(iLeapYears == -7);

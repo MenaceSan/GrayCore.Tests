@@ -7,12 +7,12 @@
 namespace Gray {
 class cUnitTestHashStruct {
     typedef cUnitTestHashStruct THIS_t;
-    HASHCODE_t m_nHashCode;
+    HASHCODE_t _nHashCode;
 
  public:
-    cUnitTestHashStruct(HASHCODE_t nHashCode = 0) : m_nHashCode(nHashCode) {}
+    cUnitTestHashStruct(HASHCODE_t nHashCode = 0) : _nHashCode(nHashCode) {}
     HASHCODE_t get_HashCode() const noexcept {
-        return m_nHashCode;
+        return _nHashCode;
     }
 };
 

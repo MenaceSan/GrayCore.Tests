@@ -17,14 +17,14 @@ struct UNITTEST_N(cHookJump) : public cUnitTest {
     static INT_PTR GRAYCALL HookJump1()  // never inline optimize this
     {
         cUnitTests& uts = cUnitTests::I();
-        uts.m_pLog->addDebugInfoF("cUnitTest_HookJump1");
+        uts._pLog->addDebugInfoF("cUnitTest_HookJump1");
         return 1;
     }
     static INT_PTR GRAYCALL HookJump2()  // never inline optimize this
     {
         // replace cUnitTest_HookJump1 with this.
         cUnitTests& uts = cUnitTests::I();
-        uts.m_pLog->addDebugInfoF("cUnitTest_HookJump2");
+        uts._pLog->addDebugInfoF("cUnitTest_HookJump2");
         return 2;
     }
     static void WINAPI Hook_OutputDebugStringA(const char* psz)  // never inline optimize this
@@ -80,7 +80,7 @@ struct UNITTEST_N(cHookJump) : public cUnitTest {
             cHookChain<FARPROC> lock(tester);
             iRet = HookJump1();  // cUnitTest_HookJump1 still as cUnitTest_HookJump2.
             UNITTEST_TRUE(iRet == 2);
-            iRet = lock.m_pFuncChain();  // cUnitTest_HookJump1 was restored just for Chain.
+            iRet = lock._pFuncChain();  // cUnitTest_HookJump1 was restored just for Chain.
             UNITTEST_TRUE(iRet == 1);
         }
 
@@ -126,7 +126,7 @@ struct UNITTEST_N(cHookJump) : public cUnitTest {
         // UNITTEST_TRUE(sm_cHookJump_HookAPI2.isHookInstalled());
 
         // watch calls to CreateFileA()
-        auto h = ::CreateFileA("c:/tmp/junk.txt", 0, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, HANDLE_NULL);
+        auto h = ::CreateFileA("c:/tmp/junk.txt", 0, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, cOSHandle::kNULL);
 
         sm_cHookJump_HookAPI2.RemoveHook();
     }
@@ -135,7 +135,7 @@ struct UNITTEST_N(cHookJump) : public cUnitTest {
         //! hook a API function for one call.
 
         cUnitTests& uts = cUnitTests::I();
-        UNITTEST_TRUE(uts.m_pLog != nullptr);
+        UNITTEST_TRUE(uts._pLog != nullptr);
         // TestAPI2();
 
         TestBasic();

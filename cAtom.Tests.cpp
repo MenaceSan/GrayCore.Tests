@@ -60,7 +60,7 @@ struct UNITTEST_N(cAtom) : public cUnitTest {
         static const ATOMCHAR_t* k_t2 = CATOM_STR("sdfsdF23 5");  // lower case = higher number ASCII.
         HRESULT hRes = StrA::CheckSymName(k_t2);
         UNITTEST_TRUE(hRes == E_INVALIDARG);
-        StrLen_t nLen = cAtomRef::MakeSymName(szTmp, k_t2, false);
+        StrLen_t nLen = cAtomRef::MakeSymName(TOSPAN(szTmp), k_t2, false);
         UNITTEST_TRUE(nLen == 8);
 
         hRes = StrA::CheckSymName(szTmp);
@@ -73,7 +73,7 @@ struct UNITTEST_N(cAtom) : public cUnitTest {
     void TestEmpty() {
         //! empty
         cAtomManager& rAM = cAtomManager::I();
-        cAtomRef a0; 
+        cAtomRef a0;
         cAtomRef a1 = k_empty;
         cAtomRef a2 = cAtomRef::FindAtomStr(k_empty);
         cAtomRef a3("");
@@ -98,10 +98,10 @@ struct UNITTEST_N(cAtom) : public cUnitTest {
         UNITTEST_TRUE(!aRoot.IsEmpty());  // k_Root
         UNITTEST_TRUE(aRoot == a_Root);
         // KNown Hash
-        const cAtomRef aRoot2("root");
-        UNITTEST_TRUE(aRoot2 == a_Root);
         const cAtomRef aRoot3("Root");
         UNITTEST_TRUE(aRoot3 == a_Root);
+        const cAtomRef aRoot2("root");
+        UNITTEST_TRUE(aRoot2 == a_Root);
     }
 
     void TestFree() {
@@ -143,7 +143,7 @@ struct UNITTEST_N(cAtom) : public cUnitTest {
         TestFree();
         TestBatch();
 
-        UNITTEST_TRUE(rAM.DebugTest());
+        UNITTEST_TRUE(rAM.DebugTestPoint());
     }
 };
 UNITTEST2_REGISTER(cAtom, UNITTEST_LEVEL_t::_Core);

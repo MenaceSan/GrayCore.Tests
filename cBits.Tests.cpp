@@ -43,22 +43,23 @@ struct UNITTEST_N(cBits) : public cUnitTest {
         UNITTEST_TRUE(cBits::Highest1Bit<UINT32>(1) == 1);
         UNITTEST_TRUE(cBits::Highest1Bit<UINT32>(4095) == 12);
         UNITTEST_TRUE(cBits::Highest1Bit<UINT32>(4096) == 13);
+        UNITTEST_TRUE(cBits::Highest1Bit<UINT32>(4196) == 13);
+
+        UNITTEST_TRUE(cBits::Lowest1Bit<UINT64>(4096) == 13);
+        UNITTEST_TRUE(cBits::Lowest1Bit<UINT64>(4095) == 1);
 
         UNITTEST_TRUE(cBits::Highest1Bit<UINT64>(0) == 0);
         UNITTEST_TRUE(cBits::Highest1Bit<UINT64>(1) == 1);
         UNITTEST_TRUE(cBits::Highest1Bit<UINT64>(4095) == 12);
         UNITTEST_TRUE(cBits::Highest1Bit<UINT64>(4096) == 13);
+        UNITTEST_TRUE(cBits::Highest1Bit<UINT64>(4196) == 13);
 
         UNITTEST_TRUE(cBits::Lowest1Bit<UINT32>(4096) == 13);
-        UNITTEST_TRUE(cBits::Lowest1Bit<UINT64>(4096) == 13);
+        UNITTEST_TRUE(cBits::Lowest1Bit<UINT32>(4095) == 1);
 
-        BIT_ENUM_t nBit = cBits::Highest1Bit(12);
-        UNITTEST_TRUE(nBit == 4);
+        UNITTEST_TRUE(cBits::Highest1Bit(12) == 4);
 
-        nBit = 32 - cBits::Highest1Bit<UINT32>(1);
-        UNITTEST_TRUE(nBit == 31);
-        UINT32 nTest = (UINT32)1 << nBit;
-        UNITTEST_TRUE(nTest > 0);
+ 
     }  // namespace Gray
 };
 UNITTEST2_REGISTER(cBits, UNITTEST_LEVEL_t::_Core);

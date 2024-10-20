@@ -6,47 +6,13 @@
 #include <GrayCore/include/cMime.h>
 
 namespace Gray {
-GRAYCORE_TEST_LINK void GRAYCALL UnitTest_Write(cStreamOutput& testfile1) { // static
-    //! Write strings to cStreamOutput.
-    for (ITERATE_t i = 0; i < _countof(cUnitTests::k_asTextLines); i++) {
-        HRESULT hRes = testfile1.WriteString(cUnitTests::k_asTextLines[i].get_CPtr());
-        UNITTEST_TRUE(SUCCEEDED(hRes));
-        testfile1.WriteString(_GT(STR_NL));
-    }
-}
-
-GRAYCORE_TEST_LINK void GRAYCALL UnitTest_Read(cStreamInput& stmIn, bool bString) { // static
-    //! Read strings from cStreamInput (as binary or text).
-    //! Other side of UnitTest_Write()
-
-    GChar_t szTmp[256];
-
-    for (ITERATE_t j = 0; j < _countof(cUnitTests::k_asTextLines); j++) {
-        const GChar_t* pszLine = cUnitTests::k_asTextLines[j];
-        const StrLen_t iLenStr = StrT::Len(pszLine);
-        ASSERT(iLenStr == cUnitTests::k_asTextLines[j]._Len);
-        UNITTEST_TRUE(iLenStr < (StrLen_t)STRMAX(szTmp));
-        const size_t nSizeBytes = (iLenStr + 1) * sizeof(GChar_t);
-        HRESULT hResRead = bString ? stmIn.ReadStringLine( TOSPAN(szTmp)) : stmIn.ReadX(cMemSpan(szTmp, nSizeBytes));
-        UNITTEST_TRUE(hResRead == (HRESULT)(bString ? (iLenStr + 1) : nSizeBytes));
-        UNITTEST_TRUE(cMem::IsEqual(szTmp, pszLine, iLenStr * sizeof(GChar_t)));  // pszLine has no newline.
-        UNITTEST_TRUE(szTmp[iLenStr] == '\n');
-    }
-
-    // Check for proper read past end of file.
-    HRESULT hResRead = stmIn.ReadX(TOSPAN(szTmp));
-    UNITTEST_TRUE(hResRead == 0);
-    hResRead = stmIn.ReadX(TOSPAN(szTmp));
-    UNITTEST_TRUE(hResRead == 0);
-}
-
 struct UNITTEST_N(cFile) : public cUnitTest {
     void TestWrite(cStringF sFilePath) {
         //
         cFile testfile1;
         HRESULT hRes = testfile1.OpenX(sFilePath, OF_CREATE | OF_WRITE | OF_BINARY);
         UNITTEST_TRUE(SUCCEEDED(hRes));
-        UnitTest_Write(testfile1);
+        cStreamTester::TestWrites(testfile1);
     }
 
     void TestRead(cStringF sFilePath, bool isString) {
@@ -58,7 +24,7 @@ struct UNITTEST_N(cFile) : public cUnitTest {
         hRes = testfile2.GetFileStatus(filestatus1);
         UNITTEST_TRUE(SUCCEEDED(hRes));
 
-        UnitTest_Read(testfile2, isString);
+        cStreamTester::TestReads(testfile2, isString);
     }
 
     void TestGrow(cStringF sFilePath) {

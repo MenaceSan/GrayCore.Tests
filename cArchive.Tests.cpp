@@ -8,7 +8,7 @@
 namespace Gray {
 struct cUnitTestArchive1 : public cObject {
     // A class with a bunch of types to serialize.
-    size_t m_nSize;
+    size_t _nSize;
     int m_i1;
     int m_i2;
     UINT m_u1;
@@ -18,10 +18,10 @@ struct cUnitTestArchive1 : public cObject {
     cString m_s3;
     // cArrayVal
 
-    cUnitTestArchive1() : m_nSize(654321), m_i1(1), m_i2(22), m_u1(333), m_u2(444444), m_s1("test"), m_s2(L"Junk Test String"), m_s3(cUnitTestCur::k_sTextBlob.get_CPtr()) {}
+    cUnitTestArchive1() : _nSize(654321), m_i1(1), m_i2(22), m_u1(333), m_u2(444444), m_s1("test"), m_s2(L"Junk Test String"), m_s3(cUnitTestCur::k_sTextBlob.get_CPtr()) {}
 
     void SetZero() {
-        m_nSize = 0;
+        _nSize = 0;
         m_i1 = 0;
         m_i2 = 0;
         m_u1 = 0;
@@ -34,7 +34,7 @@ struct cUnitTestArchive1 : public cObject {
     HRESULT Serialize(cArchive& a) override {
         // Read or write all members of this structure.
         HRESULT hRes;
-        hRes = a.SerializeSize(m_nSize);
+        hRes = a.SerializeSize(_nSize);
         hRes = a.SerializeT(m_i1);
         hRes = a.SerializeT(m_i2);
         hRes = a.SerializeT(m_u1);
@@ -45,7 +45,7 @@ struct cUnitTestArchive1 : public cObject {
         return hRes;
     }
     bool IsEqual(const cUnitTestArchive1& x) const {
-        if (x.m_nSize != m_nSize) return false;
+        if (x._nSize != _nSize) return false;
         if (x.m_i1 != m_i1) return false;
         if (x.m_i2 != m_i2) return false;
         if (x.m_u1 != m_u1) return false;

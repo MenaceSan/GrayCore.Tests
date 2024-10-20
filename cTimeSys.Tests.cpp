@@ -47,20 +47,20 @@ struct UNITTEST_N(cTimeSys) : public cUnitTest {
     UNITTEST_METHOD(cTimeSys) {
         cTimePerf::InitFreq();
 
-        cTimePerf tStart0(true);
-        cTimeSys tNow = cTimeSys::GetTimeNow();
-        TIMEPERF_t tDiff0 = tStart0.get_AgePerf();
+        const cTimePerf tStart0(true);
+        const cTimeSys tNow = cTimeSys::GetTimeNow();
+        const TIMEPERF_t tDiff0 = tStart0.get_AgePerf();
         UNITTEST_TRUE(tDiff0 >= 0);  // e.g. 2	// NOTE This can be so fast it looks like 0 ?
         UNITTEST_TRUE(tNow.get_TimeSys() >= 1);
 
-        cTimePerf tStart1(true);
+        const cTimePerf tStart1(true);
         cThreadId::SleepCurrent(0);
-        TIMEPERF_t tDiff1 = tStart1.get_AgePerf();
+        const TIMEPERF_t tDiff1 = tStart1.get_AgePerf();
         UNITTEST_TRUE(tDiff1 >= 1);
 
-        cTimePerf tStart2(true);
+        const cTimePerf tStart2(true);
         cThreadId::SleepCurrent(1);
-        TIMEPERF_t tDiff2 = tStart2.get_AgePerf();
+        const TIMEPERF_t tDiff2 = tStart2.get_AgePerf();
         UNITTEST_TRUE(tDiff2 > 1);
 
         const TIMESYSD_t k_nLen = 200;  // sleep units.

@@ -7,7 +7,7 @@
 namespace Gray {
 struct UNITTEST_N(cAppState) : public cUnitTest {
     UNITTEST_METHOD(cAppState) {
-        cUnitTestAppState inmain;
+        cUnitTestAppState inTest;
         cAppState& app = cAppState::I();
 
         cAppArgs args2;
@@ -21,7 +21,7 @@ struct UNITTEST_N(cAppState) : public cUnitTest {
         args2.InitArgsLine(_FN("a='sdf sdf' b='123123' c='sdf sdf sdf sdf '"));
 
 #ifdef _WIN32
-        _IMAGE_DOS_HEADER* pHeader = (_IMAGE_DOS_HEADER*)app.get_HModule();  //!< the current applications instance handle/base address. _IMAGE_DOS_HEADER
+        _IMAGE_DOS_HEADER* pHeader = (_IMAGE_DOS_HEADER*)app.get_HModule();  // the current applications instance handle/base address. _IMAGE_DOS_HEADER
         UNITTEST_TRUE(pHeader != nullptr);
 #endif
 
@@ -29,9 +29,9 @@ struct UNITTEST_N(cAppState) : public cUnitTest {
         UNITTEST_TRUE(!sUserName.IsEmpty());
 
         UNITTEST_TRUE(app.isAppRunning());  // cAppStateMain was called!
-        DEBUG_MSG(("Arg Qty = %d", app.m_Args.get_ArgsQty()));
+        DEBUG_MSG(("Arg Qty = %d", app._Args.get_ArgsQty()));
 
-        for (int i = 0; i < app.m_Args.get_ArgsQty(); i++) {
+        for (int i = 0; i < app._Args.get_ArgsQty(); i++) {
             cStringF sArg = app.GetArgEnum(i);
         }
 

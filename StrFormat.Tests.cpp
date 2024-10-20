@@ -13,114 +13,114 @@ namespace Gray {
 /// <summary>
 /// Argument types for testing printf()
 /// </summary>
-enum STRFORMATTEST_TYPE {
-    STRFORMATTEST_0,  // no args intentionally.
-    STRFORMATTEST_null,
+enum class STRFT_t {
+    _0,  // no args intentionally.
+    _null,
 
-    STRFORMATTEST_s1,  // "abc"
-    STRFORMATTEST_s2,  // "abcdef"
-    STRFORMATTEST_sA,  // "A string"
+    _s1,  // "abc"
+    _s2,  // "abcdef"
+    _sA,  // "A string"
 
-    STRFORMATTEST_i0,   // 0
-    STRFORMATTEST_i1,   // 123123
-    STRFORMATTEST_i2,   //
-    STRFORMATTEST_i5,   //
-    STRFORMATTEST_im2,  //
-    STRFORMATTEST_in,   //
+    _i0,   // 0
+    _i1,   // 123123
+    _i2,   //
+    _i5,   //
+    _im2,  //
+    _in,   //
 
-    STRFORMATTEST_x1,   //
-    STRFORMATTEST_xlg,  //
+    _x1,   //
+    _xlg,  //
 
-    STRFORMATTEST_c1,  //
-    STRFORMATTEST_c2,  //
+    _c1,  //
+    _c2,  //
 
-    STRFORMATTEST_f0,   // 0.0
-    STRFORMATTEST_fp1,  //
-    STRFORMATTEST_f2,   //
-    STRFORMATTEST_f3,   // 3.1416, 3.1416, 3.1416
-    STRFORMATTEST_f100,
+    _f0,   // 0.0
+    _fp1,  //
+    _f2,   //
+    _f3,   // 3.1416, 3.1416, 3.1416
+    _f100,
 
-    STRFORMATTEST_fn,   // -123.456
-    STRFORMATTEST_fnz,  // -1.797693e-100 < epsilon?
-    STRFORMATTEST_flg,  // 1.797693e+100
-    STRFORMATTEST_fmax,
+    _fn,   // -123.456
+    _fnz,  // -1.797693e-100 < epsilon?
+    _flg,  // 1.797693e+100
+    _fmax,
 
-    STRFORMATTEST_QTY,
+    _QTY,
 };
 
 /// <summary>
 /// Test a format string.
 /// </summary>
 struct StrFormatTest {
-    STRFORMATTEST_TYPE m_eArgs;
+    STRFT_t m_eArgs;
     const char* m_pszFormat;
     const char* m_pszExpected;
 };
 
 template <typename TYPE>
-StrLen_t UnitTestFormat1(typename StrFormat<TYPE>::STRFORMAT_t pFormat, cSpanX<TYPE>& ret, const TYPE* pszFormat, int eArgs) {  // static
+StrLen_t UnitTestFormat1(typename StrFormat<TYPE>::STRFORMAT_t pFormat, cSpanX<TYPE>& ret, const TYPE* pszFormat, STRFT_t eArgs) {  // static
     // Supply test arguments.
     switch (eArgs) {
-        case STRFORMATTEST_0:
+        case STRFT_t::_0:
             return (*pFormat)(ret, pszFormat);
-        case STRFORMATTEST_null:
+        case STRFT_t::_null:
             return (*pFormat)(ret, pszFormat, nullptr);
 
-        case STRFORMATTEST_s1:
+        case STRFT_t::_s1:
             return (*pFormat)(ret, pszFormat, StrArg<TYPE>("abc"));
-        case STRFORMATTEST_s2:
+        case STRFT_t::_s2:
             return (*pFormat)(ret, pszFormat, StrArg<TYPE>("abcdef"));
-        case STRFORMATTEST_sA:
+        case STRFT_t::_sA:
             return (*pFormat)(ret, pszFormat, StrArg<TYPE>("A string"));
 
-        case STRFORMATTEST_i0:
+        case STRFT_t::_i0:
             return (*pFormat)(ret, pszFormat, 0);
-        case STRFORMATTEST_i1:
+        case STRFT_t::_i1:
             return (*pFormat)(ret, pszFormat, 123123);
-        case STRFORMATTEST_i2:
-            return (*pFormat)(ret, pszFormat, 5, 10);  // m_bWidthArg
-        case STRFORMATTEST_i5:
+        case STRFT_t::_i2:
+            return (*pFormat)(ret, pszFormat, 5, 10);  // _isWidthArg
+        case STRFT_t::_i5:
             return (*pFormat)(ret, pszFormat, 100, 100, 100, 100, 100);
 
-        case STRFORMATTEST_im2:
+        case STRFT_t::_im2:
             return (*pFormat)(ret, pszFormat, 1977, 650000L);
 
-        case STRFORMATTEST_in:
+        case STRFT_t::_in:
             return (*pFormat)(ret, pszFormat, -200, 5);
 
-        case STRFORMATTEST_x1:
+        case STRFT_t::_x1:
             return (*pFormat)(ret, pszFormat, 0xA3);
-        case STRFORMATTEST_xlg:
+        case STRFT_t::_xlg:
             return (*pFormat)(ret, pszFormat, (INT64)0x123ABCL);
 
-        case STRFORMATTEST_c1:
+        case STRFT_t::_c1:
             return (*pFormat)(ret, pszFormat, 'z');
-        case STRFORMATTEST_c2:
+        case STRFT_t::_c2:
             return (*pFormat)(ret, pszFormat, 'a', 65);
 
-        case STRFORMATTEST_f0:
+        case STRFT_t::_f0:
             return (*pFormat)(ret, pszFormat, 0.0);
-        case STRFORMATTEST_fp1:
+        case STRFT_t::_fp1:
             return (*pFormat)(ret, pszFormat, 0.123);
-        case STRFORMATTEST_f2:
+        case STRFT_t::_f2:
             return (*pFormat)(ret, pszFormat, 1.123456789012345);
-        case STRFORMATTEST_f3:
+        case STRFT_t::_f3:
             return (*pFormat)(ret, pszFormat, 3.1416, 3.1416, 3.1416);
-        case STRFORMATTEST_f100:
+        case STRFT_t::_f100:
             return (*pFormat)(ret, pszFormat, 100.0);
 
-        case STRFORMATTEST_fn:
+        case STRFT_t::_fn:
             return (*pFormat)(ret, pszFormat, -123.456);
-        case STRFORMATTEST_fnz:
+        case STRFT_t::_fnz:
             return (*pFormat)(ret, pszFormat, -1.797693e-100);
-        case STRFORMATTEST_flg:
+        case STRFT_t::_flg:
             return (*pFormat)(ret, pszFormat, 1.797693e+100);
-        case STRFORMATTEST_fmax:
+        case STRFT_t::_fmax:
             return (*pFormat)(ret, pszFormat, cTypeLimit<double>::Max());
 
             // NaN, Inf ?
 
-            // case STRFORMATTEST_b1:
+            // case STRFT_t::_b1:
             //	return (*pFormat)(ret, pszFormat, 0x550F);
         default:
             break;
@@ -138,102 +138,101 @@ void GRAYCALL UnitTestFormatX(typename StrFormat<TYPE>::STRFORMAT_t pFormat, cSp
 
     // clang-format off
 	static const StrFormatTest k_UnitTestData[] = {
-		{ STRFORMATTEST_f3,		"floats: %4.2f %+.0e %E \n", "floats: 3.14 +3e+00 3.141600E+00 \n" },
+		{ STRFT_t::_f3,		"floats: %4.2f %+.0e %E \n", "floats: 3.14 +3e+00 3.141600E+00 \n" },
 
 		// Test strings via "%s".
-		{ STRFORMATTEST_0,		"%%",					"%" },				//
-		{ STRFORMATTEST_0,		"test%%test%%",			"test%test%" },		// 
+		{ STRFT_t::_0,		"%%",					"%" },				//
+		{ STRFT_t::_0,		"test%%test%%",			"test%test%" },		// 
 
-		{ STRFORMATTEST_null,	"%s",				"(null)" },		// 
-		{ STRFORMATTEST_null,	"test%stest",		"test(null)test" },		// 
+		{ STRFT_t::_null,	"%s",				"(null)" },		// 
+		{ STRFT_t::_null,	"test%stest",		"test(null)test" },		// 
 
-		{ STRFORMATTEST_s1,		"%s",					"abc" },			// "abc"
-		{ STRFORMATTEST_s1,		"%-4s",					"abc " },		// abc
-		{ STRFORMATTEST_s1,		"%4s",					" abc" },
+		{ STRFT_t::_s1,		"%s",					"abc" },			// "abc"
+		{ STRFT_t::_s1,		"%-4s",					"abc " },		// abc
+		{ STRFT_t::_s1,		"%4s",					" abc" },
 
-		{ STRFORMATTEST_s2,		"%s",					"abcdef" },			// "abcdef"
-		{ STRFORMATTEST_s2,		"test%stest",			"testabcdeftest" },
-		{ STRFORMATTEST_s2,		"test%.5stest",			"testabcdetest" },
-		{ STRFORMATTEST_s2,		"test%4.1stest",		"test   atest" },		// "abcdef"
+		{ STRFT_t::_s2,		"%s",					"abcdef" },			// "abcdef"
+		{ STRFT_t::_s2,		"test%stest",			"testabcdeftest" },
+		{ STRFT_t::_s2,		"test%.5stest",			"testabcdetest" },
+		{ STRFT_t::_s2,		"test%4.1stest",		"test   atest" },		// "abcdef"
 
-		{ STRFORMATTEST_s2,		"%4s",					"abcdef" },	// overflow.
-		{ STRFORMATTEST_s2,		"%-4s",					"abcdef" },	// abcdef
-		{ STRFORMATTEST_s2,		"%.4s",					"abcd" },		// abcdef clipped
+		{ STRFT_t::_s2,		"%4s",					"abcdef" },	// overflow.
+		{ STRFT_t::_s2,		"%-4s",					"abcdef" },	// abcdef
+		{ STRFT_t::_s2,		"%.4s",					"abcd" },		// abcdef clipped
 
-		{ STRFORMATTEST_sA,		"%s \n",				"A string \n" },
+		{ STRFT_t::_sA,		"%s \n",				"A string \n" },
 
 		// Test Numeric "%d"	
-		{ STRFORMATTEST_i1,		"%d",					"123123" },
-		{ STRFORMATTEST_i1,		"%2d",					"123123" },	// overflow.
-		{ STRFORMATTEST_i1,		"%+2d",					"+123123" },	// overflow.
-		{ STRFORMATTEST_in,		"%+2d",					"-200" },	// 
-		{ STRFORMATTEST_i0,		"%+2d",					"+0" },	// 
+		{ STRFT_t::_i1,		"%d",					"123123" },
+		{ STRFT_t::_i1,		"%2d",					"123123" },	// overflow.
+		{ STRFT_t::_i1,		"%+2d",					"+123123" },	// overflow.
+		{ STRFT_t::_in,		"%+2d",					"-200" },	// 
+		{ STRFT_t::_i0,		"%+2d",					"+0" },	// 
 
-		{ STRFORMATTEST_im2,	"Decimals: %d %ld\n",	"Decimals: 1977 650000\n" },
-		{ STRFORMATTEST_im2,	"Preceding with zeros: %010d \n",	"Preceding with zeros: 0000001977 \n" },
-		{ STRFORMATTEST_im2,	"Preceding with blanks: %10d \n",	"Preceding with blanks:       1977 \n" },
+		{ STRFT_t::_im2,	"Decimals: %d %ld\n",	"Decimals: 1977 650000\n" },
+		{ STRFT_t::_im2,	"Preceding with zeros: %010d \n",	"Preceding with zeros: 0000001977 \n" },
+		{ STRFT_t::_im2,	"Preceding with blanks: %10d \n",	"Preceding with blanks:       1977 \n" },
 
-		{ STRFORMATTEST_im2,	"%-6u",								"1977  " },
-		{ STRFORMATTEST_i2,		"Width trick: %*d \n",		"Width trick:    10 \n" },
-		{ STRFORMATTEST_in,		"%6d,%3d%%",				"  -200,  5%" },
+		{ STRFT_t::_im2,	"%-6u",								"1977  " },
+		{ STRFT_t::_i2,		"Width trick: %*d \n",		"Width trick:    10 \n" },
+		{ STRFT_t::_in,		"%6d,%3d%%",				"  -200,  5%" },
 
 		// Test Numeric other radix Types "%u" "%x"
 
-		{ STRFORMATTEST_x1,		"%x",		"a3" },
-		{ STRFORMATTEST_x1,		"%X",		"A3" },
-		{ STRFORMATTEST_x1,		"%04x",		"00a3" },
+		{ STRFT_t::_x1,		"%x",		"a3" },
+		{ STRFT_t::_x1,		"%X",		"A3" },
+		{ STRFT_t::_x1,		"%04x",		"00a3" },
 
-		{ STRFORMATTEST_xlg,	"%08lX",	"00123ABC" },		// NOTE: "%08LX" will fail.
-		{ STRFORMATTEST_i5,		"Some different radices: %u %x %o %#x %#o \n",	"Some different radices: 100 64 144 0x64 0144 \n" },
+		{ STRFT_t::_xlg,	"%08lX",	"00123ABC" },		// NOTE: "%08LX" will fail.
+		{ STRFT_t::_i5,		"Some different radices: %u %x %o %#x %#o \n",	"Some different radices: 100 64 144 0x64 0144 \n" },
 
 		// Tests char types. "%c"
-		{ STRFORMATTEST_c1,		"%c",					"z" },
-		{ STRFORMATTEST_c2,		"Characters: %c %c \n",	"Characters: a A \n" },	// 'a', 65
+		{ STRFT_t::_c1,		"%c",					"z" },
+		{ STRFT_t::_c2,		"Characters: %c %c \n",	"Characters: a A \n" },	// 'a', 65
 
 		// Test floats. "%g" "%f" "%e"
 
-		{ STRFORMATTEST_f0,		"%g",					"0" },
-		{ STRFORMATTEST_f0,		"%+g",					"+0" },
-		{ STRFORMATTEST_fn,		"%+g",					"-123.456" },
+		{ STRFT_t::_f0,		"%g",					"0" },
+		{ STRFT_t::_f0,		"%+g",					"+0" },
+		{ STRFT_t::_fn,		"%+g",					"-123.456" },
 
-		{ STRFORMATTEST_fp1,	"%g",					"0.123" },
-		{ STRFORMATTEST_fp1,	"%.17g",				"0.123" },
-		{ STRFORMATTEST_f2,		"%g",					"1.12346" },
-		{ STRFORMATTEST_f2,		"%.17g",				"1.123456789012345" },
-		{ STRFORMATTEST_f2,		"%.7g",					"1.123457" },		// rounds up last digit.
-		{ STRFORMATTEST_f100,	"%g",					"100" },
-		{ STRFORMATTEST_fmax,   "%g",					"1.79769e+308" },			// 
+		{ STRFT_t::_fp1,	"%g",					"0.123" },
+		{ STRFT_t::_fp1,	"%.17g",				"0.123" },
+		{ STRFT_t::_f2,		"%g",					"1.12346" },
+		{ STRFT_t::_f2,		"%.17g",				"1.123456789012345" },
+		{ STRFT_t::_f2,		"%.7g",					"1.123457" },		// rounds up last digit.
+		{ STRFT_t::_f100,	"%g",					"100" },
+		{ STRFT_t::_fmax,   "%g",					"1.79769e+308" },			// 
 
-		{ STRFORMATTEST_f0,		"%f",					"0.000000" },
-		{ STRFORMATTEST_f3,		"%f",					"3.141600" },		// padded to 6 places.
-		{ STRFORMATTEST_f3,		"%.2f",					"3.14" },
+		{ STRFT_t::_f0,		"%f",					"0.000000" },
+		{ STRFT_t::_f3,		"%f",					"3.141600" },		// padded to 6 places.
+		{ STRFT_t::_f3,		"%.2f",					"3.14" },
 
-		{ STRFORMATTEST_f3,		"%f %e %g",				"3.141600 3.141600e+00 3.1416" },
-		{ STRFORMATTEST_f3,		"floats: %4.2f %+.0e %E \n", "floats: 3.14 +3e+00 3.141600E+00 \n" },
-		{ STRFORMATTEST_f100,	"%f",					"100.000000" },
-		{ STRFORMATTEST_f3,		"%9.2f",				"     3.14" },
-		{ STRFORMATTEST_f3,		"%-9.2f",				"3.14     " },
-		{ STRFORMATTEST_fn,		"%-9.2f",				"-123.46  " },
+		{ STRFT_t::_f3,		"%f %e %g",				"3.141600 3.141600e+00 3.1416" },
+		{ STRFT_t::_f3,		"floats: %4.2f %+.0e %E \n", "floats: 3.14 +3e+00 3.141600E+00 \n" },
+		{ STRFT_t::_f100,	"%f",					"100.000000" },
+		{ STRFT_t::_f3,		"%9.2f",				"     3.14" },
+		{ STRFT_t::_f3,		"%-9.2f",				"3.14     " },
+		{ STRFT_t::_fn,		"%-9.2f",				"-123.46  " },
 
-		{ STRFORMATTEST_fnz,	"Tiny floats: %f",		"Tiny floats: -0.000000" },		//  -1.797693e-100  
-		// { STRFORMATTEST_flg,	"Huge floats: %f",		"Huge floats: 17976930000000001340565929873801353323097574629953369710322764223194088032032001524837302450048204800.000000" },		//  1.797693e+100 
-		// { STRFORMATTEST_fmax,   "%f",		""	},			// Max float: (316 digits) (even though it has 308 exp?) has ".000000" at the end.
-		// { STRFORMATTEST_fmax,   "%.99f",		"" },		// This will crash?! > MAX ?
+		{ STRFT_t::_fnz,	"Tiny floats: %f",		"Tiny floats: -0.000000" },		//  -1.797693e-100  
+		// { STRFT_t::_flg,	"Huge floats: %f",		"Huge floats: 17976930000000001340565929873801353323097574629953369710322764223194088032032001524837302450048204800.000000" },		//  1.797693e+100 
+		// { STRFT_t::_fmax,   "%f",		""	},			// Max float: (316 digits) (even though it has 308 exp?) has ".000000" at the end.
+		// { STRFT_t::_fmax,   "%.99f",		"" },		// This will crash?! > MAX ?
 
-		{ STRFORMATTEST_f0,		"%e",					"0.000000e+00" },
-		{ STRFORMATTEST_fnz,	"%e",					"-1.797693e-100" },
-		{ STRFORMATTEST_fnz,	"%.2e",					"-1.80e-100" },
-		{ STRFORMATTEST_f3,		"%e",					"3.141600e+00" },
-		{ STRFORMATTEST_flg,	"%e",					"1.797693e+100" }, //  1.797693e+100
-		{ STRFORMATTEST_fmax,	"%.2e",					"1.80e+308" },
-		{ STRFORMATTEST_fmax,   "%e",					"1.797693e+308" },			// 
+		{ STRFT_t::_f0,		"%e",					"0.000000e+00" },
+		{ STRFT_t::_fnz,	"%e",					"-1.797693e-100" },
+		{ STRFT_t::_fnz,	"%.2e",					"-1.80e-100" },
+		{ STRFT_t::_f3,		"%e",					"3.141600e+00" },
+		{ STRFT_t::_flg,	"%e",					"1.797693e+100" }, //  1.797693e+100
+		{ STRFT_t::_fmax,	"%.2e",					"1.80e+308" },
+		{ STRFT_t::_fmax,   "%e",					"1.797693e+308" },			// 
 
-		// { STRFORMATTEST_b1,		"%016b",	"0101010100001111" },	// 0x550F. NOT valid for M$
+		// { STRFT_t::_b1,		"%016b",	"0101010100001111" },	// 0x550F. NOT valid for M$
 	};
     // clang-format on
 
-    for (size_t i = 0; i < _countof(k_UnitTestData); i++) {
-        const StrFormatTest& test = k_UnitTestData[i];
+    for (const StrFormatTest& test : k_UnitTestData) {
 
         cStringT<TYPE> sFormat = test.m_pszFormat;
         cStringT<TYPE> sExpected = test.m_pszExpected;
@@ -266,7 +265,7 @@ void GRAYCALL UnitTestFormatX(typename StrFormat<TYPE>::STRFORMAT_t pFormat, cSp
 }
 
 template <typename TYPE>
-void GRAYCALL UnitTestFormat(typename StrFormat<TYPE>::STRFORMAT_t pFormat) { // static
+void GRAYCALL UnitTestFormat(typename StrFormat<TYPE>::STRFORMAT_t pFormat) {  // static
     // http://www.cplusplus.com/reference/cstdio/printf/
     // pFormat = StrT::sprintfN<TYPE>
 
@@ -277,7 +276,7 @@ void GRAYCALL UnitTestFormat(typename StrFormat<TYPE>::STRFORMAT_t pFormat) { //
     UnitTestFormatX(pFormat, ToSpan(szTmp, 3), _countof(szTmp));  // Test buffer size overflows/truncation.
 
 #if 0
-    UnitTestFormatX(pFormat, cBlob::k_EmptyBlob);                     // Test size estimation.
+    UnitTestFormatX(pFormat, cBlob::k_Empty);                     // Test size estimation.
 
 	//*****************************
 	// Support C# style string {0} ?

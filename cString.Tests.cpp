@@ -54,7 +54,7 @@ void GRAYCALL TestStrT() {  // static
     UNITTEST_TRUE(sTmp.GetLength() == 0);
     UNITTEST_TRUE(sTmp.IsEmpty());
 
-    const StrLen_t lenRet = StrT::Copy<_TYPE_CH>(sTmp.GetSpanWrite(100), CSTRCONST("TEST"));
+    const StrLen_t lenRet = StrT::CopyPtr<_TYPE_CH>(sTmp.GetSpanWrite(100), CSTRCONST("TEST"));
     UNITTEST_TRUE(lenRet == 4);
     sTmp.ReleaseBuffer(k_StrLen_UNK);
     UNITTEST_TRUE(sTmp.GetLength() == 4);
@@ -64,12 +64,12 @@ struct UNITTEST_N(cString) : public cUnitTest {
     UNITTEST_METHOD(cString) {
         // sizeof(cString) should be minimal. size of pointer.
         const size_t nSizeStrA = sizeof(cStringA);  // 8
-        STATIC_ASSERT(nSizeStrA == sizeof(void*), nSizeStrA);
+        STATIC_ASSERT(nSizeStrA == _SIZEOF_PTR, nSizeStrA);
         const size_t nSizeStrW = sizeof(cStringW);        // 8
         STATIC_ASSERT(nSizeStrA == nSizeStrW, cStringW);  // same
 
         const size_t nSizeStrD = sizeof(cStringHeadT<char>);  // >= 40
-        STATIC_ASSERT(nSizeStrD > sizeof(void*) + sizeof(int), cStringHeadT<char>);
+        STATIC_ASSERT(nSizeStrD > _SIZEOF_PTR + sizeof(int), cStringHeadT<char>);
 
         TestStrT<char>();
         TestStrT<wchar_t>();

@@ -7,8 +7,8 @@
 
 namespace Gray {
 struct cUnitTestListRef : public cListNodeRef<cUnitTestListRef> {
-    int m_iVal;
-    cUnitTestListRef(int iVal) : m_iVal(iVal) {}
+    const int _iTestVal;
+    cUnitTestListRef(int iVal) : _iTestVal(iVal) {}
 };
 
 struct UNITTEST_N(cList) : public cUnitTest {

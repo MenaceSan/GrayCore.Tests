@@ -31,7 +31,7 @@ struct UNITTEST_N(cUInt64) : public cUnitTest {
         for (cUInt64::UNIT_t i = 2; i < 200; i++) {
             cUInt64 n(i);
             if (n.isPrime()) {
-                uts.m_pLog->addDebugInfoF("Prime=%d", i);
+                uts._pLog->addDebugInfoF("Prime=%d", i);
             }
         }
     }

@@ -48,13 +48,13 @@ struct UNITTEST_N(cIniFile) : public cUnitTest {
         }
 
         // make a change to the INI file.
-        const IniChar_t* pszTestSection = "TestSection";
-        const IniChar_t* pszTestKey = "TestKey";
-        const IniChar_t* pszTestLine = "TestKey=9";
+        const IniChar_t k_szTestSection[] = "TestSection";
+        const IniChar_t k_szTestKey[] = "TestKey";
+        const IniChar_t k_szTestLine[] = "TestKey=9";
         // const IniChar_t* pszTestLine2 = "TestKey2:3";
 
-        const IniChar_t* pszLine = file.FindKeyLinePtr(pszTestSection, pszTestKey);
-        file.SetKeyLine(pszTestSection, pszTestKey, pszTestLine);
+        const IniChar_t* pszLine = file.FindKeyLinePtr(k_szTestSection, k_szTestKey);
+        file.SetKeyLine(k_szTestSection, k_szTestKey, k_szTestLine);
 
         // now write it back out.
         cStringF sIniWriteFile = cFilePath::CombineFilePathX(uts.get_TestOutDir(), _FN(GRAY_NAMES) _FN("IniFileUnitTest") _FN(MIME_EXT_ini));
@@ -66,9 +66,9 @@ struct UNITTEST_N(cIniFile) : public cUnitTest {
         hRes = file2.ReadIniFile(sIniWriteFile);
         UNITTEST_TRUE(SUCCEEDED(hRes));
 
-        pszLine = file2.FindKeyLinePtr(pszTestSection, pszTestKey);
+        pszLine = file2.FindKeyLinePtr(k_szTestSection, k_szTestKey);
         UNITTEST_TRUE(pszLine != nullptr);
-        UNITTEST_TRUE(!StrT::Cmp(pszLine, pszTestLine));
+        UNITTEST_TRUE(!StrT::Cmp(pszLine, k_szTestLine));
 
         // Find a particular line.
         const auto pTestSec = file2.FindSection("TestSection");

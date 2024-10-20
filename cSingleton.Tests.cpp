@@ -5,15 +5,20 @@
 
 namespace Gray {
 struct cUnitTestSingStat1 final : public cSingletonStatic<cUnitTestSingStat1> {
-    cUnitTestSingStat1() : cSingletonStatic<cUnitTestSingStat1>(this ) {
+    typedef cSingletonStatic<cUnitTestSingStat1> SUPER_t;
+    DECLARE_cSingletonStatic(cUnitTestSingStat1);
+    cUnitTestSingStat1() : cSingletonStatic<cUnitTestSingStat1>(this) {
         DEBUG_MSG(("cUnitTestSingStat1"));
     }
     ~cUnitTestSingStat1() override {
-        DEBUG_MSG(("~cUnitTestSingStat1")); // will close in cAppState::isInCExit()
+        DEBUG_MSG(("~cUnitTestSingStat1"));  // will close in cAppState::isInCExit()
     }
-    using cSingletonStatic::ClearSing;
+    using SUPER_t::ClearSing;
 };
+cSingletonStatic_IMPL(cUnitTestSingStat1);
+
 struct cUnitTestSingStat2 final : public cSingletonStatic<cUnitTestSingStat2> {
+    DECLARE_cSingletonStatic(cUnitTestSingStat2);
     cUnitTestSingStat2() : cSingletonStatic<cUnitTestSingStat2>(this) {
         DEBUG_MSG(("cUnitTestSingStat2"));
     }
@@ -21,23 +26,24 @@ struct cUnitTestSingStat2 final : public cSingletonStatic<cUnitTestSingStat2> {
         DEBUG_MSG(("~cUnitTestSingStat2"));
     }
 };
-class cUnitTestSing final : public cSingleton<cUnitTestSing> {
-    SINGLETON_IMPL(cUnitTestSing);
+cSingletonStatic_IMPL(cUnitTestSingStat2);
 
+class cUnitTestSing final : public cSingleton<cUnitTestSing> {
  protected:
-    cUnitTestSing() : cSingleton<cUnitTestSing>(this, typeid(cUnitTestSing)) {
+    cUnitTestSing() : cSingleton<cUnitTestSing>(this) {
         DEBUG_MSG(("cUnitTestSing"));
     }
 
  public:
+    DECLARE_cSingleton(cUnitTestSing);
     ~cUnitTestSing() override {
         DEBUG_MSG(("~cUnitTestSing"));
     }
 };
+cSingleton_IMPL(cUnitTestSing);
 
 struct UNITTEST_N(cSingleton) : public cUnitTest {
     UNITTEST_METHOD(cSingleton) {
-
         // static will only run once!
         if (!cUnitTestSingStat1::isSingleCreated()) {  // only true on first run of test.
             static cUnitTestSingStat1 localStatic;

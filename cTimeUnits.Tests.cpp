@@ -46,10 +46,10 @@ const cUnitTestTime cUnitTestTime::k_Tests[] =  // static
 
 struct UNITTEST_N(cTimeUnits) : public cUnitTest {
     UNITTEST_METHOD(cTimeUnits) {
-        UNITTEST_TRUE(cTimeUnits::GetUnitDef(TIMEUNIT_t::_Day).m_nUnitSeconds == (24 * 60 * 60));
-        UNITTEST_TRUE(cTimeUnits::GetUnitDef(TIMEUNIT_t::_Hour).m_nUnitSeconds == (60 * 60));
-        UNITTEST_TRUE(cTimeUnits::GetUnitDef(TIMEUNIT_t::_Minute).m_nUnitSeconds == (60));
-        UNITTEST_TRUE(cTimeUnits::GetUnitDef(TIMEUNIT_t::_Second).m_nUnitSeconds == 1);
+        UNITTEST_TRUE(cTimeUnits::GetUnitDef(TIMEUNIT_t::_Day)._nUnitSeconds == (24 * 60 * 60));
+        UNITTEST_TRUE(cTimeUnits::GetUnitDef(TIMEUNIT_t::_Hour)._nUnitSeconds == (60 * 60));
+        UNITTEST_TRUE(cTimeUnits::GetUnitDef(TIMEUNIT_t::_Minute)._nUnitSeconds == (60));
+        UNITTEST_TRUE(cTimeUnits::GetUnitDef(TIMEUNIT_t::_Second)._nUnitSeconds == 1);
 
         TIMEVALU_t nTimeZoneOffset = cTimeZoneMgr::GetLocalMinutesWest();
         TIMEVALU_t iTimeZoneHours = nTimeZoneOffset / 60;  // EST = -5 hours.
@@ -66,7 +66,7 @@ struct UNITTEST_N(cTimeUnits) : public cUnitTest {
         for (size_t i = 0; i < _countof(cUnitTestTime::k_Tests); i++) {
             const cUnitTestTime& t = cUnitTestTime::k_Tests[i];
             const cTimeUnits& Tu = t.m_tu;
-            TIMEDOW_t eDOW = cTimeUnits::GetDOW(Tu.m_wYear, Tu.m_wMonth, Tu.m_wDay);
+            TIMEDOW_t eDOW = cTimeUnits::GetDOW(Tu._wYear, Tu._wMonth, Tu._wDay);
             UNITTEST_TRUE(eDOW == t.m_eDOW);
             bool bInDST = t.m_tu.isInDST1();
             UNITTEST_TRUE(bInDST == t.m_bInDST);
@@ -76,7 +76,7 @@ struct UNITTEST_N(cTimeUnits) : public cUnitTest {
             Tu2.put_DosDate(dwDosDate1);
             UNITTEST_TRUE(Tu2.get_DosDate() == dwDosDate1);  // reciprocal
 
-            int iLeapDays = cTimeUnits::GetLeapYearsSince2K(Tu.m_wYear);
+            int iLeapDays = cTimeUnits::GetLeapYearsSince2K(Tu._wYear);
             UNITTEST_TRUE(iLeapDays == t.m_iLeapDays);
         }
 

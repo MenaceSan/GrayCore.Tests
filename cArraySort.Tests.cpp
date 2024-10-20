@@ -12,7 +12,7 @@ class cUnitTestArraySort {
     //! Test sorted arrays. pick a simple template.
  public:
     int m_iSortVal;
-    // HASHCODE_t m_nHashCode;
+    // HASHCODE_t _nHashCode;
     static int sm_nAllocated;
 
  public:

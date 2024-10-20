@@ -11,8 +11,8 @@ struct UNITTEST_N(cAppConsole) : public cUnitTest {
         cUnitTests& uts = cUnitTests::I();
         cAppConsole& console = cAppConsole::I();
         if (!console.isConsoleMode()) {
-            if (uts.m_pLog != nullptr) {
-                uts.m_pLog->addDebugInfoF("cAppConsole is NOT in CONSOLE MODE");
+            if (uts._pLog != nullptr) {
+                uts._pLog->addDebugInfoF("cAppConsole is NOT in CONSOLE MODE");
             }
             // try to create or attach a console using AllocConsole() ??
             console.AttachOrAllocConsole();

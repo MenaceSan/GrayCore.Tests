@@ -13,17 +13,17 @@ void UnitTestMem(const TYPE nValH) {
     cSpanX<BYTE>(TOSPANT(nValRev2)).ReverseSpan();
     UNITTEST_TRUE(nValRev2 == nValRev);
 
-    TYPE nValRev3 = cMemT::ReverseType(nValH);
+    TYPE nValRev3 = cValT::ReverseBytes(nValH);
     UNITTEST_TRUE(nValRev3 == nValRev);
 
-    TYPE nValN = cMemT::HtoN(nValH);
+    TYPE nValN = cValT::HtoN(nValH);
 #ifdef USE_LITTLE_ENDIAN
     // Bytes must be reversed.
     UNITTEST_TRUE(nValN == nValRev);
 #else
     UNITTEST_TRUE(nValN == nValH);  // no change
 #endif
-    UNITTEST_TRUE(cMemT::NtoH(nValN) == nValH);  // back to original value.
+    UNITTEST_TRUE(cValT::NtoH(nValN) == nValH);  // back to original value.
 }
 
 struct UNITTEST_N(cMem) : public cUnitTest {

@@ -9,13 +9,11 @@ namespace Gray {
 struct UNITTEST_N(cOSModule) : public cUnitTest {
 
     void TestCur() {
-#ifndef UNDER_CE
-        ::HMODULE hModCore = cOSModule::GetModuleHandleForAddr(&g_Rand);  // In Core.
+        ::HMODULE hModCore = cOSModule::GetModuleHandleForAddr(&g_Rand);  // static object is In Core.
         cOSModule modCore(hModCore, cOSModule::k_Load_NoRefCount);
         cStringF sNameCore = modCore.get_Name();  // == "path\\GRAYCORE.DLL"
         UNITTEST_TRUE(sNameCore.ContainsI(GRAY_NAMES "Core"));  // g_Module
         UNITTEST_TRUE(modCore.isValidModule());
-#endif
     }
 
     void TestResource() {
@@ -50,7 +48,7 @@ struct UNITTEST_N(cOSModule) : public cUnitTest {
         hRes = mod.LoadModule(k_FileName, cOSModule::k_Load_Preload);  // does not call DllMain() for process and thread initialization and termination.
         if (FAILED(hRes)) {
             // ERROR_MOD_NOT_FOUND
-            uts.m_pLog->addDebugErrorF("Module load 1 ERR='%s'", LOGERR(hRes));
+            uts._pLog->addDebugErrorF("Module load 1 ERR='%s'", LOGERR(hRes));
             UNITTEST_TRUE(false);
         }
 
@@ -77,7 +75,7 @@ struct UNITTEST_N(cOSModule) : public cUnitTest {
         hRes = mod.LoadModule(k_FileName);
         if (FAILED(hRes)) {
             // ERROR_MOD_NOT_FOUND
-            uts.m_pLog->addDebugErrorF("Module load 2 ERR='%s'", LOGERR(hRes));
+            uts._pLog->addDebugErrorF("Module load 2 ERR='%s'", LOGERR(hRes));
             UNITTEST_TRUE(false);
         }
         UNITTEST_TRUE(mod.isValidModule());
@@ -108,7 +106,7 @@ struct UNITTEST_N(cOSModule) : public cUnitTest {
         cOSModule modCur(cAppState::get_HModule(), cOSModule::k_Load_NoRefCount);
         cStringF sNameCur = modCur.get_Name();  // .EXE name
         if (sNameCur.IsEmpty()) {          // App EXE name is empty for some reason?
-            uts.m_pLog->addDebugErrorF("Module name ERR='%s'", LOGERR(HResult::GetLast()));
+            uts._pLog->addDebugErrorF("Module name ERR='%s'", LOGERR(HResult::GetLast()));
             UNITTEST_TRUE(false);
             return;
         }

@@ -9,66 +9,6 @@
 #include <GrayCore/include/cTypes.h>
 
 namespace Gray {
-GRAYCORE_TEST_LINK void GRAYCALL UnitTest_StreamIntegrity(cStreamOutput& stmOut, cStreamInput& stmIn, size_t nSizeTotal) {
-    // Write to streams in random block sizes and make sure i read the same back.
-    // @arg nSizeTotal = How much to write/test total ?
-    cUnitTests& uts = cUnitTests::I();
-
-    size_t iSizeBlock = g_Rand.GetRandUX(1024) + 100;  // TODO Make random range bigger !! 2k ?
-    cBlob blobWrite(iSizeBlock * 2);
-    g_Rand.GetNoise(cMemSpan(blobWrite, iSizeBlock));
-    cMem::Copy(blobWrite.GetTPtrW<BYTE>() + iSizeBlock, blobWrite.GetTPtrC(), iSizeBlock);  // double it.
-
-    size_t iSizeWriteTotal = 0;
-    size_t iSizeReadTotal = 0;
-
-    HRESULT hRes;
-    cBlob blobRead(iSizeBlock);
-    cTimeSys tStart = cTimeSys::GetTimeNow();
-    size_t nSizeReal;
-
-    int i = 0;
-    for (;; i++) {
-        UNITTEST_TRUE(iSizeReadTotal <= iSizeWriteTotal);
-
-        if (iSizeWriteTotal < nSizeTotal) { // write more?
-            size_t iSizeWriteBlock = g_Rand.GetRandUX((UINT)(iSizeBlock - 1)) + 1;
-            if (iSizeWriteTotal + iSizeWriteBlock > nSizeTotal) iSizeWriteBlock = nSizeTotal - iSizeWriteTotal;
-            UNITTEST_TRUE(iSizeWriteBlock <= iSizeBlock);
-            hRes = stmOut.WriteX(cMemSpan(blobWrite.GetTPtrC<BYTE>() + (iSizeWriteTotal % iSizeBlock), iSizeWriteBlock));
-            UNITTEST_TRUE(SUCCEEDED(hRes));
-            nSizeReal = (size_t)hRes;
-            UNITTEST_TRUE(nSizeReal <= iSizeWriteBlock);
-            iSizeWriteTotal += nSizeReal;
-            UNITTEST_TRUE(iSizeWriteTotal <= nSizeTotal);
-        }
-
-        UNITTEST_TRUE(iSizeReadTotal <= iSizeWriteTotal);
-
-        size_t iSizeReadBlock = g_Rand.GetRandUX((UINT)(iSizeBlock - 1)) + 1;
-        UNITTEST_TRUE(iSizeReadBlock <= iSizeBlock);
-        BYTE* pRead = blobRead.GetTPtrW();
-        hRes = stmIn.ReadX(cMemSpan(pRead, iSizeReadBlock));
-        UNITTEST_TRUE(SUCCEEDED(hRes));
-        nSizeReal = (size_t)hRes;
-        UNITTEST_TRUE(nSizeReal <= iSizeReadBlock);
-
-        // Make sure i read correctly.
-        const BYTE* pWrite = blobWrite.GetTPtrC<BYTE>() + (iSizeReadTotal % iSizeBlock);
-        bool isEqual = cMem::IsEqual(pWrite, pRead, nSizeReal);
-        UNITTEST_TRUE(isEqual);
-        iSizeReadTotal += nSizeReal;
-        UNITTEST_TRUE(iSizeReadTotal <= iSizeWriteTotal);
-
-        if (iSizeReadTotal >= nSizeTotal) break;  // done?
-            
-        if (!uts.IsTestInteractive() && tStart.get_AgeSec() > 100) {
-            UNITTEST_TRUE(false);
-            return;
-        }
-    }
-}
-
 struct UNITTEST_N(cStream) : public cUnitTest {
     void Test_StreamSize(cStream& q, bool isQ) {
         //! Write stuff to a stream and read back. WriteSize()
@@ -117,6 +57,7 @@ struct UNITTEST_N(cStream) : public cUnitTest {
     UNITTEST_METHOD(cStream) {
         //! ReadSize, WriteSize()
 
+        cUnitTests& uts = cUnitTests::I();
         g_Rand.InitSeedOS();
 
         cStreamQueue q;
@@ -124,7 +65,7 @@ struct UNITTEST_N(cStream) : public cUnitTest {
         UNITTEST_TRUE(q.isEmptyQ());  // all read back.
         UNITTEST_TRUE(q.get_ReadQty() == 0);
 
-        UnitTest_StreamIntegrity(q, q, 10000 + g_Rand.GetRandUX(500000));
+        cStreamTester::TestReadsAndWrites(q, q, 10000 + g_Rand.GetRandUX(500000), uts.IsTestInteractive() ? 100000 : 100);
         UNITTEST_TRUE(q.isEmptyQ());  // all read back.
         UNITTEST_TRUE(q.get_ReadQty() == 0);
 

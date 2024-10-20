@@ -197,7 +197,7 @@ struct UNITTEST_N(StrT) : public cUnitTest {
     template <typename TYPE>
     static void UnitTestTable() {  // static
 
-        cSpanUnk tableEmpty(cBlob::k_EmptyBlob, sizeof(void*));
+        cSpanUnk tableEmpty(cBlob::k_Empty, _SIZEOF_PTR);
 
         UNITTEST_TRUE(StrX<TYPE>::IsTableSorted(tableEmpty));
 
@@ -230,7 +230,7 @@ struct UNITTEST_N(StrT) : public cUnitTest {
         StrLen_t nLenRet = StrT::CopyLen<TYPE>(szTmp, k_t1, 16);
         UNITTEST_TRUE(nLenRet == 7);
 
-        nLenRet = StrT::Copy<TYPE>(TOSPAN(szTmp), CSTRCONST("123 "));
+        nLenRet = StrT::CopyPtr<TYPE>(TOSPAN(szTmp), CSTRCONST("123 "));
         UNITTEST_TRUE(nLenRet == 4);
 
         const TYPE* pRetChar = StrT::TrimWhitespace(szTmp);
@@ -239,7 +239,7 @@ struct UNITTEST_N(StrT) : public cUnitTest {
         pRetChar = StrT::StripBlock(szTmp);
         UNITTEST_TRUE(pRetChar != nullptr && *pRetChar == '1');  // ""
 
-        nLenRet = StrT::Copy<TYPE>(TOSPAN(szTmp), CSTRCONST("this are a string"));  // sic
+        nLenRet = StrT::CopyPtr<TYPE>(TOSPAN(szTmp), CSTRCONST("this are a string"));  // sic
         UNITTEST_TRUE(nLenRet);
 
         StrT::ReplaceX<TYPE>(TOSPAN(szTmp), 5, 3, ToSpanStr<TYPE>(CSTRCONST("is")));

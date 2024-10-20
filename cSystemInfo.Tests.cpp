@@ -15,7 +15,7 @@ struct UNITTEST_N(cSystemInfo) : public cUnitTest {
         cString sOsName = i.get_OSInfoStr();
         UNITTEST_TRUE(!sOsName.IsEmpty());
 
-        UINT uOSVer = i.m_Info.get_OSVer();
+        UINT uOSVer = i._SysInfo.get_OSVer();
 #ifdef _WIN32
         UNITTEST_TRUE(uOSVer > 0x500);  // For windows.
 #endif

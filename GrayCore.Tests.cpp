@@ -27,7 +27,7 @@ bool CALLBACK UnitTestsMs_AssertCallback(const char* pszExp, const cDebugSourceL
     //! Assert was called during a unit test. This is a failure!
     //! AssertCallback_t sm_pAssertCallback = cDebugAssert::Assert_Fail was called in UnitTest. GRAYCALL
 
-    __LineInfo lineInfo(cStringW(src.m_pszFile), src.m_pszFunction, src.m_uLine);  // StrArg
+    __LineInfo lineInfo(cStringW(src._pszFile), src._pszFunction, src._uLine);  // StrArg
     Assert::IsTrue(false, cStringW(pszExp), &lineInfo);
     return false;
 }
@@ -35,7 +35,7 @@ bool CALLBACK UnitTestsMs_AssertCallback(const char* pszExp, const cDebugSourceL
 TEST_MODULE_INITIALIZE(Initialize) {
     // module initialization code
     cUnitTests& uts = cUnitTests::I();
-    uts.m_pAssertOrig = cDebugAssert::sm_pAssertCallback;
+    uts._pAssertOrig = cDebugAssert::sm_pAssertCallback;
     cDebugAssert::sm_pAssertCallback = UnitTestsMs_AssertCallback;  // special version of assert
 
     // add special log sink. Logger. cUnitTestLogger
@@ -61,7 +61,7 @@ TEST_MODULE_CLEANUP(Cleanup) {
 #endif
 
     log.RemoveSinkType(typeid(cUnitTestsMsLogger), true);
-    cDebugAssert::sm_pAssertCallback = uts.m_pAssertOrig;  // restore.
+    cDebugAssert::sm_pAssertCallback = uts._pAssertOrig;  // restore.
 }
 #endif
 

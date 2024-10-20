@@ -20,16 +20,16 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
         auto* p2 = new cTestHeapObject2();
         UNITTEST_TRUE(cHeapAlign::IsHeapAlign(p2));
 
-        auto align1 = cHeap::GetAlign(p1);
+        const auto align1 = cHeap::GetAlign(p1);
         UNITTEST_TRUE(align1 >= cHeap::k_SizeAlignDef);
-        auto align2 = cHeap::GetAlign(p2);
+        const auto align2 = cHeap::GetAlign(p2);
         UNITTEST_TRUE(align2 >= 32);
 
-        auto size1a = cHeap::GetSize(p1);  // 16 for 64 bit.
-        auto size1b = cHeapAlign::GetSize(p1);
+        const auto size1a = cHeap::GetSize(p1);  // 16 for 64 bit.
+        const auto size1b = cHeapAlign::GetSize(p1);
         UNITTEST_TRUE(size1a == size1b);
 
-        auto size2 = cHeapAlign::GetSize(p2);  // 167 in 64 bit
+        const auto size2 = cHeapAlign::GetSize(p2);  // 167 in 64 bit
         UNITTEST_TRUE(size2 > size1a);
 
         delete p1;
@@ -61,14 +61,14 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
             TestHeapObject();
         }
 
-        UNITTEST_TRUE(uts.m_pLog != nullptr);
+        UNITTEST_TRUE(uts._pLog != nullptr);
         UNITTEST_TRUE(cHeap::Check());
 
         UINT64 uPhysTotal = cHeap::get_PhysTotal();
         UNITTEST_TRUE(uPhysTotal > 1024);
         UINT64 uPhysAvail = cHeap::get_PhysAvail();
         UNITTEST_TRUE(uPhysAvail > 1024);
-        uts.m_pLog->addInfoF("Heap %s free of %s total", LOGSTR(cString::GetSizeK(uPhysAvail)), LOGSTR(cString::GetSizeK(uPhysTotal)));
+        uts._pLog->addInfoF("Heap %s free of %s total", LOGSTR(cString::GetSizeK(uPhysAvail)), LOGSTR(cString::GetSizeK(uPhysTotal)));
 
         // Allocate a bunch of blocks and make sure they stay put til freed
         cBlob testBlob[32];
@@ -91,7 +91,7 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
             size_t nSizeTest = blob2.get_AllocSize();
             if (nSizeAlloc == 0) {
                 // Alloc 0 ? may return nullptr or not.
-                uts.m_pLog->addInfoF("Heap alloc(%d) = ptr 0%x, size=%d", (int)nSizeAlloc, (int)CastPtrToNum(blob2.GetTPtrC()), (int)nSizeTest);
+                uts._pLog->addInfoF("Heap alloc(%d) = ptr 0%x, size=%d", (int)nSizeAlloc, (int)CastPtrToNum(blob2.GetTPtrC()), (int)nSizeTest);
             }
             UNITTEST_TRUE(nSizeTest >= nSizeAlloc);
         }
@@ -101,7 +101,7 @@ struct UNITTEST_N(cHeap) : public cUnitTest {
             void* pData1N = cHeap::AllocPtr(i);
             cMem::Fill(pData1N, i, 0x11);
             UINT_PTR uValPtr = CastPtrToNum(pData1N);
-            const auto alignRem = (uValPtr % (2 * sizeof(void*)));
+            const auto alignRem = (uValPtr % (2 * _SIZEOF_PTR));
             UNITTEST_TRUE(alignRem == 0);                      // should always be true.
             UNITTEST_TRUE(!cHeapAlign::IsHeapAlign(pData1N));  // Should NOT report it is aligned.
             cHeap::FreePtr(pData1N);
